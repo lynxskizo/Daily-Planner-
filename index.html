@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyPulse Pro - Firebase Powered</title>
+    <title>StudyPulse Pro - Extended Edition</title>
     <!-- FontAwesome 6 Free Solid CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -13,7 +13,7 @@
         :root {
             --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 40%, #1e1b4b 100%);
             --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.12);
             --glass-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
             --accent-purple: #8b5cf6;
             --accent-pink: #ec4899;
@@ -44,7 +44,7 @@
             overflow-x: hidden;
         }
 
-        /* GLASSMORPHISM CARD */
+        /* GLASSMORPHISM UTILITY */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -80,7 +80,7 @@
         .auth-container p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 25px; }
 
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             position: relative;
         }
 
@@ -92,17 +92,17 @@
             color: var(--text-muted);
         }
 
-        .input-group input, .input-group select {
+        .input-group input, .input-group select, .input-group textarea {
             width: 100%;
             padding: 12px 15px 12px 45px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             outline: none;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
         }
 
-        .input-group input:focus, .input-group select:focus {
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             border-color: var(--accent-purple);
             box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
         }
@@ -140,8 +140,8 @@
         .dashboard {
             display: none;
             width: 100%;
-            max-width: 1150px;
-            grid-template-columns: 300px 1fr;
+            max-width: 1200px;
+            grid-template-columns: 320px 1fr;
             gap: 25px;
         }
 
@@ -184,7 +184,6 @@
         .clock-box h3 { font-size: 1.6rem; letter-spacing: 1px; font-weight: 600; }
         .clock-box p { font-size: 0.78rem; color: var(--text-muted); }
 
-        /* PROGRESS TRACKER */
         .progress-box {
             margin-bottom: 20px;
             padding: 15px;
@@ -216,7 +215,6 @@
             transition: width 0.4s ease;
         }
 
-        /* MINI CALENDAR */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -254,6 +252,31 @@
             gap: 20px;
         }
 
+        .tabs-header {
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--accent-pink);
+            border: 1px solid var(--glass-border);
+        }
+
         .header-actions {
             display: flex;
             justify-content: space-between;
@@ -262,7 +285,6 @@
             gap: 15px;
         }
 
-        /* CONTROLS (SEARCH & FILTERS) */
         .controls-bar {
             display: flex;
             gap: 12px;
@@ -315,12 +337,12 @@
             font-weight: 500;
         }
 
-        /* TASKS LIST */
+        /* GLOSSY TASK CARDS */
         .tasks-container {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 500px;
+            max-height: 520px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -333,21 +355,32 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(10px);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* GLOSSY COLOR ACCENTS */
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 5px; height: 100%;
+            background: var(--card-color, var(--accent-purple));
+        }
+
         .task-card:hover {
-            background: rgba(255, 255, 255, 0.07);
             transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .task-card.completed {
-            opacity: 0.55;
-            background: rgba(0, 0, 0, 0.15);
+            opacity: 0.5;
         }
         .task-card.completed .task-title {
             text-decoration: line-through;
@@ -360,56 +393,57 @@
             gap: 16px;
         }
 
+        .task-order-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 8px;
+            color: var(--text-muted);
+        }
+
         .task-icon-box {
             width: 48px;
             height: 48px;
             border-radius: 14px;
-            background: rgba(139, 92, 246, 0.12);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.25rem;
-            color: var(--accent-purple);
+            color: var(--card-color, var(--accent-purple));
             flex-shrink: 0;
         }
 
         .task-details .task-title { font-size: 0.98rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .task-details p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 
-        .task-badge {
-            font-size: 0.68rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
-        .badge-everyday { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-oneday { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
-
-        .priority-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+        .study-tag {
+            font-size: 0.72rem;
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-top: 4px;
             display: inline-block;
         }
-        .p-high { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
-        .p-medium { background: var(--warning); }
-        .p-low { background: var(--success); }
 
         .task-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .action-btn {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 10px;
             border: 1px solid var(--glass-border);
             background: rgba(255,255,255,0.04);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             transition: all 0.2s;
             display: flex;
@@ -418,9 +452,10 @@
         }
 
         .action-btn.check:hover { background: rgba(16, 185, 129, 0.2); color: var(--success); border-color: var(--success); }
+        .action-btn.edit:hover { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
         .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger); border-color: var(--danger); }
 
-        /* MODAL POPUPS */
+        /* MODALS */
         .modal {
             display: none;
             position: fixed;
@@ -435,8 +470,10 @@
 
         .modal-content {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             padding: 28px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -448,6 +485,21 @@
 
         .form-row { display: flex; gap: 10px; }
 
+        .color-picker-grid {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        .color-dot.selected { border-color: white; transform: scale(1.15); }
+
         .icon-selector-trigger {
             width: 100%;
             padding: 12px 15px;
@@ -458,38 +510,34 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .icon-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            max-height: 220px;
+            gap: 8px;
+            max-height: 180px;
             overflow-y: auto;
             padding: 8px;
             background: rgba(0,0,0,0.3);
             border-radius: 12px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .icon-option {
-            height: 40px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
             cursor: pointer;
             background: rgba(255,255,255,0.03);
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-muted);
-            transition: all 0.2s;
         }
-        .icon-option:hover, .icon-option.selected {
-            background: var(--accent-purple);
-            color: white;
-        }
+        .icon-option.selected { background: var(--accent-purple); color: white; }
 
         @media (max-width: 850px) {
             .dashboard { grid-template-columns: 1fr; }
@@ -566,47 +614,83 @@
             </button>
         </aside>
 
-        <!-- MAIN TASKS VIEW -->
+        <!-- MAIN TASKS & EVENTS VIEW -->
         <main class="glass main-content animate-fade">
-            <div class="header-actions">
-                <div>
-                    <h2>Study & Activity Planner</h2>
-                    <p style="color: var(--text-muted); font-size: 0.82rem;">Track tasks, habits, and set alarms</p>
-                </div>
-                <button class="btn" style="width: auto; padding: 10px 18px;" id="openTaskModalBtn">
-                    <i class="fa-solid fa-plus"></i> New Task
-                </button>
+            
+            <div class="tabs-header">
+                <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> Tasks</button>
+                <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> Special Events</button>
             </div>
 
-            <!-- SEARCH AND FILTERS -->
-            <div class="controls-bar">
-                <div class="search-box">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Search tasks...">
+            <!-- TASKS TAB VIEW -->
+            <div id="tasksTabView">
+                <div class="header-actions" style="margin-bottom: 15px;">
+                    <div>
+                        <h2>Daily & Routine Tasks</h2>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;">Chronological task management</p>
+                    </div>
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openTaskModalBtn">
+                        <i class="fa-solid fa-plus"></i> New Task
+                    </button>
                 </div>
-                <div class="filter-btn-group">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="active">Active</button>
-                    <button class="filter-btn" data-filter="completed">Completed</button>
+
+                <div class="controls-bar" style="margin-bottom: 15px;">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search tasks...">
+                    </div>
+                    <div class="filter-btn-group">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
                 </div>
+
+                <div class="tasks-container" id="tasksList"></div>
             </div>
 
-            <!-- TASK LIST -->
-            <div class="tasks-container" id="tasksList"></div>
+            <!-- EVENTS TAB VIEW -->
+            <div id="eventsTabView" style="display: none;">
+                <div class="header-actions" style="margin-bottom: 15px;">
+                    <div>
+                        <h2>Date Events Schedule</h2>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;">Track exam dates, deadlines, & events</p>
+                    </div>
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openEventModalBtn">
+                        <i class="fa-solid fa-calendar-plus"></i> New Event
+                    </button>
+                </div>
+
+                <div class="tasks-container" id="eventsList"></div>
+            </div>
+
         </main>
     </div>
 
-    <!-- NEW TASK MODAL -->
+    <!-- TASK MODAL -->
     <div id="taskModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
-                <h3>Create New Activity</h3>
+                <h3 id="taskModalTitle">Create New Activity</h3>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeTaskModalBtn"></i>
             </div>
             <form id="saveTaskForm">
+                <input type="hidden" id="editTaskId">
+
                 <div class="input-group">
                     <i class="fa-solid fa-heading input-icon"></i>
-                    <input type="text" id="taskName" placeholder="Task Name (e.g. Physics Revision)" required>
+                    <input type="text" id="taskName" placeholder="Task Name (e.g. Morning Revision)" required>
+                </div>
+
+                <!-- GLOSSY COLOR SELECTOR -->
+                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Theme Color</label>
+                <div class="color-picker-grid" id="colorPickerGrid">
+                    <div class="color-dot selected" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
+                    <div class="color-dot" data-color="#ec4899" style="background:#ec4899;"></div>
+                    <div class="color-dot" data-color="#3b82f6" style="background:#3b82f6;"></div>
+                    <div class="color-dot" data-color="#10b981" style="background:#10b981;"></div>
+                    <div class="color-dot" data-color="#f59e0b" style="background:#f59e0b;"></div>
+                    <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
                 </div>
 
                 <!-- ICON SELECTION CONTAINER -->
@@ -615,8 +699,24 @@
                     <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.85rem;">fa-book</span></span>
                     <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-muted);"></i>
                 </div>
-                
                 <div class="icon-grid" id="iconGrid" style="display: none;"></div>
+
+                <!-- STUDY SECTION OPTIONAL FIELDS -->
+                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Study Section Details (Optional)</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-book-open input-icon"></i>
+                    <input type="text" id="studySubject" placeholder="Subject Name (e.g., Physics)">
+                </div>
+                <div class="form-row">
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-bookmark input-icon"></i>
+                        <input type="text" id="studyChapter" placeholder="Chapter">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-list-ol input-icon"></i>
+                        <input type="text" id="studySubChapter" placeholder="Sub-chapter">
+                    </div>
+                </div>
 
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
@@ -652,6 +752,31 @@
         </div>
     </div>
 
+    <!-- EVENT MODAL -->
+    <div id="eventModal" class="modal">
+        <div class="glass modal-content animate-fade">
+            <div class="modal-header">
+                <h3>Schedule Special Event</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeEventModalBtn"></i>
+            </div>
+            <form id="saveEventForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-calendar-day input-icon"></i>
+                    <input type="text" id="eventName" placeholder="Event Title (e.g., Final Physics Exam)" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-regular fa-calendar input-icon"></i>
+                    <input type="date" id="eventDate" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-align-left input-icon"></i>
+                    <textarea id="eventNotes" placeholder="Additional Notes..." rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn">Save Event</button>
+            </form>
+        </div>
+    </div>
+
     <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
     <!-- FIREBASE MODULE SCRIPT -->
@@ -677,7 +802,6 @@
             orderBy 
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBjWYDAdRZT7dCPhK1XD07XlWc2oaWA9EY",
             authDomain: "daily-planner-8d245.firebaseapp.com",
@@ -688,32 +812,29 @@
             measurementId: "G-5Q109VE7CV"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // State Variables
         let isLoginMode = true;
         let currentUser = null;
         let userTasks = [];
+        let userEvents = [];
         let selectedIcon = "fa-book";
+        let selectedColor = "#8b5cf6";
         let activeFilter = "all";
         let triggeredAlarms = new Set();
         let unsubscribeTasks = null;
+        let unsubscribeEvents = null;
 
         const ICON_LIST = [
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-glasses", "fa-atom", "fa-palette", "fa-language", "fa-file-lines",
             "fa-dumbbell", "fa-person-running", "fa-person-biking", "fa-person-swimming", "fa-heart-pulse", "fa-apple-whole", "fa-table-tennis-paddle-ball", "fa-volleyball", "fa-person-walking", "fa-shield-halved",
-            "fa-hands-praying", "fa-place-of-worship", "fa-mosque", "fa-spa", "fa-bed", "fa-bell", "fa-sun", "fa-moon", "fa-mug-hot", "fa-shower", "fa-utensils", "fa-bath", "fa-mattress-pillow", "fa-eye",
-            "fa-gamepad", "fa-music", "fa-headphones", "fa-tv", "fa-guitar", "fa-film", "fa-camera", "fa-comments", "fa-user-group", "fa-icons", "fa-dice", "fa-compact-disc",
-            "fa-briefcase", "fa-code", "fa-terminal", "fa-compass", "fa-wrench", "fa-lightbulb", "fa-rocket", "fa-folder", "fa-clock", "fa-calendar-check", "fa-screwdriver-wrench", "fa-paperclip",
-            "fa-cart-shopping", "fa-bag-shopping", "fa-basket-shopping", "fa-broom", "fa-shirt", "fa-house", "fa-car", "fa-bus", "fa-plane", "fa-gas-pump", "fa-credit-card", "fa-wallet",
-            "fa-star", "fa-heart", "fa-fire", "fa-bolt", "fa-trophy", "fa-medal", "fa-bullseye", "fa-flag", "fa-bookmark", "fa-check", "fa-gem", "fa-key", "fa-lock", "fa-award", "fa-seedling"
+            "fa-hands-praying", "fa-place-of-worship", "fa-mosque", "fa-spa", "fa-bed", "fa-bell", "fa-sun", "fa-moon", "fa-mug-hot", "fa-shower", "fa-utensils", "fa-bath", "fa-mattress-pillow", "fa-eye"
         ];
 
-        // Auth Observer
+        // Auth Listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -725,15 +846,17 @@
                 buildIconGrid();
                 buildCalendar();
                 listenToTasks(user.uid);
+                listenToEvents(user.uid);
             } else {
                 currentUser = null;
                 if (unsubscribeTasks) unsubscribeTasks();
+                if (unsubscribeEvents) unsubscribeEvents();
                 document.getElementById('dashboardSection').style.display = 'none';
                 document.getElementById('authSection').style.display = 'block';
             }
         });
 
-        // Auth Form Actions
+        // Switch Auth Mode
         document.getElementById('switchBtn').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
             document.getElementById('authTitle').innerHTML = '<i class="fa-solid fa-graduation-cap"></i> StudyPulse';
@@ -762,9 +885,9 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // Firestore Real-time listener
+        // Listen to Tasks (Ordered by creation date - 1st, 2nd, 3rd...)
         function listenToTasks(userId) {
-            const q = query(collection(db, "users", userId, "tasks"));
+            const q = query(collection(db, "users", userId, "tasks"), orderBy("createdAt", "asc"));
             unsubscribeTasks = onSnapshot(q, (snapshot) => {
                 userTasks = [];
                 snapshot.forEach((doc) => {
@@ -774,7 +897,43 @@
             });
         }
 
-        // Icon Grid Builder
+        // Listen to Events
+        function listenToEvents(userId) {
+            const q = query(collection(db, "users", userId, "events"), orderBy("date", "asc"));
+            unsubscribeEvents = onSnapshot(q, (snapshot) => {
+                userEvents = [];
+                snapshot.forEach((doc) => {
+                    userEvents.push({ id: doc.id, ...doc.data() });
+                });
+                renderEvents();
+            });
+        }
+
+        // Navigation Tabs
+        document.getElementById('tabTasksBtn').addEventListener('click', () => {
+            document.getElementById('tasksTabView').style.display = 'block';
+            document.getElementById('eventsTabView').style.display = 'none';
+            document.getElementById('tabTasksBtn').classList.add('active');
+            document.getElementById('tabEventsBtn').classList.remove('active');
+        });
+
+        document.getElementById('tabEventsBtn').addEventListener('click', () => {
+            document.getElementById('tasksTabView').style.display = 'none';
+            document.getElementById('eventsTabView').style.display = 'block';
+            document.getElementById('tabEventsBtn').classList.add('active');
+            document.getElementById('tabTasksBtn').classList.remove('active');
+        });
+
+        // Color Picker Binding
+        document.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+                e.target.classList.add('selected');
+                selectedColor = e.target.dataset.color;
+            });
+        });
+
+        // Icon Grid
         function buildIconGrid() {
             const grid = document.getElementById('iconGrid');
             grid.innerHTML = '';
@@ -800,7 +959,7 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
-        // Clock & Alarms
+        // Live Clock & Real-time Alarms
         function updateClock() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -830,40 +989,62 @@
 
         function triggerAlarm(task) {
             const audio = document.getElementById('alarmSound');
-            audio.play().catch(e => console.log("Audio playback waiting for interaction."));
+            audio.play().catch(e => console.log("Audio playback user permission needed."));
             setTimeout(() => {
-                alert(`⏰ TASK ALARM!\n\nTask: ${task.name}\nScheduled Time: ${task.startTime} - ${task.endTime}`);
+                alert(`⏰ ALARM: TIME FOR TASK!\n\nTask: ${task.name}\nTime Slot: ${task.startTime} - ${task.endTime}`);
             }, 100);
         }
 
-        // Task Modal Controls
+        // Modal Open/Close Controls
         document.getElementById('openTaskModalBtn').addEventListener('click', () => {
+            document.getElementById('editTaskId').value = '';
+            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
+            document.getElementById('saveTaskForm').reset();
             document.getElementById('taskModal').style.display = 'flex';
         });
         document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
             document.getElementById('taskModal').style.display = 'none';
         });
 
-        // Save Task to Firebase
+        document.getElementById('openEventModalBtn').addEventListener('click', () => {
+            document.getElementById('eventModal').style.display = 'flex';
+        });
+        document.getElementById('closeEventModalBtn').addEventListener('click', () => {
+            document.getElementById('eventModal').style.display = 'none';
+        });
+
+        // Save/Update Task to Firebase
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const taskId = document.getElementById('editTaskId').value;
             const name = document.getElementById('taskName').value;
             const startTime = document.getElementById('taskStartTime').value;
             const endTime = document.getElementById('taskEndTime').value;
             const frequency = document.getElementById('taskFrequency').value;
             const priority = document.getElementById('taskPriority').value;
+            const subject = document.getElementById('studySubject').value.trim();
+            const chapter = document.getElementById('studyChapter').value.trim();
+            const subChapter = document.getElementById('studySubChapter').value.trim();
+
+            const taskData = {
+                name,
+                icon: selectedIcon,
+                color: selectedColor,
+                startTime,
+                endTime,
+                frequency,
+                priority,
+                studySection: subject ? { subject, chapter, subChapter } : null,
+            };
 
             try {
-                await addDoc(collection(db, "users", currentUser.uid, "tasks"), {
-                    name,
-                    icon: selectedIcon,
-                    startTime,
-                    endTime,
-                    frequency,
-                    priority,
-                    completed: false,
-                    createdAt: Date.now()
-                });
+                if (taskId) {
+                    await updateDoc(doc(db, "users", currentUser.uid, "tasks", taskId), taskData);
+                } else {
+                    taskData.completed = false;
+                    taskData.createdAt = Date.now();
+                    await addDoc(collection(db, "users", currentUser.uid, "tasks"), taskData);
+                }
 
                 document.getElementById('taskModal').style.display = 'none';
                 e.target.reset();
@@ -872,31 +1053,67 @@
             }
         });
 
-        // Toggle Task Complete in Firebase
-        async function toggleTask(id, currentStatus) {
-            const taskRef = doc(db, "users", currentUser.uid, "tasks", id);
-            await updateDoc(taskRef, { completed: !currentStatus });
-        }
+        // Save Event to Firebase
+        document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('eventName').value;
+            const date = document.getElementById('eventDate').value;
+            const notes = document.getElementById('eventNotes').value;
 
-        // Delete Task from Firebase
-        async function deleteTask(id) {
-            const taskRef = doc(db, "users", currentUser.uid, "tasks", id);
-            await deleteDoc(taskRef);
-        }
-
-        // Filter Controls
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                activeFilter = e.target.dataset.filter;
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                renderTasks();
-            });
+            try {
+                await addDoc(collection(db, "users", currentUser.uid, "events"), {
+                    name,
+                    date,
+                    notes,
+                    createdAt: Date.now()
+                });
+                document.getElementById('eventModal').style.display = 'none';
+                e.target.reset();
+            } catch (err) {
+                alert("Error saving event: " + err.message);
+            }
         });
 
-        document.getElementById('searchInput').addEventListener('input', renderTasks);
+        // Edit Task Callback
+        window.openEditTask = function(id) {
+            const task = userTasks.find(t => t.id === id);
+            if (!task) return;
 
-        // Render Tasks
+            document.getElementById('editTaskId').value = task.id;
+            document.getElementById('taskName').value = task.name;
+            document.getElementById('taskStartTime').value = task.startTime;
+            document.getElementById('taskEndTime').value = task.endTime;
+            document.getElementById('taskFrequency').value = task.frequency;
+            document.getElementById('taskPriority').value = task.priority;
+
+            if (task.studySection) {
+                document.getElementById('studySubject').value = task.studySection.subject || '';
+                document.getElementById('studyChapter').value = task.studySection.chapter || '';
+                document.getElementById('studySubChapter').value = task.studySection.subChapter || '';
+            }
+
+            selectedIcon = task.icon || "fa-book";
+            selectedColor = task.color || "#8b5cf6";
+            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
+            document.getElementById('selectedIconName').innerText = selectedIcon;
+
+            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
+            document.getElementById('taskModal').style.display = 'flex';
+        };
+
+        async function toggleTask(id, currentStatus) {
+            await updateDoc(doc(db, "users", currentUser.uid, "tasks", id), { completed: !currentStatus });
+        }
+
+        async function deleteTask(id) {
+            await deleteDoc(doc(db, "users", currentUser.uid, "tasks", id));
+        }
+
+        async function deleteEvent(id) {
+            await deleteDoc(doc(db, "users", currentUser.uid, "events", id));
+        }
+
+        // Render Tasks with Creation Order (1st, 2nd, 3rd)
         function renderTasks() {
             const container = document.getElementById('tasksList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -911,44 +1128,91 @@
             updateProgress();
 
             if (filteredTasks.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No tasks found.</p>`;
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No tasks created yet.</p>`;
                 return;
             }
 
-            filteredTasks.forEach(task => {
+            filteredTasks.forEach((task, index) => {
+                const orderSuffix = getOrdinalSuffix(index + 1);
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
+                card.style.setProperty('--card-color', task.color || '#8b5cf6');
+
+                let studyHTML = '';
+                if (task.studySection) {
+                    studyHTML = `<div class="study-tag"><i class="fa-solid fa-graduation-cap"></i> ${task.studySection.subject} ${task.studySection.chapter ? '| Ch: ' + task.studySection.chapter : ''} ${task.studySection.subChapter ? '| Sub: ' + task.studySection.subChapter : ''}</div>`;
+                }
+
                 card.innerHTML = `
                     <div class="task-left">
+                        <span class="task-order-badge">#${index + 1}${orderSuffix}</span>
                         <div class="task-icon-box">
-                            <i class="fa-solid ${task.icon}"></i>
+                            <i class="fa-solid ${task.icon || 'fa-book'}"></i>
                         </div>
                         <div class="task-details">
                             <div class="task-title">
-                                <span class="priority-dot p-${task.priority}"></span>
-                                ${task.name} 
-                                <span class="task-badge ${task.frequency === 'everyday' ? 'badge-everyday' : 'badge-oneday'}">
-                                    ${task.frequency === 'everyday' ? 'Everyday' : 'One Day'}
-                                </span>
+                                ${task.name}
                             </div>
-                            <p><i class="fa-regular fa-clock" style="font-size: 0.75rem;"></i> ${task.startTime} - ${task.endTime}</p>
+                            <p><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</p>
+                            ${studyHTML}
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn check-btn">
-                            <i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i>
-                        </button>
-                        <button class="action-btn delete-btn">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <button class="action-btn check" title="Complete"><i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i></button>
+                        <button class="action-btn edit" title="Edit" onclick="openEditTask('${task.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
 
-                card.querySelector('.check-btn').onclick = () => toggleTask(task.id, task.completed);
-                card.querySelector('.delete-btn').onclick = () => deleteTask(task.id);
+                card.querySelector('.check').onclick = () => toggleTask(task.id, task.completed);
+                card.querySelector('.delete').onclick = () => deleteTask(task.id);
 
                 container.appendChild(card);
             });
+        }
+
+        // Render Events
+        function renderEvents() {
+            const container = document.getElementById('eventsList');
+            container.innerHTML = '';
+
+            if (userEvents.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No events scheduled.</p>`;
+                return;
+            }
+
+            userEvents.forEach(evt => {
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                card.style.setProperty('--card-color', '#ec4899');
+
+                card.innerHTML = `
+                    <div class="task-left">
+                        <div class="task-icon-box" style="color:#ec4899;">
+                            <i class="fa-solid fa-calendar-star"></i>
+                        </div>
+                        <div class="task-details">
+                            <div class="task-title">${evt.name}</div>
+                            <p><i class="fa-regular fa-calendar"></i> ${evt.date}</p>
+                            ${evt.notes ? `<p style="color:var(--text-muted); margin-top:4px;">${evt.notes}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+
+                card.querySelector('.delete').onclick = () => deleteEvent(evt.id);
+                container.appendChild(card);
+            });
+        }
+
+        function getOrdinalSuffix(i) {
+            const j = i % 10, k = i % 100;
+            if (j == 1 && k != 11) return "st";
+            if (j == 2 && k != 12) return "nd";
+            if (j == 3 && k != 13) return "rd";
+            return "th";
         }
 
         function updateProgress() {
@@ -963,7 +1227,6 @@
             document.getElementById('progressPercent').innerText = `${percent}%`;
         }
 
-        // Mini Calendar
         function buildCalendar() {
             const calendarGrid = document.getElementById('calendarGrid');
             const monthYear = document.getElementById('calMonthYear');
