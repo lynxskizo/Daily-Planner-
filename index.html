@@ -47,7 +47,7 @@
             background-attachment: fixed;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 20px;
             overflow-x: hidden;
         }
@@ -72,12 +72,13 @@
         .auth-container {
             width: 100%;
             max-width: 420px;
-            padding: 40px 30px;
+            padding: 40px 25px;
             text-align: center;
+            margin-top: 40px;
         }
 
         .auth-container h2 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin-bottom: 5px;
             background: linear-gradient(to right, #a78bfa, #f472b6);
             -webkit-background-clip: text;
@@ -89,6 +90,7 @@
         .input-group {
             margin-bottom: 14px;
             position: relative;
+            width: 100%;
         }
 
         .input-group i.input-icon {
@@ -107,6 +109,7 @@
             border-radius: 12px;
             outline: none;
             font-size: 0.9rem;
+            text-overflow: ellipsis;
         }
 
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
@@ -156,6 +159,7 @@
             max-width: 1250px;
             grid-template-columns: 320px 1fr;
             gap: 25px;
+            margin-bottom: 20px;
         }
 
         .sidebar {
@@ -163,25 +167,40 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            gap: 15px;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
 
         .avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 16px;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .user-info h3 {
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .clock-box {
@@ -193,8 +212,40 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .clock-box h3 { font-size: 1.5rem; letter-spacing: 1px; font-weight: 600; }
+        .clock-box h3 { font-size: 1.4rem; letter-spacing: 1px; font-weight: 600; }
         .clock-box p { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* POMODORO TIMER BOX */
+        .pomodoro-box {
+            background: rgba(0,0,0,0.25);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+        .pomodoro-display {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-pink);
+            letter-spacing: 2px;
+            margin: 8px 0;
+        }
+        .pomo-btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        .pomo-btn {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: var(--accent-purple);
+            color: white;
+            font-weight: 600;
+        }
 
         .progress-box {
             margin-bottom: 20px;
@@ -262,6 +313,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-width: 0; /* Fix flex child overflow bug */
         }
 
         .tabs-header {
@@ -270,19 +322,22 @@
             border-bottom: 1px solid var(--glass-border);
             padding-bottom: 12px;
             overflow-x: auto;
+            white-space: nowrap;
         }
+        .tabs-header::-webkit-scrollbar { height: 4px; }
+        .tabs-header::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
 
         .tab-btn {
             background: none;
             border: none;
             padding: 8px 16px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.2s;
-            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .tab-btn.active {
@@ -296,18 +351,19 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
         }
 
         .controls-bar {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .search-box {
             flex: 1;
-            min-width: 200px;
+            min-width: 180px;
             position: relative;
         }
         .search-box i {
@@ -336,10 +392,10 @@
             border: 1px solid var(--glass-border);
         }
         .filter-btn {
-            padding: 6px 14px;
+            padding: 6px 12px;
             border: none;
             background: none;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             cursor: pointer;
             border-radius: 9px;
             color: var(--text-muted);
@@ -355,7 +411,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 520px;
+            max-height: 540px;
             overflow-y: auto;
             padding-right: 4px;
         }
@@ -367,7 +423,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             position: relative;
@@ -375,6 +431,7 @@
             background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             backdrop-filter: blur(10px);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            gap: 12px;
         }
 
         .task-card::before {
@@ -394,28 +451,48 @@
         .task-card.completed { opacity: 0.5; }
         .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
 
-        .task-left { display: flex; align-items: center; gap: 16px; }
+        .task-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0; /* Prevents overflow inside flexbox */
+            flex: 1;
+        }
 
         .task-order-badge {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             background: rgba(255,255,255,0.1);
-            padding: 4px 8px;
-            border-radius: 8px;
+            padding: 4px 6px;
+            border-radius: 6px;
             color: var(--text-muted);
+            flex-shrink: 0;
         }
 
         .duration-badge {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             background: rgba(139, 92, 246, 0.2);
             color: #c4b5fd;
             border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 2px 8px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 6px;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            white-space: nowrap;
         }
+
+        .priority-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .priority-high { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .priority-medium { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .priority-low { background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); }
 
         .alarm-indicator {
             font-size: 0.72rem;
@@ -424,32 +501,59 @@
         }
 
         .task-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--card-color, var(--accent-purple));
             flex-shrink: 0;
         }
 
-        .task-details .task-title { font-size: 0.98rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .task-details p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+        .task-details {
+            min-width: 0;
+            flex: 1;
+        }
 
-        .task-actions { display: flex; align-items: center; gap: 8px; }
+        .task-details .task-title {
+            font-size: 0.92rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
 
         .action-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             border: 1px solid var(--glass-border);
             background: rgba(255,255,255,0.04);
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             transition: all 0.2s;
             display: flex;
@@ -466,25 +570,27 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
         .study-card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 10px;
         }
 
         .study-notes-box {
             background: rgba(0,0,0,0.25);
             border-radius: 12px;
-            padding: 12px;
-            font-size: 0.85rem;
+            padding: 10px 14px;
+            font-size: 0.82rem;
             color: #cbd5e1;
             margin: 10px 0;
             border: 1px solid rgba(255,255,255,0.05);
+            word-break: break-word;
         }
 
         .media-container {
@@ -492,6 +598,7 @@
             gap: 12px;
             flex-wrap: wrap;
             margin-top: 10px;
+            width: 100%;
         }
 
         .youtube-embed {
@@ -516,8 +623,8 @@
 
         .modal-content {
             width: 100%;
-            max-width: 520px;
-            padding: 28px;
+            max-width: 500px;
+            padding: 24px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -526,15 +633,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-row { display: flex; gap: 10px; }
 
-        .color-picker-grid { display: flex; gap: 10px; margin-bottom: 14px; }
+        .color-picker-grid { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
         .color-dot {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
@@ -544,7 +651,7 @@
 
         .icon-selector-trigger {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 14px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
@@ -559,7 +666,7 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
-            max-height: 180px;
+            max-height: 160px;
             overflow-y: auto;
             padding: 8px;
             background: rgba(0,0,0,0.3);
@@ -569,21 +676,30 @@
         }
 
         .icon-option {
-            height: 38px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
             cursor: pointer;
             background: rgba(255,255,255,0.03);
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
         }
         .icon-option.selected { background: var(--accent-purple); color: white; }
 
+        /* MOBILE RESPONSIVE FIXES */
         @media (max-width: 850px) {
-            .dashboard { grid-template-columns: 1fr; }
             body { padding: 10px; }
+            .dashboard { grid-template-columns: 1fr; gap: 15px; }
+            .main-content { padding: 16px; }
+            .sidebar { padding: 18px; }
+            .form-row { flex-direction: column; gap: 0; }
+            .task-card { padding: 12px; }
+            .task-order-badge { display: none; }
+            .youtube-embed { height: 180px; }
+            .header-actions { align-items: flex-start; }
+            .header-actions .btn { width: 100%; }
         }
     </style>
 </head>
@@ -591,7 +707,7 @@
 
     <!-- AUTHENTICATION FORM -->
     <div id="authSection" class="glass auth-container animate-fade">
-        <h2 id="authTitle"><i class="fa-solid fa-graduation-cap"></i> StudyPulse</h2>
+        <h2 id="authTitle"><i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro</h2>
         <p id="authSubtitle">Login to access your study tasks</p>
 
         <!-- INSTALL APP BUTTON -->
@@ -625,9 +741,9 @@
             <div>
                 <div class="user-profile">
                     <div class="avatar" id="userAvatar">U</div>
-                    <div>
-                        <h3 id="userNameDisplay" style="font-size: 0.95rem; word-break: break-all;">User</h3>
-                        <p style="font-size: 0.75rem; color: var(--text-muted);">Study & Routine Planner</p>
+                    <div class="user-info">
+                        <h3 id="userNameDisplay">User</h3>
+                        <p style="font-size: 0.72rem; color: var(--text-muted);">Study & Routine Planner</p>
                     </div>
                 </div>
 
@@ -636,10 +752,20 @@
                     <p id="liveDate">Today</p>
                 </div>
 
+                <!-- INTELLIGENT POMODORO FOCUS TIMER -->
+                <div class="pomodoro-box">
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);"><i class="fa-solid fa-stopwatch"></i> Focus Pomodoro</div>
+                    <div class="pomodoro-display" id="pomoTimerDisplay">25:00</div>
+                    <div class="pomo-btn-group">
+                        <button class="pomo-btn" id="pomoStartBtn">Start</button>
+                        <button class="pomo-btn" id="pomoResetBtn" style="background: rgba(255,255,255,0.1);">Reset</button>
+                    </div>
+                </div>
+
                 <!-- TASK COMPLETION TRACKER -->
                 <div class="progress-box">
                     <div class="progress-info">
-                        <span>Daily Completion</span>
+                        <span>Daily Goal Progress</span>
                         <span id="progressPercent">0%</span>
                     </div>
                     <div class="progress-bar-bg">
@@ -665,19 +791,19 @@
         <main class="glass main-content animate-fade">
             
             <div class="tabs-header">
-                <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> Tasks</button>
-                <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> Special Events</button>
-                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> Study Section Hub</button>
+                <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> Routine Tasks</button>
+                <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> Exams & Events</button>
+                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> Study Material Hub</button>
             </div>
 
             <!-- TASKS TAB VIEW -->
             <div id="tasksTabView">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Daily & Routine Tasks</h2>
-                        <p style="color: var(--text-muted); font-size: 0.82rem;">Chronological task management</p>
+                        <h2>Daily Routine & Tasks</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Smart chronological management</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openTaskModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openTaskModalBtn">
                         <i class="fa-solid fa-plus"></i> New Task
                     </button>
                 </div>
@@ -690,7 +816,7 @@
                     <div class="filter-btn-group">
                         <button class="filter-btn active" data-filter="all">All</button>
                         <button class="filter-btn" data-filter="active">Active</button>
-                        <button class="filter-btn" data-filter="completed">Completed</button>
+                        <button class="filter-btn" data-filter="completed">Done</button>
                     </div>
                 </div>
 
@@ -701,10 +827,10 @@
             <div id="eventsTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Date Events Schedule</h2>
-                        <p style="color: var(--text-muted); font-size: 0.82rem;">Track exam dates, deadlines, & events</p>
+                        <h2>Exam & Event Schedule</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Track exam dates & deadlines</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openEventModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openEventModalBtn">
                         <i class="fa-solid fa-calendar-plus"></i> New Event
                     </button>
                 </div>
@@ -712,14 +838,14 @@
                 <div class="tasks-container" id="eventsList"></div>
             </div>
 
-            <!-- IN DETAILS STUDY SECTION HUB TAB -->
+            <!-- STUDY SECTION HUB TAB VIEW -->
             <div id="studyTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Detailed Study Hub</h2>
-                        <p style="color: var(--text-muted); font-size: 0.82rem;">Books, PDFs, Notes & YouTube Playlists</p>
+                        <h2>Study Hub & Vault</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Subject Books, PDFs & Video Lessons</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openStudyModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openStudyModalBtn">
                         <i class="fa-solid fa-book-open"></i> Add Study Material
                     </button>
                 </div>
@@ -742,10 +868,10 @@
 
                 <div class="input-group">
                     <i class="fa-solid fa-heading input-icon"></i>
-                    <input type="text" id="taskName" placeholder="Task Name (e.g. Morning Revision)" required>
+                    <input type="text" id="taskName" placeholder="Task Name (e.g. Physics Revision)" required>
                 </div>
 
-                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Theme Color</label>
+                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Theme Color</label>
                 <div class="color-picker-grid" id="colorPickerGrid">
                     <div class="color-dot selected" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
                     <div class="color-dot" data-color="#ec4899" style="background:#ec4899;"></div>
@@ -755,10 +881,10 @@
                     <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
                 </div>
 
-                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Activity Icon</label>
+                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Activity Icon</label>
                 <div class="icon-selector-trigger" id="iconSelectorTrigger">
-                    <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.85rem;">fa-book</span></span>
-                    <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+                    <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.82rem;">fa-book</span></span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="icon-grid" id="iconGrid" style="display: none;"></div>
 
@@ -773,8 +899,7 @@
                     </div>
                 </div>
 
-                <!-- ALARM SETTINGS FOR TASK -->
-                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Alarm Settings</label>
+                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Alarm Settings</label>
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
                         <i class="fa-solid fa-bell input-icon"></i>
@@ -786,17 +911,11 @@
                     <div class="input-group" style="flex: 1;">
                         <i class="fa-solid fa-music input-icon"></i>
                         <select id="taskAlarmTone">
-                            <option value="synth">Default Synth Chime</option>
-                            <option value="bell">Gentle Bell Tone</option>
-                            <option value="digital">Digital Clock Alarm</option>
-                            <option value="custom">Device Custom Tone...</option>
+                            <option value="synth">Synth Chime</option>
+                            <option value="bell">Gentle Bell</option>
+                            <option value="digital">Digital Clock</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="input-group" id="customToneFileContainer" style="display: none;">
-                    <i class="fa-solid fa-file-audio input-icon"></i>
-                    <input type="file" id="customToneFile" accept="audio/*">
                 </div>
 
                 <div class="form-row">
@@ -876,11 +995,6 @@
                 </div>
 
                 <div class="input-group">
-                    <i class="fa-solid fa-file-pdf input-icon"></i>
-                    <input type="file" id="studyPdfFile" accept="application/pdf">
-                </div>
-
-                <div class="input-group">
                     <i class="fa-solid fa-note-sticky input-icon"></i>
                     <textarea id="studyNotes" placeholder="Keep personal revision notes here..." rows="3"></textarea>
                 </div>
@@ -890,45 +1004,11 @@
         </div>
     </div>
 
-    <!-- AUDIO SYSTEM ENGINES -->
     <audio id="alarmSound" preload="auto"></audio>
-
-    <!-- REGISTER SERVICE WORKER & PWA INSTALL ENGINE -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker Active!'))
-                    .catch(err => console.log('Service Worker Failed: ', err));
-            });
-        }
-
-        let deferredPrompt;
-        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            pwaInstallBtn.style.display = 'inline-flex';
-        });
-
-        pwaInstallBtn.addEventListener('click', () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        pwaInstallBtn.style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                });
-            }
-        });
-    </script>
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
         import { 
             getAuth, 
             createUserWithEmailAndPassword, 
@@ -945,7 +1025,7 @@
             doc, 
             onSnapshot, 
             query, 
-            orderBy 
+            where
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -954,12 +1034,10 @@
             projectId: "daily-planner-8d245",
             storageBucket: "daily-planner-8d245.firebasestorage.app",
             messagingSenderId: "170453207728",
-            appId: "1:170453207728:web:387c77905505417f89c975",
-            measurementId: "G-5Q109VE7CV"
+            appId: "1:170453207728:web:387c77905505417f89c975"
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
@@ -972,7 +1050,6 @@
         let selectedColor = "#8b5cf6";
         let activeFilter = "all";
         let triggeredAlarms = new Set();
-        let customDeviceToneUrl = null;
 
         let unsubscribeTasks = null;
         let unsubscribeEvents = null;
@@ -985,12 +1062,10 @@
         };
 
         const ICON_LIST = [
-            "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-glasses", "fa-atom", "fa-palette", "fa-language", "fa-file-lines",
-            "fa-dumbbell", "fa-person-running", "fa-person-biking", "fa-person-swimming", "fa-heart-pulse", "fa-apple-whole", "fa-table-tennis-paddle-ball", "fa-volleyball", "fa-person-walking", "fa-shield-halved",
-            "fa-hands-praying", "fa-place-of-worship", "fa-mosque", "fa-spa", "fa-bed", "fa-bell", "fa-sun", "fa-moon", "fa-mug-hot", "fa-shower", "fa-utensils", "fa-bath", "fa-mattress-pillow", "fa-eye"
+            "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon"
         ];
 
-        // Auth Listener
+        // Auth State Listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 currentUser = user;
@@ -1014,10 +1089,10 @@
             }
         });
 
-        // Switch Auth Mode
+        // Toggle Login / Register
         document.getElementById('switchBtn').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerHTML = '<i class="fa-solid fa-graduation-cap"></i> StudyPulse';
+            document.getElementById('authTitle').innerHTML = '<i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro';
             document.getElementById('authSubtitle').innerText = isLoginMode ? 'Login to access your study tasks' : 'Create account to get started';
             document.getElementById('authBtn').innerText = isLoginMode ? 'Login' : 'Register';
             document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
@@ -1036,25 +1111,25 @@
                     await createUserWithEmailAndPassword(auth, email, password);
                     alert("Account created successfully!");
                 }
-            } catch (error) {
-                alert(error.message);
-            }
+            } catch (error) { alert(error.message); }
         });
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // Firestore Listeners
+        // FIXED REALTIME LISTENERS WITH UID MATCHING
         function listenToTasks(userId) {
-            const q = query(collection(db, "users", userId, "tasks"), orderBy("createdAt", "asc"));
+            const q = query(collection(db, "tasks"), where("uid", "==", userId));
             unsubscribeTasks = onSnapshot(q, (snapshot) => {
                 userTasks = [];
                 snapshot.forEach((doc) => userTasks.push({ id: doc.id, ...doc.data() }));
+                // Sort by time
+                userTasks.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
                 renderTasks();
-            }, (error) => alert("Firestore Permission Error: " + error.message));
+            });
         }
 
         function listenToEvents(userId) {
-            const q = query(collection(db, "users", userId, "events"), orderBy("date", "asc"));
+            const q = query(collection(db, "events"), where("uid", "==", userId));
             unsubscribeEvents = onSnapshot(q, (snapshot) => {
                 userEvents = [];
                 snapshot.forEach((doc) => userEvents.push({ id: doc.id, ...doc.data() }));
@@ -1063,7 +1138,7 @@
         }
 
         function listenToStudyHub(userId) {
-            const q = query(collection(db, "users", userId, "studyHub"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "studyHub"), where("uid", "==", userId));
             unsubscribeStudy = onSnapshot(q, (snapshot) => {
                 userStudyItems = [];
                 snapshot.forEach((doc) => userStudyItems.push({ id: doc.id, ...doc.data() }));
@@ -1086,20 +1161,7 @@
             document.getElementById('tabStudyBtn').classList.toggle('active', tab === 'study');
         }
 
-        // Custom Tone File Selector
-        document.getElementById('taskAlarmTone').addEventListener('change', (e) => {
-            const customContainer = document.getElementById('customToneFileContainer');
-            customContainer.style.display = e.target.value === 'custom' ? 'block' : 'none';
-        });
-
-        document.getElementById('customToneFile').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                customDeviceToneUrl = URL.createObjectURL(file);
-            }
-        });
-
-        // Color Picker Binding
+        // Color & Icon Selectors
         document.querySelectorAll('.color-dot').forEach(dot => {
             dot.addEventListener('click', (e) => {
                 document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
@@ -1108,7 +1170,6 @@
             });
         });
 
-        // Icon Grid
         function buildIconGrid() {
             const grid = document.getElementById('iconGrid');
             grid.innerHTML = '';
@@ -1134,7 +1195,7 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
-        // Time Utility Functions
+        // Time Helpers
         function format12Hour(time24) {
             if (!time24) return '';
             let [hours, minutes] = time24.split(':').map(Number);
@@ -1147,19 +1208,15 @@
             if (!startTime || !endTime) return '';
             let [startH, startM] = startTime.split(':').map(Number);
             let [endH, endM] = endTime.split(':').map(Number);
-
             let startMinutes = startH * 60 + startM;
             let endMinutes = endH * 60 + endM;
-
             if (endMinutes < startMinutes) endMinutes += 24 * 60;
-
             const diff = endMinutes - startMinutes;
             const hrs = Math.floor(diff / 60);
             const mins = diff % 60;
-
-            if (hrs === 0) return `${mins} mins`;
-            if (mins === 0) return `${hrs} hrs`;
-            return `${hrs} hr ${mins} mins`;
+            if (hrs === 0) return `${mins}m`;
+            if (mins === 0) return `${hrs}h`;
+            return `${hrs}h ${mins}m`;
         }
 
         // Live Clock
@@ -1181,6 +1238,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // Alarm Trigger Logic
         function checkAlarms(currentTime24) {
             if (!currentUser) return;
             userTasks.forEach(task => {
@@ -1196,20 +1254,56 @@
 
         function triggerAlarm(task) {
             const audio = document.getElementById('alarmSound');
-            let toneSrc = TONE_PRESETS.synth;
+            audio.src = TONE_PRESETS[task.alarmTone] || TONE_PRESETS.synth;
+            audio.play().catch(e => console.log("Audio permission needed"));
+            setTimeout(() => alert(`⏰ ALARM: TIME FOR TASK!\n\n${task.name}`), 100);
+        }
 
-            if (task.alarmTone === 'custom' && customDeviceToneUrl) {
-                toneSrc = customDeviceToneUrl;
-            } else if (TONE_PRESETS[task.alarmTone]) {
-                toneSrc = TONE_PRESETS[task.alarmTone];
+        // Pomodoro Focus Timer Logic
+        let pomoMinutes = 25;
+        let pomoSeconds = 0;
+        let pomoTimer = null;
+        let isPomoRunning = false;
+
+        document.getElementById('pomoStartBtn').addEventListener('click', () => {
+            if (isPomoRunning) {
+                clearInterval(pomoTimer);
+                isPomoRunning = false;
+                document.getElementById('pomoStartBtn').innerText = 'Start';
+            } else {
+                isPomoRunning = true;
+                document.getElementById('pomoStartBtn').innerText = 'Pause';
+                pomoTimer = setInterval(() => {
+                    if (pomoSeconds === 0) {
+                        if (pomoMinutes === 0) {
+                            clearInterval(pomoTimer);
+                            isPomoRunning = false;
+                            document.getElementById('pomoStartBtn').innerText = 'Start';
+                            alert('🎉 Pomodoro Session Completed! Take a 5 minute break!');
+                            return;
+                        }
+                        pomoMinutes--;
+                        pomoSeconds = 59;
+                    } else {
+                        pomoSeconds--;
+                    }
+                    updatePomoDisplay();
+                }, 1000);
             }
+        });
 
-            audio.src = toneSrc;
-            audio.play().catch(e => console.log("Audio permission needed from user gesture."));
+        document.getElementById('pomoResetBtn').addEventListener('click', () => {
+            clearInterval(pomoTimer);
+            isPomoRunning = false;
+            pomoMinutes = 25;
+            pomoSeconds = 0;
+            document.getElementById('pomoStartBtn').innerText = 'Start';
+            updatePomoDisplay();
+        });
 
-            setTimeout(() => {
-                alert(`⏰ ALARM: TIME FOR TASK!\n\nTask: ${task.name}\nTime Slot: ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}`);
-            }, 100);
+        function updatePomoDisplay() {
+            document.getElementById('pomoTimerDisplay').innerText = 
+                `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
         }
 
         // Modal Controls
@@ -1217,7 +1311,6 @@
             document.getElementById('editTaskId').value = '';
             document.getElementById('taskModalTitle').innerText = 'Create New Activity';
             document.getElementById('saveTaskForm').reset();
-            document.getElementById('customToneFileContainer').style.display = 'none';
             document.getElementById('taskModal').style.display = 'flex';
         });
         document.getElementById('closeTaskModalBtn').addEventListener('click', () => document.getElementById('taskModal').style.display = 'none');
@@ -1232,35 +1325,27 @@
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const taskId = document.getElementById('editTaskId').value;
-            const name = document.getElementById('taskName').value;
-            const startTime = document.getElementById('taskStartTime').value;
-            const endTime = document.getElementById('taskEndTime').value;
-            const alarmEnable = document.getElementById('taskAlarmEnable').value;
-            const alarmTone = document.getElementById('taskAlarmTone').value;
-            const frequency = document.getElementById('taskFrequency').value;
-            const priority = document.getElementById('taskPriority').value;
-
             const taskData = {
-                name,
+                uid: currentUser.uid,
+                name: document.getElementById('taskName').value,
                 icon: selectedIcon,
                 color: selectedColor,
-                startTime,
-                endTime,
-                alarmEnable,
-                alarmTone,
-                frequency,
-                priority,
+                startTime: document.getElementById('taskStartTime').value,
+                endTime: document.getElementById('taskEndTime').value,
+                alarmEnable: document.getElementById('taskAlarmEnable').value,
+                alarmTone: document.getElementById('taskAlarmTone').value,
+                frequency: document.getElementById('taskFrequency').value,
+                priority: document.getElementById('taskPriority').value,
             };
 
             try {
                 if (taskId) {
-                    await updateDoc(doc(db, "users", currentUser.uid, "tasks", taskId), taskData);
+                    await updateDoc(doc(db, "tasks", taskId), taskData);
                 } else {
                     taskData.completed = false;
                     taskData.createdAt = Date.now();
-                    await addDoc(collection(db, "users", currentUser.uid, "tasks"), taskData);
+                    await addDoc(collection(db, "tasks"), taskData);
                 }
-
                 document.getElementById('taskModal').style.display = 'none';
                 e.target.reset();
             } catch (err) { alert("Error: " + err.message); }
@@ -1270,7 +1355,8 @@
         document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "users", currentUser.uid, "events"), {
+                await addDoc(collection(db, "events"), {
+                    uid: currentUser.uid,
                     name: document.getElementById('eventName').value,
                     date: document.getElementById('eventDate').value,
                     notes: document.getElementById('eventNotes').value,
@@ -1281,67 +1367,35 @@
             } catch (err) { alert("Error: " + err.message); }
         });
 
-        // Save Detailed Study Material Hub Item
+        // Save Study Hub
         document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const bookName = document.getElementById('studyBookName').value;
-            const chapter = document.getElementById('studyChapterName').value;
-            const subChapter = document.getElementById('studySubChapterName').value;
-            const youtubeUrl = document.getElementById('studyYoutubeUrl').value;
-            const notes = document.getElementById('studyNotes').value;
-            const pdfInput = document.getElementById('studyPdfFile');
-
-            let pdfFileName = '';
-            if (pdfInput.files && pdfInput.files[0]) {
-                pdfFileName = pdfInput.files[0].name;
-            }
-
             try {
-                await addDoc(collection(db, "users", currentUser.uid, "studyHub"), {
-                    bookName,
-                    chapter,
-                    subChapter,
-                    youtubeUrl,
-                    notes,
-                    pdfFileName,
+                await addDoc(collection(db, "studyHub"), {
+                    uid: currentUser.uid,
+                    bookName: document.getElementById('studyBookName').value,
+                    chapter: document.getElementById('studyChapterName').value,
+                    subChapter: document.getElementById('studySubChapterName').value,
+                    youtubeUrl: document.getElementById('studyYoutubeUrl').value,
+                    notes: document.getElementById('studyNotes').value,
                     createdAt: Date.now()
                 });
-
                 document.getElementById('studyModal').style.display = 'none';
                 e.target.reset();
-            } catch (err) { alert("Error saving study item: " + err.message); }
+            } catch (err) { alert("Error: " + err.message); }
         });
 
-        // Edit Task Callback
-        window.openEditTask = function(id) {
-            const task = userTasks.find(t => t.id === id);
-            if (!task) return;
+        // Filters
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                activeFilter = e.target.dataset.filter;
+                renderTasks();
+            });
+        });
 
-            document.getElementById('editTaskId').value = task.id;
-            document.getElementById('taskName').value = task.name;
-            document.getElementById('taskStartTime').value = task.startTime;
-            document.getElementById('taskEndTime').value = task.endTime;
-            document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
-            document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
-            document.getElementById('taskFrequency').value = task.frequency;
-            document.getElementById('taskPriority').value = task.priority;
-
-            selectedIcon = task.icon || "fa-book";
-            selectedColor = task.color || "#8b5cf6";
-            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-            document.getElementById('selectedIconName').innerText = selectedIcon;
-
-            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
-            document.getElementById('taskModal').style.display = 'flex';
-        };
-
-        async function toggleTask(id, currentStatus) {
-            await updateDoc(doc(db, "users", currentUser.uid, "tasks", id), { completed: !currentStatus });
-        }
-
-        async function deleteTask(id) { await deleteDoc(doc(db, "users", currentUser.uid, "tasks", id)); }
-        async function deleteEvent(id) { await deleteDoc(doc(db, "users", currentUser.uid, "events", id)); }
-        async function deleteStudy(id) { await deleteDoc(doc(db, "users", currentUser.uid, "studyHub", id)); }
+        document.getElementById('searchInput').addEventListener('input', renderTasks);
 
         // Render Tasks
         function renderTasks() {
@@ -1349,7 +1403,7 @@
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
             container.innerHTML = '';
 
-            let filteredTasks = userTasks.filter(task => {
+            let filtered = userTasks.filter(task => {
                 const matchesFilter = activeFilter === 'all' ? true : activeFilter === 'completed' ? task.completed : !task.completed;
                 const matchesSearch = task.name.toLowerCase().includes(searchQuery);
                 return matchesFilter && matchesSearch;
@@ -1357,16 +1411,14 @@
 
             updateProgress();
 
-            if (filteredTasks.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No tasks created yet.</p>`;
+            if (filtered.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No tasks found.</p>`;
                 return;
             }
 
-            filteredTasks.forEach((task, index) => {
-                const orderSuffix = getOrdinalSuffix(index + 1);
+            filtered.forEach((task, index) => {
                 const durationStr = calculateDuration(task.startTime, task.endTime);
-                const formattedStart = format12Hour(task.startTime);
-                const formattedEnd = format12Hour(task.endTime);
+                const priorityClass = `priority-${task.priority || 'medium'}`;
 
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
@@ -1374,30 +1426,34 @@
 
                 card.innerHTML = `
                     <div class="task-left">
-                        <span class="task-order-badge">#${index + 1}${orderSuffix}</span>
+                        <span class="task-order-badge">#${index + 1}</span>
                         <div class="task-icon-box">
                             <i class="fa-solid ${task.icon || 'fa-book'}"></i>
                         </div>
                         <div class="task-details">
                             <div class="task-title">
                                 ${task.name}
-                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator" title="Alarm Enabled"></i>' : ''}
+                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator"></i>' : ''}
                             </div>
                             <p>
-                                <i class="fa-regular fa-clock"></i> ${formattedStart} - ${formattedEnd}
-                                <span class="duration-badge" style="margin-left: 8px;"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
+                                <i class="fa-regular fa-clock"></i> ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}
+                                <span class="duration-badge"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
+                                <span class="priority-badge ${priorityClass}">${task.priority || 'med'}</span>
                             </p>
                         </div>
                     </div>
                     <div class="task-actions">
                         <button class="action-btn check" title="Complete"><i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i></button>
-                        <button class="action-btn edit" title="Edit" onclick="openEditTask('${task.id}')"><i class="fa-solid fa-pen"></i></button>
                         <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
 
-                card.querySelector('.check').onclick = () => toggleTask(task.id, task.completed);
-                card.querySelector('.delete').onclick = () => deleteTask(task.id);
+                card.querySelector('.check').onclick = async () => {
+                    await updateDoc(doc(db, "tasks", task.id), { completed: !task.completed });
+                };
+                card.querySelector('.delete').onclick = async () => {
+                    await deleteDoc(doc(db, "tasks", task.id));
+                };
 
                 container.appendChild(card);
             });
@@ -1409,7 +1465,7 @@
             container.innerHTML = '';
 
             if (userEvents.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No events scheduled.</p>`;
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No upcoming events.</p>`;
                 return;
             }
 
@@ -1426,7 +1482,7 @@
                         <div class="task-details">
                             <div class="task-title">${evt.name}</div>
                             <p><i class="fa-regular fa-calendar"></i> ${evt.date}</p>
-                            ${evt.notes ? `<p style="color:var(--text-muted); margin-top:4px;">${evt.notes}</p>` : ''}
+                            ${evt.notes ? `<p style="color:var(--text-muted); margin-top:2px;">${evt.notes}</p>` : ''}
                         </div>
                     </div>
                     <div class="task-actions">
@@ -1434,18 +1490,20 @@
                     </div>
                 `;
 
-                card.querySelector('.delete').onclick = () => deleteEvent(evt.id);
+                card.querySelector('.delete').onclick = async () => {
+                    await deleteDoc(doc(db, "events", evt.id));
+                };
                 container.appendChild(card);
             });
         }
 
-        // Render Detailed Study Section Hub
+        // Render Study Hub
         function renderStudyHub() {
             const container = document.getElementById('studyList');
             container.innerHTML = '';
 
             if (userStudyItems.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No study materials added yet.</p>`;
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No study materials added.</p>`;
                 return;
             }
 
@@ -1464,24 +1522,20 @@
                 card.innerHTML = `
                     <div class="study-card-header">
                         <div>
-                            <h3 style="font-size: 1.1rem; color: var(--accent-pink);"><i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}</h3>
-                            <p style="font-size: 0.82rem; color: var(--text-muted);">
+                            <h3 style="font-size: 1rem; color: var(--accent-pink);"><i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}</h3>
+                            <p style="font-size: 0.78rem; color: var(--text-muted);">
                                 Chapter: ${item.chapter} ${item.subChapter ? '| Sub-chapter: ' + item.subChapter : ''}
                             </p>
                         </div>
                         <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
-
                     ${item.notes ? `<div class="study-notes-box"><i class="fa-solid fa-note-sticky" style="color:var(--warning);"></i> ${item.notes}</div>` : ''}
-
-                    ${item.pdfFileName ? `<div style="margin-top: 8px; font-size: 0.85rem;"><i class="fa-solid fa-file-pdf" style="color:var(--danger);"></i> Connected PDF: <strong>${item.pdfFileName}</strong></div>` : ''}
-
-                    <div class="media-container">
-                        ${embedYoutube}
-                    </div>
+                    <div class="media-container">${embedYoutube}</div>
                 `;
 
-                card.querySelector('.delete').onclick = () => deleteStudy(item.id);
+                card.querySelector('.delete').onclick = async () => {
+                    await deleteDoc(doc(db, "studyHub", item.id));
+                };
                 container.appendChild(card);
             });
         }
@@ -1490,14 +1544,6 @@
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function getOrdinalSuffix(i) {
-            const j = i % 10, k = i % 100;
-            if (j == 1 && k != 11) return "st";
-            if (j == 2 && k != 12) return "nd";
-            if (j == 3 && k != 13) return "rd";
-            return "th";
         }
 
         function updateProgress() {
@@ -1515,21 +1561,15 @@
         function buildCalendar() {
             const calendarGrid = document.getElementById('calendarGrid');
             const monthYear = document.getElementById('calMonthYear');
-            
             const date = new Date();
             const year = date.getFullYear();
             const month = date.getMonth();
-
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            
             monthYear.innerText = `${monthNames[month]} ${year}`;
-
             calendarGrid.innerHTML = `
-                <div class="calendar-day-head">S</div>
-                <div class="calendar-day-head">M</div>
-                <div class="calendar-day-head">T</div>
-                <div class="calendar-day-head">W</div>
-                <div class="calendar-day-head">T</div>
-                <div class="calendar-day-head">F</div>
+                <div class="calendar-day-head">S</div><div class="calendar-day-head">M</div><div class="calendar-day-head">T</div>
+                <div class="calendar-day-head">W</div><div class="calendar-day-head">T</div><div class="calendar-day-head">F</div>
                 <div class="calendar-day-head">S</div>
             `;
 
@@ -1537,10 +1577,7 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const today = date.getDate();
 
-            for (let i = 0; i < firstDay; i++) {
-                calendarGrid.innerHTML += `<div></div>`;
-            }
-
+            for (let i = 0; i < firstDay; i++) { calendarGrid.innerHTML += `<div></div>`; }
             for (let day = 1; day <= daysInMonth; day++) {
                 const isActive = day === today ? 'active' : '';
                 calendarGrid.innerHTML += `<div class="calendar-day ${isActive}">${day}</div>`;
@@ -1548,4 +1585,4 @@
         }
     </script>
 </body>
-        </html>
+</html>
