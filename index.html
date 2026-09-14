@@ -1008,609 +1008,2385 @@
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { 
-            getAuth, 
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            addDoc, 
-            deleteDoc, 
-            updateDoc, 
-            doc, 
-            onSnapshot, 
-            query, 
-            where
-        } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBjWYDAdRZT7dCPhK1XD07XlWc2oaWA9EY",
-            authDomain: "daily-planner-8d245.firebaseapp.com",
-            projectId: "daily-planner-8d245",
-            storageBucket: "daily-planner-8d245.firebasestorage.app",
-            messagingSenderId: "170453207728",
-            appId: "1:170453207728:web:387c77905505417f89c975"
-        };
+    import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    import {
+        getFirestore,
+        collection,
+        addDoc,
+        deleteDoc,
+        updateDoc,
+        doc,
+        onSnapshot,
+        query,
+        where
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
-        let isLoginMode = true;
-        let currentUser = null;
-        let userTasks = [];
-        let userEvents = [];
-        let userStudyItems = [];
-        let selectedIcon = "fa-book";
-        let selectedColor = "#8b5cf6";
-        let activeFilter = "all";
-        let triggeredAlarms = new Set();
 
-        let unsubscribeTasks = null;
-        let unsubscribeEvents = null;
-        let unsubscribeStudy = null;
+    /* =========================================================
+       FIREBASE CONFIG
+    ========================================================= */
 
-        const TONE_PRESETS = {
-            synth: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
-            bell: "https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3",
-            digital: "https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBjWYDAdRZT7dCPhK1XD07XlWc2oaWA9EY",
+        authDomain: "daily-planner-8d245.firebaseapp.com",
+        projectId: "daily-planner-8d245",
+        storageBucket: "daily-planner-8d245.firebasestorage.app",
+        messagingSenderId: "170453207728",
+        appId: "1:170453207728:web:387c77905505417f89c975"
+    };
 
-        const ICON_LIST = [
-            "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon"
-        ];
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        // Auth State Listener
-        onAuthStateChanged(auth, (user) => {
+
+    /* =========================================================
+       GLOBAL VARIABLES
+    ========================================================= */
+
+    let isLoginMode = true;
+
+    let currentUser = null;
+
+    let userTasks = [];
+    let userEvents = [];
+    let userStudyItems = [];
+
+    let selectedIcon = "fa-book";
+    let selectedColor = "#8b5cf6";
+
+    let activeFilter = "all";
+
+    let triggeredAlarms = new Set();
+
+    let unsubscribeTasks = null;
+    let unsubscribeEvents = null;
+    let unsubscribeStudy = null;
+
+
+    /* =========================================================
+       CONSTANTS
+    ========================================================= */
+
+    const TONE_PRESETS = {
+        synth: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
+        bell: "https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3",
+        digital: "https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3"
+    };
+
+    const ICON_LIST = [
+        "fa-book",
+        "fa-graduation-cap",
+        "fa-brain",
+        "fa-pencil",
+        "fa-calculator",
+        "fa-microscope",
+        "fa-flask",
+        "fa-globe",
+        "fa-laptop-code",
+        "fa-school",
+        "fa-atom",
+        "fa-palette",
+        "fa-dumbbell",
+        "fa-sun",
+        "fa-moon"
+    ];
+
+
+    /* =========================================================
+       FIREBASE ERROR HANDLER
+    ========================================================= */
+
+    function showFirebaseError(title, error) {
+
+        console.error(title, error);
+
+        const code = error?.code || "";
+        let message = error?.message || "Unknown Firebase error.";
+
+        if (code.includes("permission-denied")) {
+            message =
+                "Firestore permission denied.\n\n" +
+                "Firebase Console → Firestore Database → Rules\n" +
+                "এ গিয়ে নতুন Rules publish করো।";
+        }
+
+        else if (code.includes("failed-precondition")) {
+            message =
+                "Firestore database/index problem হয়েছে।\n\n" +
+                "Firebase Console থেকে Firestore Database check করো।";
+        }
+
+        else if (code.includes("unavailable")) {
+            message =
+                "Firebase server temporarily unavailable.\n\n" +
+                "Internet connection check করে আবার চেষ্টা করো।";
+        }
+
+        alert(`${title}\n\n${message}`);
+    }
+
+
+    /* =========================================================
+       LOGIN CHECK
+    ========================================================= */
+
+    function requireUser() {
+
+        if (!currentUser) {
+
+            alert("Please login first.");
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /* =========================================================
+       STOP OLD LISTENERS
+    ========================================================= */
+
+    function stopAllListeners() {
+
+        if (unsubscribeTasks) {
+            unsubscribeTasks();
+            unsubscribeTasks = null;
+        }
+
+        if (unsubscribeEvents) {
+            unsubscribeEvents();
+            unsubscribeEvents = null;
+        }
+
+        if (unsubscribeStudy) {
+            unsubscribeStudy();
+            unsubscribeStudy = null;
+        }
+
+        userTasks = [];
+        userEvents = [];
+        userStudyItems = [];
+    }
+
+
+    /* =========================================================
+       AUTH STATE
+    ========================================================= */
+
+    onAuthStateChanged(
+        auth,
+
+        (user) => {
+
+            stopAllListeners();
+
             if (user) {
+
                 currentUser = user;
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('dashboardSection').style.display = 'grid';
-                document.getElementById('userNameDisplay').innerText = user.email;
-                document.getElementById('userAvatar').innerText = user.email.charAt(0).toUpperCase();
+
+                document.getElementById("authSection").style.display = "none";
+
+                document.getElementById("dashboardSection").style.display = "grid";
+
+                document.getElementById("userNameDisplay").innerText =
+                    user.email || "User";
+
+                document.getElementById("userAvatar").innerText =
+                    (user.email || "U").charAt(0).toUpperCase();
 
                 buildIconGrid();
+
                 buildCalendar();
+
                 listenToTasks(user.uid);
+
                 listenToEvents(user.uid);
+
                 listenToStudyHub(user.uid);
+
             } else {
+
                 currentUser = null;
-                if (unsubscribeTasks) unsubscribeTasks();
-                if (unsubscribeEvents) unsubscribeEvents();
-                if (unsubscribeStudy) unsubscribeStudy();
-                document.getElementById('dashboardSection').style.display = 'none';
-                document.getElementById('authSection').style.display = 'block';
+
+                document.getElementById("dashboardSection").style.display = "none";
+
+                document.getElementById("authSection").style.display = "block";
+
+                userTasks = [];
+                userEvents = [];
+                userStudyItems = [];
+
+                renderTasks();
+                renderEvents();
+                renderStudyHub();
             }
-        });
+        },
 
-        // Toggle Login / Register
-        document.getElementById('switchBtn').addEventListener('click', () => {
+        (error) => {
+
+            showFirebaseError(
+                "Authentication error",
+                error
+            );
+        }
+    );
+
+
+    /* =========================================================
+       LOGIN / REGISTER SWITCH
+    ========================================================= */
+
+    document.getElementById("switchBtn").addEventListener(
+        "click",
+        () => {
+
             isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerHTML = '<i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro';
-            document.getElementById('authSubtitle').innerText = isLoginMode ? 'Login to access your study tasks' : 'Create account to get started';
-            document.getElementById('authBtn').innerText = isLoginMode ? 'Login' : 'Register';
-            document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
-            document.getElementById('switchBtn').innerText = isLoginMode ? 'Register' : 'Login';
-        });
 
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            document.getElementById("authTitle").innerHTML =
+                '<i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro';
+
+            document.getElementById("authSubtitle").innerText =
+                isLoginMode
+                    ? "Login to access your study tasks"
+                    : "Create account to get started";
+
+            document.getElementById("authBtn").innerText =
+                isLoginMode
+                    ? "Login"
+                    : "Register";
+
+            document.getElementById("switchText").innerText =
+                isLoginMode
+                    ? "Don't have an account?"
+                    : "Already have an account?";
+
+            document.getElementById("switchBtn").innerText =
+                isLoginMode
+                    ? "Register"
+                    : "Login";
+        }
+    );
+
+
+    /* =========================================================
+       LOGIN / REGISTER
+    ========================================================= */
+
+    document.getElementById("authForm").addEventListener(
+        "submit",
+        async (e) => {
+
             e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
+
+            const email =
+                document.getElementById("authEmail").value.trim();
+
+            const password =
+                document.getElementById("authPassword").value;
+
+            const button =
+                document.getElementById("authBtn");
+
+            button.disabled = true;
 
             try {
+
                 if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
+
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
                 } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
+
+                    await createUserWithEmailAndPassword(
+                        auth,
+                        email,
+                        password
+                    );
+
                     alert("Account created successfully!");
                 }
-            } catch (error) { alert(error.message); }
-        });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+            } catch (error) {
 
-        // FIXED REALTIME LISTENERS WITH UID MATCHING
-        function listenToTasks(userId) {
-            const q = query(collection(db, "tasks"), where("uid", "==", userId));
-            unsubscribeTasks = onSnapshot(q, (snapshot) => {
+                showFirebaseError(
+                    "Login/Register failed",
+                    error
+                );
+
+            } finally {
+
+                button.disabled = false;
+            }
+        }
+    );
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================= */
+
+    document.getElementById("logoutBtn").addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await signOut(auth);
+
+            } catch (error) {
+
+                showFirebaseError(
+                    "Logout failed",
+                    error
+                );
+            }
+        }
+    );
+
+
+    /* =========================================================
+       TASK REALTIME LISTENER
+    ========================================================= */
+
+    function listenToTasks(userId) {
+
+        const q = query(
+            collection(db, "tasks"),
+            where("uid", "==", userId)
+        );
+
+        unsubscribeTasks = onSnapshot(
+
+            q,
+
+            (snapshot) => {
+
                 userTasks = [];
-                snapshot.forEach((doc) => userTasks.push({ id: doc.id, ...doc.data() }));
-                // Sort by time
-                userTasks.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
+
+                snapshot.forEach((docSnap) => {
+
+                    userTasks.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                userTasks.sort(
+                    (a, b) =>
+                        (a.startTime || "").localeCompare(
+                            b.startTime || ""
+                        )
+                );
+
                 renderTasks();
-            });
-        }
+            },
 
-        function listenToEvents(userId) {
-            const q = query(collection(db, "events"), where("uid", "==", userId));
-            unsubscribeEvents = onSnapshot(q, (snapshot) => {
+            (error) => {
+
+                showFirebaseError(
+                    "Task loading failed",
+                    error
+                );
+            }
+        );
+    }
+
+
+    /* =========================================================
+       EVENT REALTIME LISTENER
+    ========================================================= */
+
+    function listenToEvents(userId) {
+
+        const q = query(
+            collection(db, "events"),
+            where("uid", "==", userId)
+        );
+
+        unsubscribeEvents = onSnapshot(
+
+            q,
+
+            (snapshot) => {
+
                 userEvents = [];
-                snapshot.forEach((doc) => userEvents.push({ id: doc.id, ...doc.data() }));
+
+                snapshot.forEach((docSnap) => {
+
+                    userEvents.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                userEvents.sort(
+                    (a, b) =>
+                        (a.date || "").localeCompare(
+                            b.date || ""
+                        )
+                );
+
                 renderEvents();
-            });
-        }
+            },
 
-        function listenToStudyHub(userId) {
-            const q = query(collection(db, "studyHub"), where("uid", "==", userId));
-            unsubscribeStudy = onSnapshot(q, (snapshot) => {
+            (error) => {
+
+                showFirebaseError(
+                    "Event loading failed",
+                    error
+                );
+            }
+        );
+    }
+
+
+    /* =========================================================
+       STUDY HUB REALTIME LISTENER
+    ========================================================= */
+
+    function listenToStudyHub(userId) {
+
+        const q = query(
+            collection(db, "studyHub"),
+            where("uid", "==", userId)
+        );
+
+        unsubscribeStudy = onSnapshot(
+
+            q,
+
+            (snapshot) => {
+
                 userStudyItems = [];
-                snapshot.forEach((doc) => userStudyItems.push({ id: doc.id, ...doc.data() }));
+
+                snapshot.forEach((docSnap) => {
+
+                    userStudyItems.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
                 renderStudyHub();
-            });
-        }
+            },
 
-        // Navigation Tabs
-        document.getElementById('tabTasksBtn').addEventListener('click', () => switchTab('tasks'));
-        document.getElementById('tabEventsBtn').addEventListener('click', () => switchTab('events'));
-        document.getElementById('tabStudyBtn').addEventListener('click', () => switchTab('study'));
+            (error) => {
 
-        function switchTab(tab) {
-            document.getElementById('tasksTabView').style.display = tab === 'tasks' ? 'block' : 'none';
-            document.getElementById('eventsTabView').style.display = tab === 'events' ? 'block' : 'none';
-            document.getElementById('studyTabView').style.display = tab === 'study' ? 'block' : 'none';
+                showFirebaseError(
+                    "Study Hub loading failed",
+                    error
+                );
+            }
+        );
+    }
 
-            document.getElementById('tabTasksBtn').classList.toggle('active', tab === 'tasks');
-            document.getElementById('tabEventsBtn').classList.toggle('active', tab === 'events');
-            document.getElementById('tabStudyBtn').classList.toggle('active', tab === 'study');
-        }
 
-        // Color & Icon Selectors
-        document.querySelectorAll('.color-dot').forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-                e.target.classList.add('selected');
-                selectedColor = e.target.dataset.color;
-            });
+    /* =========================================================
+       TAB NAVIGATION
+    ========================================================= */
+
+    document.getElementById("tabTasksBtn").addEventListener(
+        "click",
+        () => switchTab("tasks")
+    );
+
+    document.getElementById("tabEventsBtn").addEventListener(
+        "click",
+        () => switchTab("events")
+    );
+
+    document.getElementById("tabStudyBtn").addEventListener(
+        "click",
+        () => switchTab("study")
+    );
+
+
+    function switchTab(tab) {
+
+        document.getElementById("tasksTabView").style.display =
+            tab === "tasks" ? "block" : "none";
+
+        document.getElementById("eventsTabView").style.display =
+            tab === "events" ? "block" : "none";
+
+        document.getElementById("studyTabView").style.display =
+            tab === "study" ? "block" : "none";
+
+        document.getElementById("tabTasksBtn")
+            .classList.toggle("active", tab === "tasks");
+
+        document.getElementById("tabEventsBtn")
+            .classList.toggle("active", tab === "events");
+
+        document.getElementById("tabStudyBtn")
+            .classList.toggle("active", tab === "study");
+    }
+
+
+    /* =========================================================
+       COLOR SELECTOR
+    ========================================================= */
+
+    document.querySelectorAll(".color-dot").forEach(dot => {
+
+        dot.addEventListener("click", () => {
+
+            document.querySelectorAll(".color-dot")
+                .forEach(d => d.classList.remove("selected"));
+
+            dot.classList.add("selected");
+
+            selectedColor =
+                dot.dataset.color;
         });
+    });
 
-        function buildIconGrid() {
-            const grid = document.getElementById('iconGrid');
-            grid.innerHTML = '';
-            ICON_LIST.forEach(iconClass => {
-                const item = document.createElement('div');
-                item.className = `icon-option ${iconClass === selectedIcon ? 'selected' : ''}`;
-                item.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
-                item.onclick = () => {
+
+    /* =========================================================
+       ICON GRID
+    ========================================================= */
+
+    function buildIconGrid() {
+
+        const grid =
+            document.getElementById("iconGrid");
+
+        grid.innerHTML = "";
+
+        ICON_LIST.forEach(iconClass => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "icon-option " +
+                (iconClass === selectedIcon
+                    ? "selected"
+                    : "");
+
+            item.innerHTML =
+                `<i class="fa-solid ${iconClass}"></i>`;
+
+            item.addEventListener(
+                "click",
+                () => {
+
                     selectedIcon = iconClass;
-                    document.getElementById('selectedIconPreview').className = `fa-solid ${iconClass}`;
-                    document.getElementById('selectedIconName').innerText = iconClass;
-                    document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
-                    item.classList.add('selected');
+
+                    document.getElementById(
+                        "selectedIconPreview"
+                    ).className =
+                        `fa-solid ${iconClass}`;
+
+                    document.getElementById(
+                        "selectedIconName"
+                    ).innerText =
+                        iconClass;
+
+                    document.querySelectorAll(
+                        ".icon-option"
+                    ).forEach(el =>
+                        el.classList.remove("selected")
+                    );
+
+                    item.classList.add("selected");
+
                     toggleIconGrid();
-                };
-                grid.appendChild(item);
-            });
-        }
-
-        document.getElementById('iconSelectorTrigger').addEventListener('click', toggleIconGrid);
-        function toggleIconGrid() {
-            const grid = document.getElementById('iconGrid');
-            grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
-        }
-
-        // Time Helpers
-        function format12Hour(time24) {
-            if (!time24) return '';
-            let [hours, minutes] = time24.split(':').map(Number);
-            const period = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12;
-            return `${hours}:${String(minutes).padStart(2, '0')} ${period}`;
-        }
-
-        function calculateDuration(startTime, endTime) {
-            if (!startTime || !endTime) return '';
-            let [startH, startM] = startTime.split(':').map(Number);
-            let [endH, endM] = endTime.split(':').map(Number);
-            let startMinutes = startH * 60 + startM;
-            let endMinutes = endH * 60 + endM;
-            if (endMinutes < startMinutes) endMinutes += 24 * 60;
-            const diff = endMinutes - startMinutes;
-            const hrs = Math.floor(diff / 60);
-            const mins = diff % 60;
-            if (hrs === 0) return `${mins}m`;
-            if (mins === 0) return `${hrs}h`;
-            return `${hrs}h ${mins}m`;
-        }
-
-        // Live Clock
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const period = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12;
-
-            const time24Str = `${String(now.getHours()).padStart(2, '0')}:${minutes}`;
-            
-            document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} ${period}`;
-            document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-
-            checkAlarms(time24Str);
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // Alarm Trigger Logic
-        function checkAlarms(currentTime24) {
-            if (!currentUser) return;
-            userTasks.forEach(task => {
-                if (task.alarmEnable === 'yes' && task.startTime === currentTime24 && !task.completed) {
-                    const alarmKey = `${task.id}-${currentTime24}`;
-                    if (!triggeredAlarms.has(alarmKey)) {
-                        triggeredAlarms.add(alarmKey);
-                        triggerAlarm(task);
-                    }
                 }
-            });
+            );
+
+            grid.appendChild(item);
+        });
+    }
+
+
+    document.getElementById(
+        "iconSelectorTrigger"
+    ).addEventListener(
+        "click",
+        toggleIconGrid
+    );
+
+
+    function toggleIconGrid() {
+
+        const grid =
+            document.getElementById("iconGrid");
+
+        grid.style.display =
+            grid.style.display === "none"
+                ? "grid"
+                : "none";
+    }
+
+
+    /* =========================================================
+       SAFE HTML
+    ========================================================= */
+
+    function escapeHtml(value = "") {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    function safeIcon(icon) {
+
+        return ICON_LIST.includes(icon)
+            ? icon
+            : "fa-book";
+    }
+
+
+    function safeColor(color) {
+
+        return /^#[0-9a-fA-F]{6}$/.test(color || "")
+            ? color
+            : "#8b5cf6";
+    }
+
+
+    function safePriority(priority) {
+
+        return ["high", "medium", "low"].includes(priority)
+            ? priority
+            : "medium";
+    }
+
+
+    /* =========================================================
+       TIME FUNCTIONS
+    ========================================================= */
+
+    function format12Hour(time24) {
+
+        if (!time24) return "";
+
+        let [hours, minutes] =
+            time24.split(":").map(Number);
+
+        const period =
+            hours >= 12 ? "PM" : "AM";
+
+        hours =
+            hours % 12 || 12;
+
+        return `${hours}:${String(minutes).padStart(2, "0")} ${period}`;
+    }
+
+
+    function calculateDuration(startTime, endTime) {
+
+        if (!startTime || !endTime) return "";
+
+        let [startH, startM] =
+            startTime.split(":").map(Number);
+
+        let [endH, endM] =
+            endTime.split(":").map(Number);
+
+        let startMinutes =
+            startH * 60 + startM;
+
+        let endMinutes =
+            endH * 60 + endM;
+
+        if (endMinutes < startMinutes) {
+            endMinutes += 24 * 60;
         }
 
-        function triggerAlarm(task) {
-            const audio = document.getElementById('alarmSound');
-            audio.src = TONE_PRESETS[task.alarmTone] || TONE_PRESETS.synth;
-            audio.play().catch(e => console.log("Audio permission needed"));
-            setTimeout(() => alert(`⏰ ALARM: TIME FOR TASK!\n\n${task.name}`), 100);
-        }
+        const diff =
+            endMinutes - startMinutes;
 
-        // Pomodoro Focus Timer Logic
-        let pomoMinutes = 25;
-        let pomoSeconds = 0;
-        let pomoTimer = null;
-        let isPomoRunning = false;
+        const hrs =
+            Math.floor(diff / 60);
 
-        document.getElementById('pomoStartBtn').addEventListener('click', () => {
+        const mins =
+            diff % 60;
+
+        if (hrs === 0) return `${mins}m`;
+
+        if (mins === 0) return `${hrs}h`;
+
+        return `${hrs}h ${mins}m`;
+    }
+
+
+    /* =========================================================
+       CLOCK
+    ========================================================= */
+
+    function updateClock() {
+
+        const now = new Date();
+
+        let hours = now.getHours();
+
+        const minutes =
+            String(now.getMinutes()).padStart(2, "0");
+
+        const seconds =
+            String(now.getSeconds()).padStart(2, "0");
+
+        const period =
+            hours >= 12 ? "PM" : "AM";
+
+        hours =
+            hours % 12 || 12;
+
+        const time24 =
+            `${String(now.getHours()).padStart(2, "0")}:${minutes}`;
+
+        document.getElementById(
+            "liveClock"
+        ).innerText =
+            `${hours}:${minutes}:${seconds} ${period}`;
+
+        document.getElementById(
+            "liveDate"
+        ).innerText =
+            now.toLocaleDateString(
+                "en-US",
+                {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric"
+                }
+            );
+
+        checkAlarms(time24);
+    }
+
+    setInterval(updateClock, 1000);
+
+    updateClock();
+
+
+    /* =========================================================
+       ALARM
+    ========================================================= */
+
+    function checkAlarms(currentTime24) {
+
+        if (!currentUser) return;
+
+        userTasks.forEach(task => {
+
+            if (
+                task.alarmEnable === "yes" &&
+                task.startTime === currentTime24 &&
+                !task.completed
+            ) {
+
+                const alarmKey =
+                    `${task.id}-${currentTime24}`;
+
+                if (!triggeredAlarms.has(alarmKey)) {
+
+                    triggeredAlarms.add(alarmKey);
+
+                    triggerAlarm(task);
+                }
+            }
+        });
+    }
+
+
+    function triggerAlarm(task) {
+
+        const audio =
+            document.getElementById("alarmSound");
+
+        audio.src =
+            TONE_PRESETS[task.alarmTone]
+            || TONE_PRESETS.synth;
+
+        audio.play()
+            .catch(() => {});
+
+        setTimeout(() => {
+
+            alert(
+                `⏰ ALARM: TIME FOR TASK!\n\n${task.name}`
+            );
+
+        }, 100);
+    }
+
+
+    /* =========================================================
+       POMODORO
+    ========================================================= */
+
+    let pomoMinutes = 25;
+    let pomoSeconds = 0;
+    let pomoTimer = null;
+    let isPomoRunning = false;
+
+
+    document.getElementById(
+        "pomoStartBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
             if (isPomoRunning) {
+
                 clearInterval(pomoTimer);
+
                 isPomoRunning = false;
-                document.getElementById('pomoStartBtn').innerText = 'Start';
-            } else {
-                isPomoRunning = true;
-                document.getElementById('pomoStartBtn').innerText = 'Pause';
-                pomoTimer = setInterval(() => {
-                    if (pomoSeconds === 0) {
-                        if (pomoMinutes === 0) {
-                            clearInterval(pomoTimer);
+
+                document.getElementById(
+                    "pomoStartBtn"
+                ).innerText = "Start";
+
+                return;
+            }
+
+            isPomoRunning = true;
+
+            document.getElementById(
+                "pomoStartBtn"
+            ).innerText = "Pause";
+
+            pomoTimer =
+                setInterval(() => {
+
+                    if (
+                        pomoSeconds === 0
+                    ) {
+
+                        if (
+                            pomoMinutes === 0
+                        ) {
+
+                            clearInterval(
+                                pomoTimer
+                            );
+
                             isPomoRunning = false;
-                            document.getElementById('pomoStartBtn').innerText = 'Start';
-                            alert('🎉 Pomodoro Session Completed! Take a 5 minute break!');
+
+                            document.getElementById(
+                                "pomoStartBtn"
+                            ).innerText = "Start";
+
+                            alert(
+                                "🎉 Pomodoro Session Completed!\n\nTake a 5 minute break!"
+                            );
+
                             return;
                         }
+
                         pomoMinutes--;
                         pomoSeconds = 59;
+
                     } else {
+
                         pomoSeconds--;
                     }
-                    updatePomoDisplay();
-                }, 1000);
-            }
-        });
 
-        document.getElementById('pomoResetBtn').addEventListener('click', () => {
+                    updatePomoDisplay();
+
+                }, 1000);
+        }
+    );
+
+
+    document.getElementById(
+        "pomoResetBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
             clearInterval(pomoTimer);
+
             isPomoRunning = false;
+
             pomoMinutes = 25;
             pomoSeconds = 0;
-            document.getElementById('pomoStartBtn').innerText = 'Start';
+
+            document.getElementById(
+                "pomoStartBtn"
+            ).innerText = "Start";
+
             updatePomoDisplay();
-        });
-
-        function updatePomoDisplay() {
-            document.getElementById('pomoTimerDisplay').innerText = 
-                `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
         }
+    );
 
-        // Modal Controls
-        document.getElementById('openTaskModalBtn').addEventListener('click', () => {
-            document.getElementById('editTaskId').value = '';
-            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
-            document.getElementById('saveTaskForm').reset();
-            document.getElementById('taskModal').style.display = 'flex';
-        });
-        document.getElementById('closeTaskModalBtn').addEventListener('click', () => document.getElementById('taskModal').style.display = 'none');
 
-        document.getElementById('openEventModalBtn').addEventListener('click', () => document.getElementById('eventModal').style.display = 'flex');
-        document.getElementById('closeEventModalBtn').addEventListener('click', () => document.getElementById('eventModal').style.display = 'none');
+    function updatePomoDisplay() {
 
-        document.getElementById('openStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'flex');
-        document.getElementById('closeStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'none');
+        document.getElementById(
+            "pomoTimerDisplay"
+        ).innerText =
+            `${String(pomoMinutes).padStart(2, "0")}:${String(pomoSeconds).padStart(2, "0")}`;
+    }
 
-        // Edit Task Helper Function
-        window.editTask = function(taskId) {
-            const task = userTasks.find(t => t.id === taskId);
-            if (!task) return;
 
-            document.getElementById('editTaskId').value = task.id;
-            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
-            document.getElementById('taskName').value = task.name || '';
-            document.getElementById('taskStartTime').value = task.startTime || '';
-            document.getElementById('taskEndTime').value = task.endTime || '';
-            document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
-            document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
-            document.getElementById('taskFrequency').value = task.frequency || 'oneday';
-            document.getElementById('taskPriority').value = task.priority || 'medium';
+    /* =========================================================
+       TASK MODAL
+    ========================================================= */
 
-            selectedIcon = task.icon || 'fa-book';
-            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-            document.getElementById('selectedIconName').innerText = selectedIcon;
+    document.getElementById(
+        "openTaskModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
 
-            selectedColor = task.color || '#8b5cf6';
-            document.querySelectorAll('.color-dot').forEach(d => {
-                d.classList.toggle('selected', d.dataset.color === selectedColor);
+            selectedIcon = "fa-book";
+            selectedColor = "#8b5cf6";
+
+            document.getElementById(
+                "saveTaskForm"
+            ).reset();
+
+            document.getElementById(
+                "editTaskId"
+            ).value = "";
+
+            document.getElementById(
+                "taskModalTitle"
+            ).innerText =
+                "Create New Activity";
+
+            document.getElementById(
+                "selectedIconPreview"
+            ).className =
+                "fa-solid fa-book";
+
+            document.getElementById(
+                "selectedIconName"
+            ).innerText =
+                "fa-book";
+
+            document.querySelectorAll(
+                ".color-dot"
+            ).forEach(dot => {
+
+                dot.classList.toggle(
+                    "selected",
+                    dot.dataset.color === "#8b5cf6"
+                );
             });
 
-            document.getElementById('taskModal').style.display = 'flex';
-        };
+            buildIconGrid();
 
-        // Save Task
-        document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
+            document.getElementById(
+                "taskModal"
+            ).style.display = "flex";
+        }
+    );
+
+
+    document.getElementById(
+        "closeTaskModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "taskModal"
+            ).style.display = "none";
+        }
+    );
+
+
+    /* =========================================================
+       EVENT MODAL
+    ========================================================= */
+
+    document.getElementById(
+        "openEventModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "saveEventForm"
+            ).reset();
+
+            document.getElementById(
+                "eventModal"
+            ).style.display = "flex";
+        }
+    );
+
+
+    document.getElementById(
+        "closeEventModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "eventModal"
+            ).style.display = "none";
+        }
+    );
+
+
+    /* =========================================================
+       STUDY MODAL
+    ========================================================= */
+
+    document.getElementById(
+        "openStudyModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "saveStudyForm"
+            ).reset();
+
+            document.getElementById(
+                "studyModal"
+            ).style.display = "flex";
+        }
+    );
+
+
+    document.getElementById(
+        "closeStudyModalBtn"
+    ).addEventListener(
+        "click",
+        () => {
+
+            document.getElementById(
+                "studyModal"
+            ).style.display = "none";
+        }
+    );
+
+
+    /* =========================================================
+       EDIT TASK
+    ========================================================= */
+
+    window.editTask = function(taskId) {
+
+        const task =
+            userTasks.find(
+                t => t.id === taskId
+            );
+
+        if (!task) return;
+
+        selectedIcon =
+            safeIcon(task.icon);
+
+        selectedColor =
+            safeColor(task.color);
+
+        document.getElementById(
+            "editTaskId"
+        ).value =
+            task.id;
+
+        document.getElementById(
+            "taskModalTitle"
+        ).innerText =
+            "Edit Activity";
+
+        document.getElementById(
+            "taskName"
+        ).value =
+            task.name || "";
+
+        document.getElementById(
+            "taskStartTime"
+        ).value =
+            task.startTime || "";
+
+        document.getElementById(
+            "taskEndTime"
+        ).value =
+            task.endTime || "";
+
+        document.getElementById(
+            "taskAlarmEnable"
+        ).value =
+            task.alarmEnable || "yes";
+
+        document.getElementById(
+            "taskAlarmTone"
+        ).value =
+            task.alarmTone || "synth";
+
+        document.getElementById(
+            "taskFrequency"
+        ).value =
+            task.frequency || "oneday";
+
+        document.getElementById(
+            "taskPriority"
+        ).value =
+            task.priority || "medium";
+
+        document.getElementById(
+            "selectedIconPreview"
+        ).className =
+            `fa-solid ${selectedIcon}`;
+
+        document.getElementById(
+            "selectedIconName"
+        ).innerText =
+            selectedIcon;
+
+        document.querySelectorAll(
+            ".color-dot"
+        ).forEach(dot => {
+
+            dot.classList.toggle(
+                "selected",
+                dot.dataset.color === selectedColor
+            );
+        });
+
+        buildIconGrid();
+
+        document.getElementById(
+            "taskModal"
+        ).style.display = "flex";
+    };
+
+
+    /* =========================================================
+       SAVE TASK
+    ========================================================= */
+
+    document.getElementById(
+        "saveTaskForm"
+    ).addEventListener(
+        "submit",
+        async (e) => {
+
             e.preventDefault();
-            const taskId = document.getElementById('editTaskId').value;
+
+            if (!requireUser()) return;
+
+            const form = e.currentTarget;
+
+            const saveButton =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
+
+            const originalText =
+                saveButton.innerHTML;
+
+            saveButton.disabled = true;
+
+            saveButton.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+            const taskId =
+                document.getElementById(
+                    "editTaskId"
+                ).value.trim();
+
             const taskData = {
+
                 uid: currentUser.uid,
-                name: document.getElementById('taskName').value,
-                icon: selectedIcon,
-                color: selectedColor,
-                startTime: document.getElementById('taskStartTime').value,
-                endTime: document.getElementById('taskEndTime').value,
-                alarmEnable: document.getElementById('taskAlarmEnable').value,
-                alarmTone: document.getElementById('taskAlarmTone').value,
-                frequency: document.getElementById('taskFrequency').value,
-                priority: document.getElementById('taskPriority').value,
+
+                name:
+                    document.getElementById(
+                        "taskName"
+                    ).value.trim(),
+
+                icon:
+                    safeIcon(selectedIcon),
+
+                color:
+                    safeColor(selectedColor),
+
+                startTime:
+                    document.getElementById(
+                        "taskStartTime"
+                    ).value,
+
+                endTime:
+                    document.getElementById(
+                        "taskEndTime"
+                    ).value,
+
+                alarmEnable:
+                    document.getElementById(
+                        "taskAlarmEnable"
+                    ).value,
+
+                alarmTone:
+                    document.getElementById(
+                        "taskAlarmTone"
+                    ).value,
+
+                frequency:
+                    document.getElementById(
+                        "taskFrequency"
+                    ).value,
+
+                priority:
+                    document.getElementById(
+                        "taskPriority"
+                    ).value
             };
 
+
             try {
+
                 if (taskId) {
-                    await updateDoc(doc(db, "tasks", taskId), taskData);
+
+                    /*
+                     EDIT EXISTING TASK
+                    */
+
+                    await updateDoc(
+                        doc(db, "tasks", taskId),
+                        taskData
+                    );
+
                 } else {
-                    taskData.completed = false;
-                    taskData.createdAt = Date.now();
-                    await addDoc(collection(db, "tasks"), taskData);
+
+                    /*
+                     CREATE NEW TASK
+                    */
+
+                    await addDoc(
+                        collection(db, "tasks"),
+                        {
+                            ...taskData,
+
+                            completed: false,
+
+                            createdAt: Date.now()
+                        }
+                    );
                 }
-                document.getElementById('taskModal').style.display = 'none';
-                e.target.reset();
-            } catch (err) { alert("Error: " + err.message); }
-        });
 
-        // Save Event
-        document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await addDoc(collection(db, "events"), {
-                    uid: currentUser.uid,
-                    name: document.getElementById('eventName').value,
-                    date: document.getElementById('eventDate').value,
-                    notes: document.getElementById('eventNotes').value,
-                    createdAt: Date.now()
-                });
-                document.getElementById('eventModal').style.display = 'none';
-                e.target.reset();
-            } catch (err) { alert("Error: " + err.message); }
-        });
 
-        // Save Study Hub
-        document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            try {
-                await addDoc(collection(db, "studyHub"), {
-                    uid: currentUser.uid,
-                    bookName: document.getElementById('studyBookName').value,
-                    chapter: document.getElementById('studyChapterName').value,
-                    subChapter: document.getElementById('studySubChapterName').value,
-                    youtubeUrl: document.getElementById('studyYoutubeUrl').value,
-                    notes: document.getElementById('studyNotes').value,
-                    createdAt: Date.now()
-                });
-                document.getElementById('studyModal').style.display = 'none';
-                e.target.reset();
-            } catch (err) { alert("Error: " + err.message); }
-        });
+                document.getElementById(
+                    "taskModal"
+                ).style.display = "none";
 
-        // Filters
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                activeFilter = e.target.dataset.filter;
-                renderTasks();
-            });
-        });
+                form.reset();
 
-        document.getElementById('searchInput').addEventListener('input', renderTasks);
+                selectedIcon = "fa-book";
+                selectedColor = "#8b5cf6";
 
-        // Render Tasks
-        function renderTasks() {
-            const container = document.getElementById('tasksList');
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            container.innerHTML = '';
+                console.log(
+                    "Task saved successfully!"
+                );
 
-            let filtered = userTasks.filter(task => {
-                const matchesFilter = activeFilter === 'all' ? true : activeFilter === 'completed' ? task.completed : !task.completed;
-                const matchesSearch = task.name.toLowerCase().includes(searchQuery);
-                return matchesFilter && matchesSearch;
-            });
+            } catch (error) {
 
-            updateProgress();
+                showFirebaseError(
+                    "Task save failed",
+                    error
+                );
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No tasks found.</p>`;
-                return;
+            } finally {
+
+                saveButton.disabled = false;
+
+                saveButton.innerHTML =
+                    originalText;
             }
-
-            filtered.forEach((task, index) => {
-                const durationStr = calculateDuration(task.startTime, task.endTime);
-                const priorityClass = `priority-${task.priority || 'medium'}`;
-
-                const card = document.createElement('div');
-                card.className = `task-card ${task.completed ? 'completed' : ''}`;
-                card.style.setProperty('--card-color', task.color || '#8b5cf6');
-
-                card.innerHTML = `
-                    <div class="task-left">
-                        <span class="task-order-badge">#${index + 1}</span>
-                        <div class="task-icon-box">
-                            <i class="fa-solid ${task.icon || 'fa-book'}"></i>
-                        </div>
-                        <div class="task-details">
-                            <div class="task-title">
-                                ${task.name}
-                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator"></i>' : ''}
-                            </div>
-                            <p>
-                                <i class="fa-regular fa-clock"></i> ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}
-                                <span class="duration-badge"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
-                                <span class="priority-badge ${priorityClass}">${task.priority || 'med'}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <button class="action-btn check" title="Complete"><i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i></button>
-                        <button class="action-btn edit" title="Edit" onclick="editTask('${task.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
-
-                card.querySelector('.check').onclick = async () => {
-                    await updateDoc(doc(db, "tasks", task.id), { completed: !task.completed });
-                };
-                card.querySelector('.delete').onclick = async () => {
-                    await deleteDoc(doc(db, "tasks", task.id));
-                };
-
-                container.appendChild(card);
-            });
         }
+    );
 
-        // Render Events
-        function renderEvents() {
-            const container = document.getElementById('eventsList');
-            container.innerHTML = '';
 
-            if (userEvents.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No upcoming events.</p>`;
-                return;
-            }
+    /* =========================================================
+       SAVE EVENT
+    ========================================================= */
 
-            userEvents.forEach(evt => {
-                const card = document.createElement('div');
-                card.className = 'task-card';
-                card.style.setProperty('--card-color', '#ec4899');
+    document.getElementById(
+        "saveEventForm"
+    ).addEventListener(
+        "submit",
+        async (e) => {
 
-                card.innerHTML = `
-                    <div class="task-left">
-                        <div class="task-icon-box" style="color:#ec4899;">
-                            <i class="fa-solid fa-calendar-star"></i>
-                        </div>
-                        <div class="task-details">
-                            <div class="task-title">${evt.name}</div>
-                            <p><i class="fa-regular fa-calendar"></i> ${evt.date}</p>
-                            ${evt.notes ? `<p style="color:var(--text-muted); margin-top:2px;">${evt.notes}</p>` : ''}
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
+            e.preventDefault();
 
-                card.querySelector('.delete').onclick = async () => {
-                    await deleteDoc(doc(db, "events", evt.id));
-                };
-                container.appendChild(card);
-            });
-        }
+            if (!requireUser()) return;
 
-        // Render Study Hub
-        function renderStudyHub() {
-            const container = document.getElementById('studyList');
-            container.innerHTML = '';
+            const form = e.currentTarget;
 
-            if (userStudyItems.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 30px; font-size: 0.85rem;">No study materials added.</p>`;
-                return;
-            }
+            const button =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
 
-            userStudyItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'study-card animate-fade';
+            const original =
+                button.innerHTML;
 
-                let embedYoutube = '';
-                if (item.youtubeUrl) {
-                    let videoId = extractYoutubeId(item.youtubeUrl);
-                    if (videoId) {
-                        embedYoutube = `<iframe class="youtube-embed" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+            button.disabled = true;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+
+            try {
+
+                await addDoc(
+                    collection(db, "events"),
+                    {
+
+                        uid: currentUser.uid,
+
+                        name:
+                            document.getElementById(
+                                "eventName"
+                            ).value.trim(),
+
+                        date:
+                            document.getElementById(
+                                "eventDate"
+                            ).value,
+
+                        notes:
+                            document.getElementById(
+                                "eventNotes"
+                            ).value.trim(),
+
+                        createdAt:
+                            Date.now()
                     }
-                }
+                );
+
+
+                document.getElementById(
+                    "eventModal"
+                ).style.display = "none";
+
+                form.reset();
+
+            } catch (error) {
+
+                showFirebaseError(
+                    "Event save failed",
+                    error
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    original;
+            }
+        }
+    );
+
+
+    /* =========================================================
+       SAVE STUDY MATERIAL
+    ========================================================= */
+
+    document.getElementById(
+        "saveStudyForm"
+    ).addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault();
+
+            if (!requireUser()) return;
+
+            const form = e.currentTarget;
+
+            const button =
+                form.querySelector(
+                    'button[type="submit"]'
+                );
+
+            const original =
+                button.innerHTML;
+
+            button.disabled = true;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+
+
+            try {
+
+                await addDoc(
+                    collection(db, "studyHub"),
+                    {
+
+                        uid: currentUser.uid,
+
+                        bookName:
+                            document.getElementById(
+                                "studyBookName"
+                            ).value.trim(),
+
+                        chapter:
+                            document.getElementById(
+                                "studyChapterName"
+                            ).value.trim(),
+
+                        subChapter:
+                            document.getElementById(
+                                "studySubChapterName"
+                            ).value.trim(),
+
+                        youtubeUrl:
+                            document.getElementById(
+                                "studyYoutubeUrl"
+                            ).value.trim(),
+
+                        notes:
+                            document.getElementById(
+                                "studyNotes"
+                            ).value.trim(),
+
+                        createdAt:
+                            Date.now()
+                    }
+                );
+
+
+                document.getElementById(
+                    "studyModal"
+                ).style.display = "none";
+
+                form.reset();
+
+            } catch (error) {
+
+                showFirebaseError(
+                    "Study material save failed",
+                    error
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    original;
+            }
+        }
+    );
+
+
+    /* =========================================================
+       TASK FILTER
+    ========================================================= */
+
+    document.querySelectorAll(
+        ".filter-btn"
+    ).forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document.querySelectorAll(
+                    ".filter-btn"
+                ).forEach(
+                    b => b.classList.remove("active")
+                );
+
+                button.classList.add("active");
+
+                activeFilter =
+                    button.dataset.filter;
+
+                renderTasks();
+            }
+        );
+    });
+
+
+    document.getElementById(
+        "searchInput"
+    ).addEventListener(
+        "input",
+        renderTasks
+    );
+
+
+    /* =========================================================
+       RENDER TASKS
+    ========================================================= */
+
+    function renderTasks() {
+
+        const container =
+            document.getElementById(
+                "tasksList"
+            );
+
+        if (!container) return;
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+        const searchQuery =
+            (searchInput?.value || "")
+                .toLowerCase()
+                .trim();
+
+
+        let filtered =
+            userTasks.filter(task => {
+
+                const matchesFilter =
+                    activeFilter === "all"
+                        ? true
+                        : activeFilter === "completed"
+                            ? task.completed === true
+                            : task.completed !== true;
+
+
+                const taskName =
+                    String(task.name || "")
+                        .toLowerCase();
+
+
+                const matchesSearch =
+                    taskName.includes(searchQuery);
+
+
+                return (
+                    matchesFilter &&
+                    matchesSearch
+                );
+            });
+
+
+        updateProgress();
+
+        container.innerHTML = "";
+
+
+        if (filtered.length === 0) {
+
+            container.innerHTML =
+                `<p style="text-align:center;color:var(--text-muted);margin-top:30px;font-size:.85rem;">
+                    No tasks found.
+                </p>`;
+
+            return;
+        }
+
+
+        filtered.forEach(
+            (task, index) => {
+
+                const duration =
+                    calculateDuration(
+                        task.startTime,
+                        task.endTime
+                    );
+
+                const priority =
+                    safePriority(
+                        task.priority
+                    );
+
+                const color =
+                    safeColor(
+                        task.color
+                    );
+
+                const icon =
+                    safeIcon(
+                        task.icon
+                    );
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    `task-card ${task.completed ? "completed" : ""}`;
+
+                card.style.setProperty(
+                    "--card-color",
+                    color
+                );
+
 
                 card.innerHTML = `
-                    <div class="study-card-header">
-                        <div>
-                            <h3 style="font-size: 1rem; color: var(--accent-pink);"><i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}</h3>
-                            <p style="font-size: 0.78rem; color: var(--text-muted);">
-                                Chapter: ${item.chapter} ${item.subChapter ? '| Sub-chapter: ' + item.subChapter : ''}
-                            </p>
+
+                    <div class="task-left">
+
+                        <span class="task-order-badge">
+                            #${index + 1}
+                        </span>
+
+                        <div class="task-icon-box">
+
+                            <i class="fa-solid ${icon}"></i>
+
                         </div>
-                        <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+
+                        <div class="task-details">
+
+                            <div class="task-title">
+
+                                ${escapeHtml(task.name || "Untitled Task")}
+
+                                ${
+                                    task.alarmEnable === "yes"
+                                        ? '<i class="fa-solid fa-bell alarm-indicator"></i>'
+                                        : ""
+                                }
+
+                            </div>
+
+                            <p>
+
+                                <i class="fa-regular fa-clock"></i>
+
+                                ${format12Hour(task.startTime)}
+                                -
+                                ${format12Hour(task.endTime)}
+
+                                <span class="duration-badge">
+
+                                    <i class="fa-solid fa-hourglass-half"></i>
+
+                                    ${duration}
+
+                                </span>
+
+                                <span class="priority-badge priority-${priority}">
+
+                                    ${escapeHtml(priority)}
+
+                                </span>
+
+                            </p>
+
+                        </div>
+
                     </div>
-                    ${item.notes ? `<div class="study-notes-box"><i class="fa-solid fa-note-sticky" style="color:var(--warning);"></i> ${item.notes}</div>` : ''}
-                    <div class="media-container">${embedYoutube}</div>
+
+
+                    <div class="task-actions">
+
+                        <button
+                            class="action-btn check"
+                            title="${task.completed ? "Undo" : "Complete"}">
+
+                            <i class="fa-solid ${
+                                task.completed
+                                    ? "fa-rotate-left"
+                                    : "fa-check"
+                            }"></i>
+
+                        </button>
+
+
+                        <button
+                            class="action-btn edit"
+                            title="Edit">
+
+                            <i class="fa-solid fa-pen-to-square"></i>
+
+                        </button>
+
+
+                        <button
+                            class="action-btn delete"
+                            title="Delete">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </div>
                 `;
 
-                card.querySelector('.delete').onclick = async () => {
-                    await deleteDoc(doc(db, "studyHub", item.id));
-                };
+
+                /* COMPLETE */
+
+                card.querySelector(
+                    ".check"
+                ).addEventListener(
+                    "click",
+                    async () => {
+
+                        if (!requireUser()) return;
+
+                        try {
+
+                            await updateDoc(
+                                doc(
+                                    db,
+                                    "tasks",
+                                    task.id
+                                ),
+                                {
+                                    completed:
+                                        !task.completed
+                                }
+                            );
+
+                        } catch (error) {
+
+                            showFirebaseError(
+                                "Task update failed",
+                                error
+                            );
+                        }
+                    }
+                );
+
+
+                /* EDIT */
+
+                card.querySelector(
+                    ".edit"
+                ).addEventListener(
+                    "click",
+                    () => {
+
+                        window.editTask(
+                            task.id
+                        );
+                    }
+                );
+
+
+                /* DELETE */
+
+                card.querySelector(
+                    ".delete"
+                ).addEventListener(
+                    "click",
+                    async () => {
+
+                        if (!requireUser()) return;
+
+                        const confirmed =
+                            confirm(
+                                `Delete "${task.name}"?`
+                            );
+
+                        if (!confirmed) return;
+
+                        try {
+
+                            await deleteDoc(
+                                doc(
+                                    db,
+                                    "tasks",
+                                    task.id
+                                )
+                            );
+
+                        } catch (error) {
+
+                            showFirebaseError(
+                                "Task delete failed",
+                                error
+                            );
+                        }
+                    }
+                );
+
+
                 container.appendChild(card);
-            });
-        }
-
-        function extractYoutubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function updateProgress() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressBar').style.width = '0%';
-                document.getElementById('progressPercent').innerText = '0%';
-                return;
             }
-            const completed = userTasks.filter(t => t.completed).length;
-            const percent = Math.round((completed / userTasks.length) * 100);
-            document.getElementById('progressBar').style.width = `${percent}%`;
-            document.getElementById('progressPercent').innerText = `${percent}%`;
+        );
+    }
+
+
+    /* =========================================================
+       RENDER EVENTS
+    ========================================================= */
+
+    function renderEvents() {
+
+        const container =
+            document.getElementById(
+                "eventsList"
+            );
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+
+        if (userEvents.length === 0) {
+
+            container.innerHTML =
+                `<p style="text-align:center;color:var(--text-muted);margin-top:30px;font-size:.85rem;">
+                    No upcoming events.
+                </p>`;
+
+            return;
         }
 
-        function buildCalendar() {
-            const calendarGrid = document.getElementById('calendarGrid');
-            const monthYear = document.getElementById('calMonthYear');
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            
-            monthYear.innerText = `${monthNames[month]} ${year}`;
-            calendarGrid.innerHTML = `
-                <div class="calendar-day-head">S</div><div class="calendar-day-head">M</div><div class="calendar-day-head">T</div>
-                <div class="calendar-day-head">W</div><div class="calendar-day-head">T</div><div class="calendar-day-head">F</div>
-                <div class="calendar-day-head">S</div>
+
+        userEvents.forEach(evt => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "task-card";
+
+
+            card.style.setProperty(
+                "--card-color",
+                "#ec4899"
+            );
+
+
+            card.innerHTML = `
+
+                <div class="task-left">
+
+                    <div
+                        class="task-icon-box"
+                        style="color:#ec4899;">
+
+                        <i class="fa-solid fa-calendar-star"></i>
+
+                    </div>
+
+
+                    <div class="task-details">
+
+                        <div class="task-title">
+
+                            ${escapeHtml(
+                                evt.name || "Untitled Event"
+                            )}
+
+                        </div>
+
+                        <p>
+
+                            <i class="fa-regular fa-calendar"></i>
+
+                            ${escapeHtml(
+                                evt.date || ""
+                            )}
+
+                        </p>
+
+                        ${
+                            evt.notes
+                                ? `
+                                <p style="color:var(--text-muted);margin-top:2px;">
+                                    ${escapeHtml(evt.notes)}
+                                </p>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="task-actions">
+
+                    <button
+                        class="action-btn delete"
+                        title="Delete">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
             `;
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = date.getDate();
 
-            for (let i = 0; i < firstDay; i++) { calendarGrid.innerHTML += `<div></div>`; }
-            for (let day = 1; day <= daysInMonth; day++) {
-                const isActive = day === today ? 'active' : '';
-                calendarGrid.innerHTML += `<div class="calendar-day ${isActive}">${day}</div>`;
+            card.querySelector(
+                ".delete"
+            ).addEventListener(
+                "click",
+                async () => {
+
+                    if (!requireUser()) return;
+
+                    if (
+                        !confirm(
+                            `Delete "${evt.name}"?`
+                        )
+                    ) return;
+
+                    try {
+
+                        await deleteDoc(
+                            doc(
+                                db,
+                                "events",
+                                evt.id
+                            )
+                        );
+
+                    } catch (error) {
+
+                        showFirebaseError(
+                            "Event delete failed",
+                            error
+                        );
+                    }
+                }
+            );
+
+
+            container.appendChild(card);
+        });
+    }
+
+
+    /* =========================================================
+       YOUTUBE ID
+    ========================================================= */
+
+    function extractYoutubeId(url) {
+
+        if (!url) return null;
+
+        try {
+
+            const parsed =
+                new URL(url);
+
+            if (
+                parsed.hostname.includes(
+                    "youtu.be"
+                )
+            ) {
+
+                return parsed.pathname
+                    .replace("/", "")
+                    .substring(0, 11);
             }
+
+
+            if (
+                parsed.hostname.includes(
+                    "youtube.com"
+                )
+            ) {
+
+                const id =
+                    parsed.searchParams.get("v");
+
+                if (id) {
+                    return id.substring(0, 11);
+                }
+
+
+                const parts =
+                    parsed.pathname.split("/");
+
+                const index =
+                    parts.indexOf("embed");
+
+                if (
+                    index !== -1 &&
+                    parts[index + 1]
+                ) {
+
+                    return parts[index + 1]
+                        .substring(0, 11);
+                }
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Invalid YouTube URL",
+                error
+            );
         }
+
+        return null;
+    }
+
+
+    /* =========================================================
+       RENDER STUDY HUB
+    ========================================================= */
+
+    function renderStudyHub() {
+
+        const container =
+            document.getElementById(
+                "studyList"
+            );
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+
+        if (userStudyItems.length === 0) {
+
+            container.innerHTML =
+                `<p style="text-align:center;color:var(--text-muted);margin-top:30px;font-size:.85rem;">
+                    No study materials added.
+                </p>`;
+
+            return;
+        }
+
+
+        userStudyItems.forEach(item => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "study-card animate-fade";
+
+
+            let embedYoutube = "";
+
+            if (item.youtubeUrl) {
+
+                const videoId =
+                    extractYoutubeId(
+                        item.youtubeUrl
+                    );
+
+                if (videoId) {
+
+                    embedYoutube =
+                        `
+                        <iframe
+                            class="youtube-embed"
+                            src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}"
+                            allowfullscreen>
+                        </iframe>
+                        `;
+                }
+            }
+
+
+            card.innerHTML = `
+
+                <div class="study-card-header">
+
+                    <div>
+
+                        <h3
+                            style="font-size:1rem;color:var(--accent-pink);">
+
+                            <i class="fa-solid fa-book-journal-whills"></i>
+
+                            ${escapeHtml(
+                                item.bookName || "Study Material"
+                            )}
+
+                        </h3>
+
+
+                        <p
+                            style="font-size:.78rem;color:var(--text-muted);">
+
+                            Chapter:
+                            ${escapeHtml(item.chapter || "")}
+
+                            ${
+                                item.subChapter
+                                    ? " | Sub-chapter: " +
+                                      escapeHtml(item.subChapter)
+                                    : ""
+                            }
+
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="action-btn delete"
+                        title="Delete">
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+
+                ${
+                    item.notes
+                        ? `
+                        <div class="study-notes-box">
+
+                            <i
+                                class="fa-solid fa-note-sticky"
+                                style="color:var(--warning);">
+                            </i>
+
+                            ${escapeHtml(item.notes)}
+
+                        </div>
+                        `
+                        : ""
+                }
+
+
+                <div class="media-container">
+
+                    ${embedYoutube}
+
+                </div>
+            `;
+
+
+            card.querySelector(
+                ".delete"
+            ).addEventListener(
+                "click",
+                async () => {
+
+                    if (!requireUser()) return;
+
+                    if (
+                        !confirm(
+                            `Delete "${item.bookName}"?`
+                        )
+                    ) return;
+
+                    try {
+
+                        await deleteDoc(
+                            doc(
+                                db,
+                                "studyHub",
+                                item.id
+                            )
+                        );
+
+                    } catch (error) {
+
+                        showFirebaseError(
+                            "Study material delete failed",
+                            error
+                        );
+                    }
+                }
+            );
+
+
+            container.appendChild(card);
+        });
+    }
+
+
+    /* =========================================================
+       PROGRESS
+    ========================================================= */
+
+    function updateProgress() {
+
+        const bar =
+            document.getElementById(
+                "progressBar"
+            );
+
+        const percentText =
+            document.getElementById(
+                "progressPercent"
+            );
+
+
+        if (!bar || !percentText) return;
+
+
+        if (userTasks.length === 0) {
+
+            bar.style.width = "0%";
+
+            percentText.innerText = "0%";
+
+            return;
+        }
+
+
+        const completed =
+            userTasks.filter(
+                task =>
+                    task.completed === true
+            ).length;
+
+
+        const percent =
+            Math.round(
+                (completed / userTasks.length) * 100
+            );
+
+
+        bar.style.width =
+            `${percent}%`;
+
+        percentText.innerText =
+            `${percent}%`;
+    }
+
+
+    /* =========================================================
+       CALENDAR
+    ========================================================= */
+
+    function buildCalendar() {
+
+        const calendarGrid =
+            document.getElementById(
+                "calendarGrid"
+            );
+
+        const monthYear =
+            document.getElementById(
+                "calMonthYear"
+            );
+
+        if (!calendarGrid || !monthYear) return;
+
+
+        const date = new Date();
+
+        const year =
+            date.getFullYear();
+
+        const month =
+            date.getMonth();
+
+
+        const monthNames = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        ];
+
+
+        monthYear.innerText =
+            `${monthNames[month]} ${year}`;
+
+
+        calendarGrid.innerHTML = `
+
+            <div class="calendar-day-head">S</div>
+            <div class="calendar-day-head">M</div>
+            <div class="calendar-day-head">T</div>
+            <div class="calendar-day-head">W</div>
+            <div class="calendar-day-head">T</div>
+            <div class="calendar-day-head">F</div>
+            <div class="calendar-day-head">S</div>
+
+        `;
+
+
+        const firstDay =
+            new Date(
+                year,
+                month,
+                1
+            ).getDay();
+
+
+        const daysInMonth =
+            new Date(
+                year,
+                month + 1,
+                0
+            ).getDate();
+
+
+        const today =
+            date.getDate();
+
+
+        for (
+            let i = 0;
+            i < firstDay;
+            i++
+        ) {
+
+            calendarGrid.innerHTML +=
+                `<div></div>`;
+        }
+
+
+        for (
+            let day = 1;
+            day <= daysInMonth;
+            day++
+        ) {
+
+            const isActive =
+                day === today
+                    ? "active"
+                    : "";
+
+
+            calendarGrid.innerHTML +=
+                `
+                <div class="calendar-day ${isActive}">
+                    ${day}
+                </div>
+                `;
+        }
+    }
+
+
+    /* =========================================================
+       INITIAL DISPLAY
+    ========================================================= */
+
+    updatePomoDisplay();
+
+    buildIconGrid();
+
+    console.log(
+        "StudyPulse Pro Firebase system initialized."
+    );
+
+</script>                                  
+            
     </script>
 </body>
 </html>
