@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyPulse Pro - Extended Edition</title>
+    <title>StudyPulse Pro</title>
+
+    <!-- PWA Manifest & Theme Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3429/3429149.png">
+
     <!-- FontAwesome 6 Free Solid CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -126,6 +134,12 @@
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+        }
+
+        .btn-install {
+            background: linear-gradient(135deg, #10b981, #059669);
+            margin-bottom: 15px;
+            display: none;
         }
 
         .auth-switch {
@@ -426,17 +440,6 @@
         .task-details .task-title { font-size: 0.98rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .task-details p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 
-        .study-tag {
-            font-size: 0.72rem;
-            background: rgba(59, 130, 246, 0.15);
-            color: #93c5fd;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 2px 6px;
-            border-radius: 6px;
-            margin-top: 4px;
-            display: inline-block;
-        }
-
         .task-actions { display: flex; align-items: center; gap: 8px; }
 
         .action-btn {
@@ -590,6 +593,11 @@
     <div id="authSection" class="glass auth-container animate-fade">
         <h2 id="authTitle"><i class="fa-solid fa-graduation-cap"></i> StudyPulse</h2>
         <p id="authSubtitle">Login to access your study tasks</p>
+
+        <!-- INSTALL APP BUTTON -->
+        <button id="pwaInstallBtn" class="btn btn-install">
+            <i class="fa-solid fa-download"></i> Install App
+        </button>
 
         <form id="authForm">
             <div class="input-group">
@@ -885,6 +893,38 @@
     <!-- AUDIO SYSTEM ENGINES -->
     <audio id="alarmSound" preload="auto"></audio>
 
+    <!-- REGISTER SERVICE WORKER & PWA INSTALL ENGINE -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker Active!'))
+                    .catch(err => console.log('Service Worker Failed: ', err));
+            });
+        }
+
+        let deferredPrompt;
+        const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            pwaInstallBtn.style.display = 'inline-flex';
+        });
+
+        pwaInstallBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        pwaInstallBtn.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        });
+    </script>
+
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
@@ -1094,7 +1134,7 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
-        // Time Utility Functions (12-Hour Format & Duration Calculation)
+        // Time Utility Functions
         function format12Hour(time24) {
             if (!time24) return '';
             let [hours, minutes] = time24.split(':').map(Number);
@@ -1111,7 +1151,7 @@
             let startMinutes = startH * 60 + startM;
             let endMinutes = endH * 60 + endM;
 
-            if (endMinutes < startMinutes) endMinutes += 24 * 60; // Overnight span
+            if (endMinutes < startMinutes) endMinutes += 24 * 60;
 
             const diff = endMinutes - startMinutes;
             const hrs = Math.floor(diff / 60);
@@ -1122,7 +1162,7 @@
             return `${hrs} hr ${mins} mins`;
         }
 
-        // Live Clock (12-Hour Format)
+        // Live Clock
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -1252,11 +1292,8 @@
             const pdfInput = document.getElementById('studyPdfFile');
 
             let pdfFileName = '';
-            let pdfBlobUrl = '';
-
             if (pdfInput.files && pdfInput.files[0]) {
                 pdfFileName = pdfInput.files[0].name;
-                pdfBlobUrl = URL.createObjectURL(pdfInput.files[0]);
             }
 
             try {
@@ -1511,4 +1548,4 @@
         }
     </script>
 </body>
-</html>
+        </html>
