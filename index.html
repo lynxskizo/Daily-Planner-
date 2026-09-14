@@ -1321,6 +1321,33 @@
         document.getElementById('openStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'flex');
         document.getElementById('closeStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'none');
 
+        // Edit Task Helper Function
+        window.editTask = function(taskId) {
+            const task = userTasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            document.getElementById('editTaskId').value = task.id;
+            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
+            document.getElementById('taskName').value = task.name || '';
+            document.getElementById('taskStartTime').value = task.startTime || '';
+            document.getElementById('taskEndTime').value = task.endTime || '';
+            document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
+            document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
+            document.getElementById('taskFrequency').value = task.frequency || 'oneday';
+            document.getElementById('taskPriority').value = task.priority || 'medium';
+
+            selectedIcon = task.icon || 'fa-book';
+            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
+            document.getElementById('selectedIconName').innerText = selectedIcon;
+
+            selectedColor = task.color || '#8b5cf6';
+            document.querySelectorAll('.color-dot').forEach(d => {
+                d.classList.toggle('selected', d.dataset.color === selectedColor);
+            });
+
+            document.getElementById('taskModal').style.display = 'flex';
+        };
+
         // Save Task
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1444,6 +1471,7 @@
                     </div>
                     <div class="task-actions">
                         <button class="action-btn check" title="Complete"><i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i></button>
+                        <button class="action-btn edit" title="Edit" onclick="editTask('${task.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
