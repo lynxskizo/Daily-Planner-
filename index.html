@@ -44,7 +44,6 @@
             overflow-x: hidden;
         }
 
-        /* GLASSMORPHISM UTILITY */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -140,12 +139,11 @@
         .dashboard {
             display: none;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1250px;
             grid-template-columns: 320px 1fr;
             gap: 25px;
         }
 
-        /* SIDEBAR */
         .sidebar {
             padding: 25px;
             display: flex;
@@ -181,7 +179,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .clock-box h3 { font-size: 1.6rem; letter-spacing: 1px; font-weight: 600; }
+        .clock-box h3 { font-size: 1.5rem; letter-spacing: 1px; font-weight: 600; }
         .clock-box p { font-size: 0.78rem; color: var(--text-muted); }
 
         .progress-box {
@@ -257,6 +255,7 @@
             gap: 10px;
             border-bottom: 1px solid var(--glass-border);
             padding-bottom: 12px;
+            overflow-x: auto;
         }
 
         .tab-btn {
@@ -269,6 +268,7 @@
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
@@ -337,7 +337,6 @@
             font-weight: 500;
         }
 
-        /* GLOSSY TASK CARDS */
         .tasks-container {
             display: flex;
             flex-direction: column;
@@ -364,7 +363,6 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* GLOSSY COLOR ACCENTS */
         .task-card::before {
             content: '';
             position: absolute;
@@ -379,19 +377,10 @@
             border-color: rgba(255, 255, 255, 0.25);
         }
 
-        .task-card.completed {
-            opacity: 0.5;
-        }
-        .task-card.completed .task-title {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
+        .task-card.completed { opacity: 0.5; }
+        .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
 
-        .task-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .task-left { display: flex; align-items: center; gap: 16px; }
 
         .task-order-badge {
             font-size: 0.75rem;
@@ -400,6 +389,24 @@
             padding: 4px 8px;
             border-radius: 8px;
             color: var(--text-muted);
+        }
+
+        .duration-badge {
+            font-size: 0.72rem;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 2px 8px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .alarm-indicator {
+            font-size: 0.72rem;
+            color: var(--warning);
+            margin-left: 6px;
         }
 
         .task-icon-box {
@@ -430,11 +437,7 @@
             display: inline-block;
         }
 
-        .task-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .task-actions { display: flex; align-items: center; gap: 8px; }
 
         .action-btn {
             width: 34px;
@@ -455,6 +458,46 @@
         .action-btn.edit:hover { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
         .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger); border-color: var(--danger); }
 
+        /* STUDY DETAIL CARD STYLES */
+        .study-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .study-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .study-notes-box {
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .media-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .youtube-embed {
+            width: 100%;
+            height: 220px;
+            border-radius: 12px;
+            border: none;
+        }
+
         /* MODALS */
         .modal {
             display: none;
@@ -470,7 +513,7 @@
 
         .modal-content {
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             padding: 28px;
             max-height: 90vh;
             overflow-y: auto;
@@ -485,11 +528,7 @@
 
         .form-row { display: flex; gap: 10px; }
 
-        .color-picker-grid {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
+        .color-picker-grid { display: flex; gap: 10px; margin-bottom: 14px; }
         .color-dot {
             width: 24px;
             height: 24px;
@@ -585,7 +624,7 @@
                 </div>
 
                 <div class="clock-box">
-                    <h3 id="liveClock">00:00:00</h3>
+                    <h3 id="liveClock">12:00:00 AM</h3>
                     <p id="liveDate">Today</p>
                 </div>
 
@@ -614,12 +653,13 @@
             </button>
         </aside>
 
-        <!-- MAIN TASKS & EVENTS VIEW -->
+        <!-- MAIN TASKS, EVENTS & STUDY VIEW -->
         <main class="glass main-content animate-fade">
             
             <div class="tabs-header">
                 <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> Tasks</button>
                 <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> Special Events</button>
+                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> Study Section Hub</button>
             </div>
 
             <!-- TASKS TAB VIEW -->
@@ -664,6 +704,21 @@
                 <div class="tasks-container" id="eventsList"></div>
             </div>
 
+            <!-- IN DETAILS STUDY SECTION HUB TAB -->
+            <div id="studyTabView" style="display: none;">
+                <div class="header-actions" style="margin-bottom: 15px;">
+                    <div>
+                        <h2>Detailed Study Hub</h2>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;">Books, PDFs, Notes & YouTube Playlists</p>
+                    </div>
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openStudyModalBtn">
+                        <i class="fa-solid fa-book-open"></i> Add Study Material
+                    </button>
+                </div>
+
+                <div class="tasks-container" id="studyList"></div>
+            </div>
+
         </main>
     </div>
 
@@ -682,7 +737,6 @@
                     <input type="text" id="taskName" placeholder="Task Name (e.g. Morning Revision)" required>
                 </div>
 
-                <!-- GLOSSY COLOR SELECTOR -->
                 <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Theme Color</label>
                 <div class="color-picker-grid" id="colorPickerGrid">
                     <div class="color-dot selected" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
@@ -693,30 +747,12 @@
                     <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
                 </div>
 
-                <!-- ICON SELECTION CONTAINER -->
                 <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Select Activity Icon</label>
                 <div class="icon-selector-trigger" id="iconSelectorTrigger">
                     <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.85rem;">fa-book</span></span>
                     <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="icon-grid" id="iconGrid" style="display: none;"></div>
-
-                <!-- STUDY SECTION OPTIONAL FIELDS -->
-                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Study Section Details (Optional)</label>
-                <div class="input-group">
-                    <i class="fa-solid fa-book-open input-icon"></i>
-                    <input type="text" id="studySubject" placeholder="Subject Name (e.g., Physics)">
-                </div>
-                <div class="form-row">
-                    <div class="input-group" style="flex: 1;">
-                        <i class="fa-solid fa-bookmark input-icon"></i>
-                        <input type="text" id="studyChapter" placeholder="Chapter">
-                    </div>
-                    <div class="input-group" style="flex: 1;">
-                        <i class="fa-solid fa-list-ol input-icon"></i>
-                        <input type="text" id="studySubChapter" placeholder="Sub-chapter">
-                    </div>
-                </div>
 
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
@@ -727,6 +763,32 @@
                         <i class="fa-solid fa-clock input-icon"></i>
                         <input type="time" id="taskEndTime" required>
                     </div>
+                </div>
+
+                <!-- ALARM SETTINGS FOR TASK -->
+                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Alarm Settings</label>
+                <div class="form-row">
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-bell input-icon"></i>
+                        <select id="taskAlarmEnable">
+                            <option value="yes">Alarm ON 🔔</option>
+                            <option value="no">Alarm OFF 🔕</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-music input-icon"></i>
+                        <select id="taskAlarmTone">
+                            <option value="synth">Default Synth Chime</option>
+                            <option value="bell">Gentle Bell Tone</option>
+                            <option value="digital">Digital Clock Alarm</option>
+                            <option value="custom">Device Custom Tone...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="customToneFileContainer" style="display: none;">
+                    <i class="fa-solid fa-file-audio input-icon"></i>
+                    <input type="file" id="customToneFile" accept="audio/*">
                 </div>
 
                 <div class="form-row">
@@ -777,7 +839,51 @@
         </div>
     </div>
 
-    <audio id="alarmSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+    <!-- IN DETAILS STUDY SECTION MODAL -->
+    <div id="studyModal" class="modal">
+        <div class="glass modal-content animate-fade">
+            <div class="modal-header">
+                <h3>Add Study Material</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeStudyModalBtn"></i>
+            </div>
+            <form id="saveStudyForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-book input-icon"></i>
+                    <input type="text" id="studyBookName" placeholder="Book / Subject Name (e.g. Organic Chemistry)" required>
+                </div>
+                <div class="form-row">
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-bookmark input-icon"></i>
+                        <input type="text" id="studyChapterName" placeholder="Chapter Name/No." required>
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <i class="fa-solid fa-list-ol input-icon"></i>
+                        <input type="text" id="studySubChapterName" placeholder="Sub-chapter">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-brands fa-youtube input-icon"></i>
+                    <input type="url" id="studyYoutubeUrl" placeholder="YouTube Video/Playlist Link (Optional)">
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-file-pdf input-icon"></i>
+                    <input type="file" id="studyPdfFile" accept="application/pdf">
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-note-sticky input-icon"></i>
+                    <textarea id="studyNotes" placeholder="Keep personal revision notes here..." rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Save to Study Hub</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- AUDIO SYSTEM ENGINES -->
+    <audio id="alarmSound" preload="auto"></audio>
 
     <!-- FIREBASE MODULE SCRIPT -->
     <script type="module">
@@ -821,12 +927,22 @@
         let currentUser = null;
         let userTasks = [];
         let userEvents = [];
+        let userStudyItems = [];
         let selectedIcon = "fa-book";
         let selectedColor = "#8b5cf6";
         let activeFilter = "all";
         let triggeredAlarms = new Set();
+        let customDeviceToneUrl = null;
+
         let unsubscribeTasks = null;
         let unsubscribeEvents = null;
+        let unsubscribeStudy = null;
+
+        const TONE_PRESETS = {
+            synth: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
+            bell: "https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3",
+            digital: "https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3"
+        };
 
         const ICON_LIST = [
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-glasses", "fa-atom", "fa-palette", "fa-language", "fa-file-lines",
@@ -847,10 +963,12 @@
                 buildCalendar();
                 listenToTasks(user.uid);
                 listenToEvents(user.uid);
+                listenToStudyHub(user.uid);
             } else {
                 currentUser = null;
                 if (unsubscribeTasks) unsubscribeTasks();
                 if (unsubscribeEvents) unsubscribeEvents();
+                if (unsubscribeStudy) unsubscribeStudy();
                 document.getElementById('dashboardSection').style.display = 'none';
                 document.getElementById('authSection').style.display = 'block';
             }
@@ -885,43 +1003,60 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // Listen to Tasks (Ordered by creation date - 1st, 2nd, 3rd...)
+        // Firestore Listeners
         function listenToTasks(userId) {
             const q = query(collection(db, "users", userId, "tasks"), orderBy("createdAt", "asc"));
             unsubscribeTasks = onSnapshot(q, (snapshot) => {
                 userTasks = [];
-                snapshot.forEach((doc) => {
-                    userTasks.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach((doc) => userTasks.push({ id: doc.id, ...doc.data() }));
                 renderTasks();
-            });
+            }, (error) => alert("Firestore Permission Error: " + error.message));
         }
 
-        // Listen to Events
         function listenToEvents(userId) {
             const q = query(collection(db, "users", userId, "events"), orderBy("date", "asc"));
             unsubscribeEvents = onSnapshot(q, (snapshot) => {
                 userEvents = [];
-                snapshot.forEach((doc) => {
-                    userEvents.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach((doc) => userEvents.push({ id: doc.id, ...doc.data() }));
                 renderEvents();
             });
         }
 
+        function listenToStudyHub(userId) {
+            const q = query(collection(db, "users", userId, "studyHub"), orderBy("createdAt", "desc"));
+            unsubscribeStudy = onSnapshot(q, (snapshot) => {
+                userStudyItems = [];
+                snapshot.forEach((doc) => userStudyItems.push({ id: doc.id, ...doc.data() }));
+                renderStudyHub();
+            });
+        }
+
         // Navigation Tabs
-        document.getElementById('tabTasksBtn').addEventListener('click', () => {
-            document.getElementById('tasksTabView').style.display = 'block';
-            document.getElementById('eventsTabView').style.display = 'none';
-            document.getElementById('tabTasksBtn').classList.add('active');
-            document.getElementById('tabEventsBtn').classList.remove('active');
+        document.getElementById('tabTasksBtn').addEventListener('click', () => switchTab('tasks'));
+        document.getElementById('tabEventsBtn').addEventListener('click', () => switchTab('events'));
+        document.getElementById('tabStudyBtn').addEventListener('click', () => switchTab('study'));
+
+        function switchTab(tab) {
+            document.getElementById('tasksTabView').style.display = tab === 'tasks' ? 'block' : 'none';
+            document.getElementById('eventsTabView').style.display = tab === 'events' ? 'block' : 'none';
+            document.getElementById('studyTabView').style.display = tab === 'study' ? 'block' : 'none';
+
+            document.getElementById('tabTasksBtn').classList.toggle('active', tab === 'tasks');
+            document.getElementById('tabEventsBtn').classList.toggle('active', tab === 'events');
+            document.getElementById('tabStudyBtn').classList.toggle('active', tab === 'study');
+        }
+
+        // Custom Tone File Selector
+        document.getElementById('taskAlarmTone').addEventListener('change', (e) => {
+            const customContainer = document.getElementById('customToneFileContainer');
+            customContainer.style.display = e.target.value === 'custom' ? 'block' : 'none';
         });
 
-        document.getElementById('tabEventsBtn').addEventListener('click', () => {
-            document.getElementById('tasksTabView').style.display = 'none';
-            document.getElementById('eventsTabView').style.display = 'block';
-            document.getElementById('tabEventsBtn').classList.add('active');
-            document.getElementById('tabTasksBtn').classList.remove('active');
+        document.getElementById('customToneFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                customDeviceToneUrl = URL.createObjectURL(file);
+            }
         });
 
         // Color Picker Binding
@@ -959,26 +1094,58 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
-        // Live Clock & Real-time Alarms
+        // Time Utility Functions (12-Hour Format & Duration Calculation)
+        function format12Hour(time24) {
+            if (!time24) return '';
+            let [hours, minutes] = time24.split(':').map(Number);
+            const period = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${hours}:${String(minutes).padStart(2, '0')} ${period}`;
+        }
+
+        function calculateDuration(startTime, endTime) {
+            if (!startTime || !endTime) return '';
+            let [startH, startM] = startTime.split(':').map(Number);
+            let [endH, endM] = endTime.split(':').map(Number);
+
+            let startMinutes = startH * 60 + startM;
+            let endMinutes = endH * 60 + endM;
+
+            if (endMinutes < startMinutes) endMinutes += 24 * 60; // Overnight span
+
+            const diff = endMinutes - startMinutes;
+            const hrs = Math.floor(diff / 60);
+            const mins = diff % 60;
+
+            if (hrs === 0) return `${mins} mins`;
+            if (mins === 0) return `${hrs} hrs`;
+            return `${hrs} hr ${mins} mins`;
+        }
+
+        // Live Clock (12-Hour Format)
         function updateClock() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
+            let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
+            const period = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+
+            const time24Str = `${String(now.getHours()).padStart(2, '0')}:${minutes}`;
             
-            document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} ${period}`;
             document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
-            checkAlarms(`${hours}:${minutes}`);
+            checkAlarms(time24Str);
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        function checkAlarms(currentTimeStr) {
+        function checkAlarms(currentTime24) {
             if (!currentUser) return;
             userTasks.forEach(task => {
-                if (task.startTime === currentTimeStr && !task.completed) {
-                    const alarmKey = `${task.id}-${currentTimeStr}`;
+                if (task.alarmEnable === 'yes' && task.startTime === currentTime24 && !task.completed) {
+                    const alarmKey = `${task.id}-${currentTime24}`;
                     if (!triggeredAlarms.has(alarmKey)) {
                         triggeredAlarms.add(alarmKey);
                         triggerAlarm(task);
@@ -989,42 +1156,49 @@
 
         function triggerAlarm(task) {
             const audio = document.getElementById('alarmSound');
-            audio.play().catch(e => console.log("Audio playback user permission needed."));
+            let toneSrc = TONE_PRESETS.synth;
+
+            if (task.alarmTone === 'custom' && customDeviceToneUrl) {
+                toneSrc = customDeviceToneUrl;
+            } else if (TONE_PRESETS[task.alarmTone]) {
+                toneSrc = TONE_PRESETS[task.alarmTone];
+            }
+
+            audio.src = toneSrc;
+            audio.play().catch(e => console.log("Audio permission needed from user gesture."));
+
             setTimeout(() => {
-                alert(`⏰ ALARM: TIME FOR TASK!\n\nTask: ${task.name}\nTime Slot: ${task.startTime} - ${task.endTime}`);
+                alert(`⏰ ALARM: TIME FOR TASK!\n\nTask: ${task.name}\nTime Slot: ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}`);
             }, 100);
         }
 
-        // Modal Open/Close Controls
+        // Modal Controls
         document.getElementById('openTaskModalBtn').addEventListener('click', () => {
             document.getElementById('editTaskId').value = '';
             document.getElementById('taskModalTitle').innerText = 'Create New Activity';
             document.getElementById('saveTaskForm').reset();
+            document.getElementById('customToneFileContainer').style.display = 'none';
             document.getElementById('taskModal').style.display = 'flex';
         });
-        document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
-            document.getElementById('taskModal').style.display = 'none';
-        });
+        document.getElementById('closeTaskModalBtn').addEventListener('click', () => document.getElementById('taskModal').style.display = 'none');
 
-        document.getElementById('openEventModalBtn').addEventListener('click', () => {
-            document.getElementById('eventModal').style.display = 'flex';
-        });
-        document.getElementById('closeEventModalBtn').addEventListener('click', () => {
-            document.getElementById('eventModal').style.display = 'none';
-        });
+        document.getElementById('openEventModalBtn').addEventListener('click', () => document.getElementById('eventModal').style.display = 'flex');
+        document.getElementById('closeEventModalBtn').addEventListener('click', () => document.getElementById('eventModal').style.display = 'none');
 
-        // Save/Update Task to Firebase
+        document.getElementById('openStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'flex');
+        document.getElementById('closeStudyModalBtn').addEventListener('click', () => document.getElementById('studyModal').style.display = 'none');
+
+        // Save Task
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const taskId = document.getElementById('editTaskId').value;
             const name = document.getElementById('taskName').value;
             const startTime = document.getElementById('taskStartTime').value;
             const endTime = document.getElementById('taskEndTime').value;
+            const alarmEnable = document.getElementById('taskAlarmEnable').value;
+            const alarmTone = document.getElementById('taskAlarmTone').value;
             const frequency = document.getElementById('taskFrequency').value;
             const priority = document.getElementById('taskPriority').value;
-            const subject = document.getElementById('studySubject').value.trim();
-            const chapter = document.getElementById('studyChapter').value.trim();
-            const subChapter = document.getElementById('studySubChapter').value.trim();
 
             const taskData = {
                 name,
@@ -1032,9 +1206,10 @@
                 color: selectedColor,
                 startTime,
                 endTime,
+                alarmEnable,
+                alarmTone,
                 frequency,
                 priority,
-                studySection: subject ? { subject, chapter, subChapter } : null,
             };
 
             try {
@@ -1048,30 +1223,56 @@
 
                 document.getElementById('taskModal').style.display = 'none';
                 e.target.reset();
-            } catch (err) {
-                alert("Error saving task: " + err.message);
-            }
+            } catch (err) { alert("Error: " + err.message); }
         });
 
-        // Save Event to Firebase
+        // Save Event
         document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('eventName').value;
-            const date = document.getElementById('eventDate').value;
-            const notes = document.getElementById('eventNotes').value;
-
             try {
                 await addDoc(collection(db, "users", currentUser.uid, "events"), {
-                    name,
-                    date,
-                    notes,
+                    name: document.getElementById('eventName').value,
+                    date: document.getElementById('eventDate').value,
+                    notes: document.getElementById('eventNotes').value,
                     createdAt: Date.now()
                 });
                 document.getElementById('eventModal').style.display = 'none';
                 e.target.reset();
-            } catch (err) {
-                alert("Error saving event: " + err.message);
+            } catch (err) { alert("Error: " + err.message); }
+        });
+
+        // Save Detailed Study Material Hub Item
+        document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const bookName = document.getElementById('studyBookName').value;
+            const chapter = document.getElementById('studyChapterName').value;
+            const subChapter = document.getElementById('studySubChapterName').value;
+            const youtubeUrl = document.getElementById('studyYoutubeUrl').value;
+            const notes = document.getElementById('studyNotes').value;
+            const pdfInput = document.getElementById('studyPdfFile');
+
+            let pdfFileName = '';
+            let pdfBlobUrl = '';
+
+            if (pdfInput.files && pdfInput.files[0]) {
+                pdfFileName = pdfInput.files[0].name;
+                pdfBlobUrl = URL.createObjectURL(pdfInput.files[0]);
             }
+
+            try {
+                await addDoc(collection(db, "users", currentUser.uid, "studyHub"), {
+                    bookName,
+                    chapter,
+                    subChapter,
+                    youtubeUrl,
+                    notes,
+                    pdfFileName,
+                    createdAt: Date.now()
+                });
+
+                document.getElementById('studyModal').style.display = 'none';
+                e.target.reset();
+            } catch (err) { alert("Error saving study item: " + err.message); }
         });
 
         // Edit Task Callback
@@ -1083,14 +1284,10 @@
             document.getElementById('taskName').value = task.name;
             document.getElementById('taskStartTime').value = task.startTime;
             document.getElementById('taskEndTime').value = task.endTime;
+            document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
+            document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
             document.getElementById('taskFrequency').value = task.frequency;
             document.getElementById('taskPriority').value = task.priority;
-
-            if (task.studySection) {
-                document.getElementById('studySubject').value = task.studySection.subject || '';
-                document.getElementById('studyChapter').value = task.studySection.chapter || '';
-                document.getElementById('studySubChapter').value = task.studySection.subChapter || '';
-            }
 
             selectedIcon = task.icon || "fa-book";
             selectedColor = task.color || "#8b5cf6";
@@ -1105,15 +1302,11 @@
             await updateDoc(doc(db, "users", currentUser.uid, "tasks", id), { completed: !currentStatus });
         }
 
-        async function deleteTask(id) {
-            await deleteDoc(doc(db, "users", currentUser.uid, "tasks", id));
-        }
+        async function deleteTask(id) { await deleteDoc(doc(db, "users", currentUser.uid, "tasks", id)); }
+        async function deleteEvent(id) { await deleteDoc(doc(db, "users", currentUser.uid, "events", id)); }
+        async function deleteStudy(id) { await deleteDoc(doc(db, "users", currentUser.uid, "studyHub", id)); }
 
-        async function deleteEvent(id) {
-            await deleteDoc(doc(db, "users", currentUser.uid, "events", id));
-        }
-
-        // Render Tasks with Creation Order (1st, 2nd, 3rd)
+        // Render Tasks
         function renderTasks() {
             const container = document.getElementById('tasksList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -1134,14 +1327,13 @@
 
             filteredTasks.forEach((task, index) => {
                 const orderSuffix = getOrdinalSuffix(index + 1);
+                const durationStr = calculateDuration(task.startTime, task.endTime);
+                const formattedStart = format12Hour(task.startTime);
+                const formattedEnd = format12Hour(task.endTime);
+
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
                 card.style.setProperty('--card-color', task.color || '#8b5cf6');
-
-                let studyHTML = '';
-                if (task.studySection) {
-                    studyHTML = `<div class="study-tag"><i class="fa-solid fa-graduation-cap"></i> ${task.studySection.subject} ${task.studySection.chapter ? '| Ch: ' + task.studySection.chapter : ''} ${task.studySection.subChapter ? '| Sub: ' + task.studySection.subChapter : ''}</div>`;
-                }
 
                 card.innerHTML = `
                     <div class="task-left">
@@ -1152,9 +1344,12 @@
                         <div class="task-details">
                             <div class="task-title">
                                 ${task.name}
+                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator" title="Alarm Enabled"></i>' : ''}
                             </div>
-                            <p><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</p>
-                            ${studyHTML}
+                            <p>
+                                <i class="fa-regular fa-clock"></i> ${formattedStart} - ${formattedEnd}
+                                <span class="duration-badge" style="margin-left: 8px;"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
+                            </p>
                         </div>
                     </div>
                     <div class="task-actions">
@@ -1205,6 +1400,59 @@
                 card.querySelector('.delete').onclick = () => deleteEvent(evt.id);
                 container.appendChild(card);
             });
+        }
+
+        // Render Detailed Study Section Hub
+        function renderStudyHub() {
+            const container = document.getElementById('studyList');
+            container.innerHTML = '';
+
+            if (userStudyItems.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color: var(--text-muted); margin-top: 40px; font-size: 0.88rem;">No study materials added yet.</p>`;
+                return;
+            }
+
+            userStudyItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'study-card animate-fade';
+
+                let embedYoutube = '';
+                if (item.youtubeUrl) {
+                    let videoId = extractYoutubeId(item.youtubeUrl);
+                    if (videoId) {
+                        embedYoutube = `<iframe class="youtube-embed" src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    <div class="study-card-header">
+                        <div>
+                            <h3 style="font-size: 1.1rem; color: var(--accent-pink);"><i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}</h3>
+                            <p style="font-size: 0.82rem; color: var(--text-muted);">
+                                Chapter: ${item.chapter} ${item.subChapter ? '| Sub-chapter: ' + item.subChapter : ''}
+                            </p>
+                        </div>
+                        <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+
+                    ${item.notes ? `<div class="study-notes-box"><i class="fa-solid fa-note-sticky" style="color:var(--warning);"></i> ${item.notes}</div>` : ''}
+
+                    ${item.pdfFileName ? `<div style="margin-top: 8px; font-size: 0.85rem;"><i class="fa-solid fa-file-pdf" style="color:var(--danger);"></i> Connected PDF: <strong>${item.pdfFileName}</strong></div>` : ''}
+
+                    <div class="media-container">
+                        ${embedYoutube}
+                    </div>
+                `;
+
+                card.querySelector('.delete').onclick = () => deleteStudy(item.id);
+                container.appendChild(card);
+            });
+        }
+
+        function extractYoutubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
         }
 
         function getOrdinalSuffix(i) {
