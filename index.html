@@ -457,6 +457,7 @@
             gap: 12px;
             min-width: 0;
             flex: 1;
+            overflow: hidden;
         }
 
         .task-order-badge {
@@ -480,6 +481,7 @@
             align-items: center;
             gap: 4px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .priority-badge {
@@ -489,6 +491,7 @@
             border-radius: 6px;
             text-transform: uppercase;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .priority-high { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
         .priority-medium { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
@@ -498,6 +501,7 @@
             font-size: 0.72rem;
             color: var(--warning);
             margin-left: 6px;
+            flex-shrink: 0;
         }
 
         .task-icon-box {
@@ -514,9 +518,23 @@
             flex-shrink: 0;
         }
 
+        /* FLEXIBLE AND RESPONSIVE TASK DETAILS (Fix for issue #2) */
         .task-details {
             min-width: 0;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .task-details::-webkit-scrollbar {
+            height: 2px;
+        }
+        .task-details::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
         }
 
         .task-details .task-title {
@@ -525,18 +543,18 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
-        .task-details p {
+        .task-meta-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-top: 4px;
+            flex-wrap: wrap;
         }
 
         .task-actions {
@@ -1025,7 +1043,8 @@
             doc, 
             onSnapshot, 
             query, 
-            where
+            where,
+            enableIndexedDbPersistence
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1040,6 +1059,15 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+
+        // Enable Offline Persistence for Firestore (Fix for issue #1)
+        enableIndexedDbPersistence(db).catch((err) => {
+            if (err.code == 'failed-precondition') {
+                console.log('Multiple tabs open, persistence enabled in first tab only');
+            } else if (err.code == 'unimplemented') {
+                console.log('Browser does not support offline persistence');
+            }
+        });
 
         let isLoginMode = true;
         let currentUser = null;
@@ -1065,7 +1093,7 @@
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon"
         ];
 
-        // Storage Backup Helpers
+        // Storage Helpers
         function saveLocalData(key, data) {
             if (!currentUser) return;
             localStorage.setItem(`studypulse_${currentUser.uid}_${key}`, JSON.stringify(data));
@@ -1137,14 +1165,16 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // REALTIME LISTENERS
+        // REALTIME LISTENERS (WITH PERSISTENCE LOGIC SAFEGUARD)
         function listenToTasks(userId) {
             try {
                 const q = query(collection(db, "tasks"), where("uid", "==", userId));
                 unsubscribeTasks = onSnapshot(q, (snapshot) => {
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    if (fetched.length > 0 || userTasks.length === 0) {
+                    
+                    // Update only if network/cache returned records OR if local array is also empty
+                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
                         userTasks = fetched;
                         userTasks.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
                         saveLocalData('tasks', userTasks);
@@ -1160,7 +1190,7 @@
                 unsubscribeEvents = onSnapshot(q, (snapshot) => {
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    if (fetched.length > 0 || userEvents.length === 0) {
+                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
                         userEvents = fetched;
                         saveLocalData('events', userEvents);
                         renderEvents();
@@ -1175,7 +1205,7 @@
                 unsubscribeStudy = onSnapshot(q, (snapshot) => {
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    if (fetched.length > 0 || userStudyItems.length === 0) {
+                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
                         userStudyItems = fetched;
                         saveLocalData('study', userStudyItems);
                         renderStudyHub();
@@ -1498,7 +1528,7 @@
 
         document.getElementById('searchInput').addEventListener('input', renderTasks);
 
-        // Render Tasks
+        // RENDER TASKS (Fix for issue #2)
         function renderTasks() {
             const container = document.getElementById('tasksList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -1533,14 +1563,14 @@
                         </div>
                         <div class="task-details">
                             <div class="task-title">
-                                ${task.name}
+                                <span>${task.name}</span>
                                 ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator"></i>' : ''}
                             </div>
-                            <p>
-                                <i class="fa-regular fa-clock"></i> ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}
+                            <div class="task-meta-info">
+                                <span><i class="fa-regular fa-clock"></i> ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}</span>
                                 <span class="duration-badge"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
                                 <span class="priority-badge ${priorityClass}">${task.priority || 'med'}</span>
-                            </p>
+                            </div>
                         </div>
                     </div>
                     <div class="task-actions">
@@ -1598,8 +1628,10 @@
                         </div>
                         <div class="task-details">
                             <div class="task-title">${evt.name}</div>
-                            <p><i class="fa-regular fa-calendar"></i> ${evt.date}</p>
-                            ${evt.notes ? `<p style="color:var(--text-muted); margin-top:2px;">${evt.notes}</p>` : ''}
+                            <div class="task-meta-info">
+                                <span><i class="fa-regular fa-calendar"></i> ${evt.date}</span>
+                                ${evt.notes ? `<span>${evt.notes}</span>` : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="task-actions">
