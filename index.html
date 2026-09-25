@@ -14,8 +14,9 @@
 
     <!-- FontAwesome 6 Free Solid CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins (Standard EN) & Hind Siliguri (Bangla) -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -31,14 +32,21 @@
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
+            --font-en: 'Poppins', sans-serif;
+            --font-bn: 'Hind Siliguri', sans-serif;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font-en);
             color: var(--text-main);
+        }
+
+        /* Bangla Font Overrides */
+        body.lang-bn, body.lang-bn * {
+            font-family: var(--font-bn) !important;
         }
 
         body {
@@ -50,16 +58,46 @@
             align-items: flex-start;
             padding: 20px;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Liquid Glass Ambient Animated Blobs */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.35;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatBlob 12s infinite alternate ease-in-out;
+        }
+        .blob-1 {
+            width: 320px; height: 320px;
+            background: var(--accent-purple);
+            top: 5%; left: 10%;
+        }
+        .blob-2 {
+            width: 380px; height: 380px;
+            background: var(--accent-pink);
+            bottom: 10%; right: 10%;
+            animation-delay: -6s;
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 50px) scale(1.15); }
         }
 
         .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             box-shadow: var(--glass-shadow);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
         }
 
         .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
@@ -68,13 +106,40 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* LANGUAGE & PROFILE FLOATING BAR */
+        .top-navbar {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lang-toggle-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .lang-toggle-btn:hover { background: var(--accent-purple); }
+
         /* AUTH SCREEN */
         .auth-container {
             width: 100%;
             max-width: 420px;
             padding: 40px 25px;
             text-align: center;
-            margin-top: 40px;
+            margin-top: 50px;
         }
 
         .auth-container h2 {
@@ -159,6 +224,7 @@
             max-width: 1250px;
             grid-template-columns: 320px 1fr;
             gap: 25px;
+            margin-top: 40px;
             margin-bottom: 20px;
         }
 
@@ -170,37 +236,53 @@
             gap: 15px;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            overflow: hidden;
+        /* DUOLINGO STYLE PROFILE CARD */
+        .user-profile-duo {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 10px;
         }
 
         .avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             font-weight: bold;
-            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        .user-info {
-            overflow: hidden;
-            width: 100%;
+        .profile-badges {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 12px;
         }
 
-        .user-info h3 {
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
         }
 
         .clock-box {
@@ -208,12 +290,27 @@
             padding: 16px;
             background: rgba(0, 0, 0, 0.25);
             border-radius: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .clock-box h3 { font-size: 1.4rem; letter-spacing: 1px; font-weight: 600; }
+        .clock-box h3 { font-size: 1.35rem; letter-spacing: 1px; font-weight: 600; }
         .clock-box p { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* NOTICE CENTER CARD */
+        .notice-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .notice-card:hover { transform: translateY(-2px); }
 
         /* POMODORO TIMER BOX */
         .pomodoro-box {
@@ -222,7 +319,7 @@
             padding: 15px;
             text-align: center;
             border: 1px solid var(--glass-border);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .pomodoro-display {
             font-size: 1.8rem;
@@ -248,7 +345,7 @@
         }
 
         .progress-box {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
@@ -407,6 +504,7 @@
             font-weight: 500;
         }
 
+        /* DAILY PLANNER TIMELINE LAYOUT */
         .tasks-container {
             display: flex;
             flex-direction: column;
@@ -518,7 +616,6 @@
             flex-shrink: 0;
         }
 
-        /* FLEXIBLE AND RESPONSIVE TASK DETAILS (Fix for issue #2) */
         .task-details {
             min-width: 0;
             flex: 1;
@@ -529,13 +626,8 @@
             scrollbar-width: thin;
         }
 
-        .task-details::-webkit-scrollbar {
-            height: 2px;
-        }
-        .task-details::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
+        .task-details::-webkit-scrollbar { height: 2px; }
+        .task-details::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
 
         .task-details .task-title {
             font-size: 0.92rem;
@@ -590,6 +682,12 @@
             border-radius: 18px;
             padding: 16px;
             margin-bottom: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .study-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-purple);
         }
 
         .study-card-header {
@@ -706,10 +804,24 @@
         }
         .icon-option.selected { background: var(--accent-purple); color: white; }
 
+        /* TIME PICKER CUSTOM 12-HOUR WRAPPER */
+        .time-picker-12 {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .time-picker-12 select {
+            padding: 10px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+
         /* MOBILE RESPONSIVE FIXES */
         @media (max-width: 850px) {
             body { padding: 10px; }
-            .dashboard { grid-template-columns: 1fr; gap: 15px; }
+            .dashboard { grid-template-columns: 1fr; gap: 15px; margin-top: 50px; }
             .main-content { padding: 16px; }
             .sidebar { padding: 18px; }
             .form-row { flex-direction: column; gap: 0; }
@@ -721,16 +833,27 @@
         }
     </style>
 </head>
-<body>
+<body class="lang-en">
+
+    <!-- AMBIENT GLOW BLOBS FOR LIQUID GLASS ANIMATION -->
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+
+    <!-- LANGUAGE & SETTINGS BAR -->
+    <div class="top-navbar">
+        <button id="langToggleBtn" class="lang-toggle-btn">
+            <i class="fa-solid fa-language"></i> <span id="langLabel">BN</span>
+        </button>
+    </div>
 
     <!-- AUTHENTICATION FORM -->
     <div id="authSection" class="glass auth-container animate-fade">
         <h2 id="authTitle"><i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro</h2>
-        <p id="authSubtitle">Login to access your study tasks</p>
+        <p id="authSubtitle" data-en="Login to access your study tasks" data-bn="আপনার পড়ার রুটিন এক্সেস করতে লগইন করুন">Login to access your study tasks</p>
 
         <!-- INSTALL APP BUTTON -->
         <button id="pwaInstallBtn" class="btn btn-install">
-            <i class="fa-solid fa-download"></i> Install App
+            <i class="fa-solid fa-download"></i> <span data-en="Install App" data-bn="অ্যাপ ইনস্টল করুন">Install App</span>
         </button>
 
         <form id="authForm">
@@ -742,12 +865,12 @@
                 <i class="fa-solid fa-lock input-icon"></i>
                 <input type="password" id="authPassword" placeholder="Password" required>
             </div>
-            <button type="submit" class="btn" id="authBtn">Login</button>
+            <button type="submit" class="btn" id="authBtn" data-en="Login" data-bn="লগইন করুন">Login</button>
         </form>
 
         <div class="auth-switch">
-            <span id="switchText">Don't have an account?</span>
-            <span id="switchBtn">Register</span>
+            <span id="switchText" data-en="Don't have an account?" data-bn="একাউন্ট নেই?">Don't have an account?</span>
+            <span id="switchBtn" data-en="Register" data-bn="রেজিস্ট্রেশন করুন">Register</span>
         </div>
     </div>
 
@@ -757,12 +880,41 @@
         <!-- SIDEBAR -->
         <aside class="glass sidebar animate-fade">
             <div>
-                <div class="user-profile">
-                    <div class="avatar" id="userAvatar">U</div>
-                    <div class="user-info">
-                        <h3 id="userNameDisplay">User</h3>
-                        <p style="font-size: 0.72rem; color: var(--text-muted);">Study & Routine Planner</p>
+                <!-- DUOLINGO STYLE PROFILE CARD -->
+                <div class="user-profile-duo">
+                    <div class="avatar-container">
+                        <div class="avatar" id="userAvatar">U</div>
                     </div>
+                    <h3 id="userNameDisplay" style="font-size: 0.95rem; font-weight: 700;">User</h3>
+                    
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;" id="userClassInstDisplay">
+                        <span id="userClassText">Class 12</span> • <span id="userInstText">College</span>
+                    </div>
+
+                    <div class="profile-badges">
+                        <div class="badge-item" style="color: #f59e0b;">
+                            <i class="fa-solid fa-fire"></i> <span id="userStreak">5</span> <span data-en="Days" data-bn="দিন">Days</span>
+                        </div>
+                        <div class="badge-item" style="color: var(--accent-pink);">
+                            <i class="fa-solid fa-bolt"></i> <span id="userXP">340</span> XP
+                        </div>
+                    </div>
+
+                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:8px; cursor:pointer; font-weight:600;">
+                        <i class="fa-solid fa-user-pen"></i> <span data-en="Edit Profile" data-bn="প্রোফাইল পরিবর্তন">Edit Profile</span>
+                    </button>
+                </div>
+
+                <!-- INSTITUTION FACEBOOK NOTICE CENTER CARD -->
+                <div class="notice-card" id="noticeCenterCard">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fa-brands fa-facebook" style="font-size: 1.4rem; color: #3b82f6;"></i>
+                        <div>
+                            <div style="font-size: 0.8rem; font-weight: 700;" data-en="Notice Center" data-bn="নোটিশ সেন্টার">Notice Center</div>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);" data-en="Campus Facebook Updates" data-bn="প্রতিষ্ঠানের ফেসবুক নোটিশ">Campus Facebook Updates</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem; color: var(--text-muted);"></i>
                 </div>
 
                 <div class="clock-box">
@@ -772,18 +924,20 @@
 
                 <!-- INTELLIGENT POMODORO FOCUS TIMER -->
                 <div class="pomodoro-box">
-                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);"><i class="fa-solid fa-stopwatch"></i> Focus Pomodoro</div>
+                    <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">
+                        <i class="fa-solid fa-stopwatch"></i> <span data-en="Focus Pomodoro" data-bn="ফোকাস পোমোডোরো">Focus Pomodoro</span>
+                    </div>
                     <div class="pomodoro-display" id="pomoTimerDisplay">25:00</div>
                     <div class="pomo-btn-group">
-                        <button class="pomo-btn" id="pomoStartBtn">Start</button>
-                        <button class="pomo-btn" id="pomoResetBtn" style="background: rgba(255,255,255,0.1);">Reset</button>
+                        <button class="pomo-btn" id="pomoStartBtn" data-en="Start" data-bn="শুরু করুন">Start</button>
+                        <button class="pomo-btn" id="pomoResetBtn" style="background: rgba(255,255,255,0.1);" data-en="Reset" data-bn="রিসেট">Reset</button>
                     </div>
                 </div>
 
                 <!-- TASK COMPLETION TRACKER -->
                 <div class="progress-box">
                     <div class="progress-info">
-                        <span>Daily Goal Progress</span>
+                        <span data-en="Daily Goal Progress" data-bn="দৈনিক লক্ষ্য অগ্রগতি">Daily Goal Progress</span>
                         <span id="progressPercent">0%</span>
                     </div>
                     <div class="progress-bar-bg">
@@ -801,7 +955,7 @@
             </div>
 
             <button id="logoutBtn" class="btn btn-logout" style="margin-top: 15px;">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
+                <i class="fa-solid fa-right-from-bracket"></i> <span data-en="Logout" data-bn="লগআউট">Logout</span>
             </button>
         </aside>
 
@@ -809,20 +963,20 @@
         <main class="glass main-content animate-fade">
             
             <div class="tabs-header">
-                <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> Routine Tasks</button>
-                <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> Exams & Events</button>
-                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> Study Material Hub</button>
+                <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> <span data-en="Routine Tasks" data-bn="দৈনিক রুটিন">Routine Tasks</span></button>
+                <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> <span data-en="Exams & Events" data-bn="পরীক্ষা ও ইভেন্ট">Exams & Events</span></button>
+                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> <span data-en="Study Material Hub" data-bn="স্টাডি হাব ও মেমোরিয়াল">Study Material Hub</span></button>
             </div>
 
             <!-- TASKS TAB VIEW -->
             <div id="tasksTabView">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Daily Routine & Tasks</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;">Smart chronological management</p>
+                        <h2 data-en="Daily Routine & Planner" data-bn="দৈনিক রুটিন ও প্ল্যানার">Daily Routine & Planner</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Smart chronological routine management" data-bn="সময়ানুক্রমিক রুটিন ব্যবস্থাপনা">Smart chronological routine management</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openTaskModalBtn">
-                        <i class="fa-solid fa-plus"></i> New Task
+                        <i class="fa-solid fa-plus"></i> <span data-en="New Task" data-bn="নতুন কাজ">New Task</span>
                     </button>
                 </div>
 
@@ -832,9 +986,9 @@
                         <input type="text" id="searchInput" placeholder="Search tasks...">
                     </div>
                     <div class="filter-btn-group">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="active">Active</button>
-                        <button class="filter-btn" data-filter="completed">Done</button>
+                        <button class="filter-btn active" data-filter="all" data-en="All" data-bn="সবগুলো">All</button>
+                        <button class="filter-btn" data-filter="active" data-en="Active" data-bn="চলতি">Active</button>
+                        <button class="filter-btn" data-filter="completed" data-en="Done" data-bn="সম্পন্ন">Done</button>
                     </div>
                 </div>
 
@@ -845,11 +999,11 @@
             <div id="eventsTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Exam & Event Schedule</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;">Track exam dates & deadlines</p>
+                        <h2 data-en="Exam & Event Schedule" data-bn="পরীক্ষা ও ইভেন্ট সময়সূচী">Exam & Event Schedule</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track exam dates & deadlines" data-bn="পরীক্ষার তারিখ ও ডেডলাইন ট্র্যাক করুন">Track exam dates & deadlines</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openEventModalBtn">
-                        <i class="fa-solid fa-calendar-plus"></i> New Event
+                        <i class="fa-solid fa-calendar-plus"></i> <span data-en="New Event" data-bn="নতুন ইভেন্ট">New Event</span>
                     </button>
                 </div>
 
@@ -860,11 +1014,11 @@
             <div id="studyTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2>Study Hub & Vault</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;">Subject Books, PDFs & Video Lessons</p>
+                        <h2 data-en="Study Vault & Memorials" data-bn="স্টাডি মেমোরিয়াল ও ভল্ট">Study Vault & Memorials</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Subject Books, PDFs & Auto-Redirect Resources" data-bn="বই, নোটস এবং লিংকে অটো-রিডাইরেক্ট">Subject Books, PDFs & Auto-Redirect Resources</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openStudyModalBtn">
-                        <i class="fa-solid fa-book-open"></i> Add Study Material
+                        <i class="fa-solid fa-book-open"></i> <span data-en="Add Material" data-bn="মেটেরিয়াল যুক্ত করুন">Add Material</span>
                     </button>
                 </div>
 
@@ -874,11 +1028,36 @@
         </main>
     </div>
 
+    <!-- PROFILE DECORATION MODAL -->
+    <div id="profileModal" class="modal">
+        <div class="glass modal-content animate-fade">
+            <div class="modal-header">
+                <h3 data-en="Decorate Profile" data-bn="প্রোফাইল সাজান">Decorate Profile</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeProfileModalBtn"></i>
+            </div>
+            <form id="saveProfileForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-graduation-cap input-icon"></i>
+                    <input type="text" id="profClass" placeholder="Class / Grade (e.g. Class 12 / HSC)" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-building-columns input-icon"></i>
+                    <input type="text" id="profInst" placeholder="Institution / College Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-brands fa-facebook input-icon"></i>
+                    <input type="url" id="profFbUrl" placeholder="Institution Facebook Page URL">
+                </div>
+                <button type="submit" class="btn" data-en="Save Profile" data-bn="সংরক্ষণ করুন">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
     <!-- TASK MODAL -->
     <div id="taskModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
-                <h3 id="taskModalTitle">Create New Activity</h3>
+                <h3 id="taskModalTitle" data-en="Create New Activity" data-bn="নতুন অ্যাক্টিভিটি তৈরি করুন">Create New Activity</h3>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeTaskModalBtn"></i>
             </div>
             <form id="saveTaskForm">
@@ -889,7 +1068,7 @@
                     <input type="text" id="taskName" placeholder="Task Name (e.g. Physics Revision)" required>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Theme Color</label>
+                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Theme Color" data-bn="থিম কালার">Theme Color</label>
                 <div class="color-picker-grid" id="colorPickerGrid">
                     <div class="color-dot selected" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
                     <div class="color-dot" data-color="#ec4899" style="background:#ec4899;"></div>
@@ -899,25 +1078,52 @@
                     <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Activity Icon</label>
+                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Activity Icon" data-bn="আইকন নির্বাচন">Activity Icon</label>
                 <div class="icon-selector-trigger" id="iconSelectorTrigger">
                     <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.82rem;">fa-book</span></span>
                     <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="icon-grid" id="iconGrid" style="display: none;"></div>
 
-                <div class="form-row">
-                    <div class="input-group" style="flex: 1;">
-                        <i class="fa-regular fa-clock input-icon"></i>
-                        <input type="time" id="taskStartTime" required>
+                <!-- 12-HOUR TIME SELECTOR INPUTS -->
+                <div class="form-row" style="margin-bottom: 14px;">
+                    <div style="flex:1;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="Start Time (12hr)" data-bn="শুরুর সময় (১২ ঘণ্টা)">Start Time (12hr)</label>
+                        <div class="time-picker-12">
+                            <select id="startHour">
+                                <option value="12">12</option><option value="01">01</option><option value="02">02</option>
+                                <option value="03">03</option><option value="04">04</option><option value="05">05</option>
+                                <option value="06">06</option><option value="07">07</option><option value="08">08</option>
+                                <option value="09">09</option><option value="10">10</option><option value="11">11</option>
+                            </select>
+                            <select id="startMin">
+                                <option value="00">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+                            </select>
+                            <select id="startAmpm">
+                                <option value="AM">AM</option><option value="PM">PM</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="input-group" style="flex: 1;">
-                        <i class="fa-solid fa-clock input-icon"></i>
-                        <input type="time" id="taskEndTime" required>
+                    <div style="flex:1;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="End Time (12hr)" data-bn="শেষের সময় (১২ ঘণ্টা)">End Time (12hr)</label>
+                        <div class="time-picker-12">
+                            <select id="endHour">
+                                <option value="12">12</option><option value="01">01</option><option value="02">02</option>
+                                <option value="03">03</option><option value="04">04</option><option value="05">05</option>
+                                <option value="06">06</option><option value="07">07</option><option value="08">08</option>
+                                <option value="09">09</option><option value="10">10</option><option value="11">11</option>
+                            </select>
+                            <select id="endMin">
+                                <option value="00">00</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+                            </select>
+                            <select id="endAmpm">
+                                <option value="AM">AM</option><option value="PM">PM</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;">Alarm Settings</label>
+                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Alarm Settings" data-bn="অ্যালার্ম সেটিংস">Alarm Settings</label>
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
                         <i class="fa-solid fa-bell input-icon"></i>
@@ -954,7 +1160,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn" style="margin-top: 10px;">Save Task</button>
+                <button type="submit" class="btn" style="margin-top: 10px;" data-en="Save Task" data-bn="টাস্ক সেভ করুন">Save Task</button>
             </form>
         </div>
     </div>
@@ -963,7 +1169,7 @@
     <div id="eventModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
-                <h3>Schedule Special Event</h3>
+                <h3 data-en="Schedule Special Event" data-bn="ইভেন্ট সিডিউল করুন">Schedule Special Event</h3>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeEventModalBtn"></i>
             </div>
             <form id="saveEventForm">
@@ -979,7 +1185,7 @@
                     <i class="fa-solid fa-align-left input-icon"></i>
                     <textarea id="eventNotes" placeholder="Additional Notes..." rows="3"></textarea>
                 </div>
-                <button type="submit" class="btn">Save Event</button>
+                <button type="submit" class="btn" data-en="Save Event" data-bn="ইভেন্ট সেভ করুন">Save Event</button>
             </form>
         </div>
     </div>
@@ -988,36 +1194,36 @@
     <div id="studyModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
-                <h3>Add Study Material</h3>
+                <h3 data-en="Add Study Material / Link" data-bn="স্টাডি মেটেরিয়াল যুক্ত করুন">Add Study Material / Link</h3>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeStudyModalBtn"></i>
             </div>
             <form id="saveStudyForm">
                 <div class="input-group">
                     <i class="fa-solid fa-book input-icon"></i>
-                    <input type="text" id="studyBookName" placeholder="Book / Subject Name (e.g. Organic Chemistry)" required>
+                    <input type="text" id="studyBookName" placeholder="Title / Subject (e.g. Organic Chemistry)" required>
                 </div>
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
                         <i class="fa-solid fa-bookmark input-icon"></i>
-                        <input type="text" id="studyChapterName" placeholder="Chapter Name/No." required>
+                        <input type="text" id="studyChapterName" placeholder="Chapter / Details" required>
                     </div>
                     <div class="input-group" style="flex: 1;">
-                        <i class="fa-solid fa-list-ol input-icon"></i>
-                        <input type="text" id="studySubChapterName" placeholder="Sub-chapter">
+                        <i class="fa-solid fa-link input-icon"></i>
+                        <input type="url" id="studyTargetUrl" placeholder="Direct Link (Google Drive, Web, Video)">
                     </div>
                 </div>
 
                 <div class="input-group">
                     <i class="fa-brands fa-youtube input-icon"></i>
-                    <input type="url" id="studyYoutubeUrl" placeholder="YouTube Video/Playlist Link (Optional)">
+                    <input type="url" id="studyYoutubeUrl" placeholder="YouTube Video Link (Optional)">
                 </div>
 
                 <div class="input-group">
                     <i class="fa-solid fa-note-sticky input-icon"></i>
-                    <textarea id="studyNotes" placeholder="Keep personal revision notes here..." rows="3"></textarea>
+                    <textarea id="studyNotes" placeholder="Personal revision notes..." rows="3"></textarea>
                 </div>
 
-                <button type="submit" class="btn">Save to Study Hub</button>
+                <button type="submit" class="btn" data-en="Save to Study Hub" data-bn="সংরক্ষণ করুন">Save to Study Hub</button>
             </form>
         </div>
     </div>
@@ -1041,6 +1247,8 @@
             deleteDoc, 
             updateDoc, 
             doc, 
+            setDoc,
+            getDoc,
             onSnapshot, 
             query, 
             where,
@@ -1060,7 +1268,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Enable Offline Persistence for Firestore (Fix for issue #1)
+        // Enable Offline Persistence for Firestore
         enableIndexedDbPersistence(db).catch((err) => {
             if (err.code == 'failed-precondition') {
                 console.log('Multiple tabs open, persistence enabled in first tab only');
@@ -1074,6 +1282,9 @@
         let userTasks = [];
         let userEvents = [];
         let userStudyItems = [];
+        let userProfileData = { class: 'Class 12', inst: 'College', fbUrl: '', streak: 5, xp: 340 };
+        let currentLang = localStorage.getItem('studypulse_lang') || 'en';
+
         let selectedIcon = "fa-book";
         let selectedColor = "#8b5cf6";
         let activeFilter = "all";
@@ -1093,7 +1304,23 @@
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon"
         ];
 
-        // Storage Helpers
+        // Language Switcher Logic
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('studypulse_lang', lang);
+            document.body.className = `lang-${lang}`;
+            document.getElementById('langLabel').innerText = lang === 'en' ? 'BN' : 'EN';
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = lang === 'en' ? el.getAttribute('data-en') : el.getAttribute('data-bn');
+            });
+        }
+
+        document.getElementById('langToggleBtn').addEventListener('click', () => {
+            setLanguage(currentLang === 'en' ? 'bn' : 'en');
+        });
+
+        // Local Storage Helpers
         function saveLocalData(key, data) {
             if (!currentUser) return;
             localStorage.setItem(`studypulse_${currentUser.uid}_${key}`, JSON.stringify(data));
@@ -1106,12 +1333,13 @@
         }
 
         // Auth State Listener
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
+            setLanguage(currentLang);
             if (user) {
                 currentUser = user;
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardSection').style.display = 'grid';
-                document.getElementById('userNameDisplay').innerText = user.email;
+                document.getElementById('userNameDisplay').innerText = user.email.split('@')[0];
                 document.getElementById('userAvatar').innerText = user.email.charAt(0).toUpperCase();
 
                 // Hydrate immediately from cache
@@ -1128,6 +1356,7 @@
                 listenToTasks(user.uid);
                 listenToEvents(user.uid);
                 listenToStudyHub(user.uid);
+                loadUserProfile(user.uid);
             } else {
                 currentUser = null;
                 if (unsubscribeTasks) unsubscribeTasks();
@@ -1141,7 +1370,6 @@
         // Toggle Login / Register
         document.getElementById('switchBtn').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerHTML = '<i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro';
             document.getElementById('authSubtitle').innerText = isLoginMode ? 'Login to access your study tasks' : 'Create account to get started';
             document.getElementById('authBtn').innerText = isLoginMode ? 'Login' : 'Register';
             document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
@@ -1165,7 +1393,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // REALTIME LISTENERS (WITH PERSISTENCE LOGIC SAFEGUARD)
+        // REALTIME LISTENERS WITH STRICT DELETION PERSISTENCE FIX
         function listenToTasks(userId) {
             try {
                 const q = query(collection(db, "tasks"), where("uid", "==", userId));
@@ -1173,13 +1401,10 @@
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
                     
-                    // Update only if network/cache returned records OR if local array is also empty
-                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
-                        userTasks = fetched;
-                        userTasks.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
-                        saveLocalData('tasks', userTasks);
-                        renderTasks();
-                    }
+                    userTasks = fetched;
+                    userTasks.sort((a, b) => compare12HrTimes(a.startTime, b.startTime));
+                    saveLocalData('tasks', userTasks);
+                    renderTasks();
                 }, (err) => console.log("Firebase sync warning:", err));
             } catch (e) { console.log(e); }
         }
@@ -1190,11 +1415,9 @@
                 unsubscribeEvents = onSnapshot(q, (snapshot) => {
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
-                        userEvents = fetched;
-                        saveLocalData('events', userEvents);
-                        renderEvents();
-                    }
+                    userEvents = fetched;
+                    saveLocalData('events', userEvents);
+                    renderEvents();
                 }, (err) => console.log("Firebase sync warning:", err));
             } catch (e) { console.log(e); }
         }
@@ -1205,14 +1428,62 @@
                 unsubscribeStudy = onSnapshot(q, (snapshot) => {
                     const fetched = [];
                     snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    if (fetched.length > 0 || snapshot.metadata.fromCache) {
-                        userStudyItems = fetched;
-                        saveLocalData('study', userStudyItems);
-                        renderStudyHub();
-                    }
+                    userStudyItems = fetched;
+                    saveLocalData('study', userStudyItems);
+                    renderStudyHub();
                 }, (err) => console.log("Firebase sync warning:", err));
             } catch (e) { console.log(e); }
         }
+
+        // DUOLINGO PROFILE & NOTICE CENTER LOGIC
+        async function loadUserProfile(userId) {
+            try {
+                const docRef = doc(db, "users", userId);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    userProfileData = { ...userProfileData, ...docSnap.data() };
+                    document.getElementById('userClassText').innerText = userProfileData.class || 'Class 12';
+                    document.getElementById('userInstText').innerText = userProfileData.inst || 'Institution';
+                    document.getElementById('userStreak').innerText = userProfileData.streak || 5;
+                    document.getElementById('userXP').innerText = userProfileData.xp || 340;
+                }
+            } catch(e) { console.log("Profile load local:", e); }
+        }
+
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+            document.getElementById('profClass').value = userProfileData.class || '';
+            document.getElementById('profInst').value = userProfileData.inst || '';
+            document.getElementById('profFbUrl').value = userProfileData.fbUrl || '';
+            document.getElementById('profileModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeProfileModalBtn').addEventListener('click', () => {
+            document.getElementById('profileModal').style.display = 'none';
+        });
+
+        document.getElementById('saveProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            userProfileData.class = document.getElementById('profClass').value;
+            userProfileData.inst = document.getElementById('profInst').value;
+            userProfileData.fbUrl = document.getElementById('profFbUrl').value;
+
+            document.getElementById('userClassText').innerText = userProfileData.class;
+            document.getElementById('userInstText').innerText = userProfileData.inst;
+
+            document.getElementById('profileModal').style.display = 'none';
+
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), userProfileData, { merge: true });
+            } catch(e) { console.log(e); }
+        });
+
+        document.getElementById('noticeCenterCard').addEventListener('click', () => {
+            if (userProfileData.fbUrl) {
+                window.open(userProfileData.fbUrl, '_blank');
+            } else {
+                alert("Please add your institution's Facebook page link in 'Edit Profile'.");
+            }
+        });
 
         // Navigation Tabs
         document.getElementById('tabTasksBtn').addEventListener('click', () => switchTab('tasks'));
@@ -1263,23 +1534,45 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
-        // Time Helpers
-        function format12Hour(time24) {
-            if (!time24) return '';
-            let [hours, minutes] = time24.split(':').map(Number);
-            const period = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12;
-            return `${hours}:${String(minutes).padStart(2, '0')} ${period}`;
+        // 12-HOUR TIME HELPERS
+        function getSelected12HourTime(prefix) {
+            const hour = document.getElementById(`${prefix}Hour`).value;
+            const min = document.getElementById(`${prefix}Min`).value;
+            const ampm = document.getElementById(`${prefix}Ampm`).value;
+            return `${hour}:${min} ${ampm}`;
         }
 
-        function calculateDuration(startTime, endTime) {
+        function set12HourTimeInputs(prefix, timeStr) {
+            if (!timeStr) return;
+            const parts = timeStr.split(/[: ]/);
+            if (parts.length >= 3) {
+                document.getElementById(`${prefix}Hour`).value = parts[0];
+                document.getElementById(`${prefix}Min`).value = parts[1];
+                document.getElementById(`${prefix}Ampm`).value = parts[2];
+            }
+        }
+
+        function compare12HrTimes(t1, t2) {
+            if (!t1 || !t2) return 0;
+            return convert12To24Minutes(t1) - convert12To24Minutes(t2);
+        }
+
+        function convert12To24Minutes(time12) {
+            const parts = time12.split(/[: ]/);
+            let h = parseInt(parts[0]);
+            const m = parseInt(parts[1]);
+            const ampm = parts[2];
+            if (ampm === 'PM' && h < 12) h += 12;
+            if (ampm === 'AM' && h === 12) h = 0;
+            return h * 60 + m;
+        }
+
+        function calculateDuration12Hr(startTime, endTime) {
             if (!startTime || !endTime) return '';
-            let [startH, startM] = startTime.split(':').map(Number);
-            let [endH, endM] = endTime.split(':').map(Number);
-            let startMinutes = startH * 60 + startM;
-            let endMinutes = endH * 60 + endM;
-            if (endMinutes < startMinutes) endMinutes += 24 * 60;
-            const diff = endMinutes - startMinutes;
+            const startMins = convert12To24Minutes(startTime);
+            let endMins = convert12To24Minutes(endTime);
+            if (endMins < startMins) endMins += 24 * 60;
+            const diff = endMins - startMins;
             const hrs = Math.floor(diff / 60);
             const mins = diff % 60;
             if (hrs === 0) return `${mins}m`;
@@ -1287,7 +1580,7 @@
             return `${hrs}h ${mins}m`;
         }
 
-        // Live Clock
+        // Live Clock (12-Hour Format)
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -1296,22 +1589,22 @@
             const period = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12 || 12;
 
-            const time24Str = `${String(now.getHours()).padStart(2, '0')}:${minutes}`;
+            const time12Formatted = `${String(hours).padStart(2, '0')}:${minutes} ${period}`;
             
             document.getElementById('liveClock').innerText = `${hours}:${minutes}:${seconds} ${period}`;
             document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
-            checkAlarms(time24Str);
+            checkAlarms(time12Formatted);
         }
         setInterval(updateClock, 1000);
         updateClock();
 
         // Alarm Trigger Logic
-        function checkAlarms(currentTime24) {
+        function checkAlarms(currentTime12) {
             if (!currentUser) return;
             userTasks.forEach(task => {
-                if (task.alarmEnable === 'yes' && task.startTime === currentTime24 && !task.completed) {
-                    const alarmKey = `${task.id}-${currentTime24}`;
+                if (task.alarmEnable === 'yes' && task.startTime === currentTime12 && !task.completed) {
+                    const alarmKey = `${task.id}-${currentTime12}`;
                     if (!triggeredAlarms.has(alarmKey)) {
                         triggeredAlarms.add(alarmKey);
                         triggerAlarm(task);
@@ -1337,17 +1630,17 @@
             if (isPomoRunning) {
                 clearInterval(pomoTimer);
                 isPomoRunning = false;
-                document.getElementById('pomoStartBtn').innerText = 'Start';
+                document.getElementById('pomoStartBtn').innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
             } else {
                 isPomoRunning = true;
-                document.getElementById('pomoStartBtn').innerText = 'Pause';
+                document.getElementById('pomoStartBtn').innerText = currentLang === 'en' ? 'Pause' : 'থামুন';
                 pomoTimer = setInterval(() => {
                     if (pomoSeconds === 0) {
                         if (pomoMinutes === 0) {
                             clearInterval(pomoTimer);
                             isPomoRunning = false;
-                            document.getElementById('pomoStartBtn').innerText = 'Start';
-                            alert('🎉 Pomodoro Session Completed! Take a 5 minute break!');
+                            document.getElementById('pomoStartBtn').innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
+                            alert('🎉 Pomodoro Session Completed!');
                             return;
                         }
                         pomoMinutes--;
@@ -1365,7 +1658,7 @@
             isPomoRunning = false;
             pomoMinutes = 25;
             pomoSeconds = 0;
-            document.getElementById('pomoStartBtn').innerText = 'Start';
+            document.getElementById('pomoStartBtn').innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
             updatePomoDisplay();
         });
 
@@ -1377,7 +1670,6 @@
         // Modal Controls
         document.getElementById('openTaskModalBtn').addEventListener('click', () => {
             document.getElementById('editTaskId').value = '';
-            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
             document.getElementById('saveTaskForm').reset();
             document.getElementById('taskModal').style.display = 'flex';
         });
@@ -1395,10 +1687,11 @@
             if (!task) return;
 
             document.getElementById('editTaskId').value = task.id;
-            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
             document.getElementById('taskName').value = task.name || '';
-            document.getElementById('taskStartTime').value = task.startTime || '';
-            document.getElementById('taskEndTime').value = task.endTime || '';
+            
+            set12HourTimeInputs('start', task.startTime);
+            set12HourTimeInputs('end', task.endTime);
+
             document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
             document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
             document.getElementById('taskFrequency').value = task.frequency || 'oneday';
@@ -1421,14 +1714,15 @@
             e.preventDefault();
             const taskId = document.getElementById('editTaskId').value;
             const idToUse = taskId || 'local_' + Date.now();
+            
             const taskData = {
                 id: idToUse,
                 uid: currentUser.uid,
                 name: document.getElementById('taskName').value,
                 icon: selectedIcon,
                 color: selectedColor,
-                startTime: document.getElementById('taskStartTime').value,
-                endTime: document.getElementById('taskEndTime').value,
+                startTime: getSelected12HourTime('start'),
+                endTime: getSelected12HourTime('end'),
                 alarmEnable: document.getElementById('taskAlarmEnable').value,
                 alarmTone: document.getElementById('taskAlarmTone').value,
                 frequency: document.getElementById('taskFrequency').value,
@@ -1444,7 +1738,7 @@
                 userTasks.push(taskData);
             }
 
-            userTasks.sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
+            userTasks.sort((a, b) => compare12HrTimes(a.startTime, b.startTime));
             saveLocalData('tasks', userTasks);
             renderTasks();
 
@@ -1488,7 +1782,7 @@
             } catch (err) { console.log("Offline event saved locally:", err); }
         });
 
-        // Save Study Hub
+        // Save Study Hub / Memorials
         document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const studyData = {
@@ -1496,7 +1790,7 @@
                 uid: currentUser.uid,
                 bookName: document.getElementById('studyBookName').value,
                 chapter: document.getElementById('studyChapterName').value,
-                subChapter: document.getElementById('studySubChapterName').value,
+                targetUrl: document.getElementById('studyTargetUrl').value,
                 youtubeUrl: document.getElementById('studyYoutubeUrl').value,
                 notes: document.getElementById('studyNotes').value,
                 createdAt: Date.now()
@@ -1528,7 +1822,7 @@
 
         document.getElementById('searchInput').addEventListener('input', renderTasks);
 
-        // RENDER TASKS (Fix for issue #2)
+        // RENDER TASKS (DAILY PLANNER ROUTINE TIMELINE)
         function renderTasks() {
             const container = document.getElementById('tasksList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -1548,7 +1842,7 @@
             }
 
             filtered.forEach((task, index) => {
-                const durationStr = calculateDuration(task.startTime, task.endTime);
+                const durationStr = calculateDuration12Hr(task.startTime, task.endTime);
                 const priorityClass = `priority-${task.priority || 'medium'}`;
 
                 const card = document.createElement('div');
@@ -1567,7 +1861,7 @@
                                 ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator"></i>' : ''}
                             </div>
                             <div class="task-meta-info">
-                                <span><i class="fa-regular fa-clock"></i> ${format12Hour(task.startTime)} - ${format12Hour(task.endTime)}</span>
+                                <span><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
                                 <span class="duration-badge"><i class="fa-solid fa-hourglass-half"></i> ${durationStr}</span>
                                 <span class="priority-badge ${priorityClass}">${task.priority || 'med'}</span>
                             </div>
@@ -1591,6 +1885,7 @@
                     } catch (e) { console.log(e); }
                 };
 
+                // DELETION WITH PERSISTENT CLEANUP
                 card.querySelector('.delete').onclick = async () => {
                     userTasks = userTasks.filter(t => t.id !== task.id);
                     saveLocalData('tasks', userTasks);
@@ -1653,7 +1948,7 @@
             });
         }
 
-        // Render Study Hub
+        // Render Study Hub & Memorials with Auto Open Link
         function renderStudyHub() {
             const container = document.getElementById('studyList');
             container.innerHTML = '';
@@ -1678,9 +1973,11 @@
                 card.innerHTML = `
                     <div class="study-card-header">
                         <div>
-                            <h3 style="font-size: 1rem; color: var(--accent-pink);"><i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}</h3>
+                            <h3 style="font-size: 1rem; color: var(--accent-pink);">
+                                <i class="fa-solid fa-book-journal-whills"></i> ${item.bookName}
+                            </h3>
                             <p style="font-size: 0.78rem; color: var(--text-muted);">
-                                Chapter: ${item.chapter} ${item.subChapter ? '| Sub-chapter: ' + item.subChapter : ''}
+                                ${item.chapter} ${item.targetUrl ? '• <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Link' : ''}
                             </p>
                         </div>
                         <button class="action-btn delete"><i class="fa-solid fa-trash"></i></button>
@@ -1689,7 +1986,16 @@
                     <div class="media-container">${embedYoutube}</div>
                 `;
 
-                card.querySelector('.delete').onclick = async () => {
+                // Auto Open Link on Click
+                card.onclick = (e) => {
+                    if (e.target.closest('.delete') || e.target.closest('iframe')) return;
+                    if (item.targetUrl) {
+                        window.open(item.targetUrl, '_blank');
+                    }
+                };
+
+                card.querySelector('.delete').onclick = async (e) => {
+                    e.stopPropagation();
                     userStudyItems = userStudyItems.filter(s => s.id !== item.id);
                     saveLocalData('study', userStudyItems);
                     renderStudyHub();
