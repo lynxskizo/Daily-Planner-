@@ -12,8 +12,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3429/3429149.png">
 
-    <!-- FontAwesome 6 Free Solid CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome 6.5.1 Free Solid CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Google Fonts: Poppins (Standard EN) & Hind Siliguri (Bangla) -->
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -782,7 +782,7 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
-            max-height: 160px;
+            max-height: 220px;
             overflow-y: auto;
             padding: 8px;
             background: rgba(0,0,0,0.3);
@@ -1144,7 +1144,7 @@
 
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
-                        <i class="fa-solid fa-arrows-rotate input-icon"></i>
+                        <i class="fa-solid fa-rotate input-icon"></i>
                         <select id="taskFrequency">
                             <option value="oneday">Just One Day</option>
                             <option value="everyday">Everyday Routine</option>
@@ -1300,8 +1300,18 @@
             digital: "https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3"
         };
 
+        // EXPANDED 100+ ICON PALETTE
         const ICON_LIST = [
-            "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school", "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon"
+            "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school",
+            "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon", "fa-compass", "fa-dna", "fa-language", "fa-music", "fa-headphones",
+            "fa-lightbulb", "fa-clock", "fa-stopwatch", "fa-calendar", "fa-pen-nib", "fa-bookmark", "fa-folder", "fa-file-lines", "fa-note-sticky", "fa-laptop",
+            "fa-desktop", "fa-mobile-screen", "fa-terminal", "fa-code", "fa-database", "fa-microchip", "fa-network-wired", "fa-wifi", "fa-robot", "fa-gears",
+            "fa-book-open", "fa-book-journal-whills", "fa-glasses", "fa-certificate", "fa-award", "fa-trophy", "fa-medal", "fa-bullseye", "fa-flag", "fa-star",
+            "fa-heart", "fa-bolt", "fa-fire", "fa-shield-halved", "fa-check", "fa-pen-to-square", "fa-trash", "fa-rotate-left", "fa-plus", "fa-xmark",
+            "fa-circle-play", "fa-list-check", "fa-person-running", "fa-person-swimming", "fa-bicycle", "fa-apple-whole", "fa-utensils", "fa-mug-hot", "fa-bed", "fa-spa",
+            "fa-shapes", "fa-cube", "fa-cubes", "fa-chart-pie", "fa-chart-line", "fa-chart-simple", "fa-arrow-trend-up", "fa-table-cells", "fa-clipboard-list", "fa-box-archive",
+            "fa-cloud", "fa-umbrella", "fa-seedling", "fa-tree", "fa-earth-americas", "fa-rocket", "fa-shuttle-space", "fa-paper-plane", "fa-map-location-dot", "fa-magnifying-glass",
+            "fa-key", "fa-lock", "fa-unlock", "fa-bell", "fa-envelope", "fa-comment", "fa-comments", "fa-share-nodes", "fa-link", "fa-thumbs-up"
         ];
 
         // Language Switcher Logic
@@ -1393,7 +1403,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
 
-        // REALTIME LISTENERS WITH STRICT DELETION PERSISTENCE FIX
+        // REALTIME LISTENERS
         function listenToTasks(userId) {
             try {
                 const q = query(collection(db, "tasks"), where("uid", "==", userId));
@@ -1534,6 +1544,37 @@
             grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
         }
 
+        // Mini Calendar Helper
+        function buildCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthYearHeader = document.getElementById('calMonthYear');
+            if (!grid || !monthYearHeader) return;
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            monthYearHeader.innerText = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            grid.innerHTML = '';
+
+            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            dayNames.forEach(day => {
+                grid.innerHTML += `<div class="calendar-day-head">${day}</div>`;
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const isToday = d === now.getDate();
+                grid.innerHTML += `<div class="calendar-day ${isToday ? 'active' : ''}">${d}</div>`;
+            }
+        }
+
         // 12-HOUR TIME HELPERS
         function getSelected12HourTime(prefix) {
             const hour = document.getElementById(`${prefix}Hour`).value;
@@ -1578,6 +1619,12 @@
             if (hrs === 0) return `${mins}m`;
             if (mins === 0) return `${hrs}h`;
             return `${hrs}h ${mins}m`;
+        }
+
+        function extractYoutubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
         }
 
         // Live Clock (12-Hour Format)
@@ -1746,12 +1793,15 @@
             e.target.reset();
 
             try {
-                if (taskId) {
+                if (taskId && !taskId.startsWith('local_')) {
                     await updateDoc(doc(db, "tasks", taskId), taskData);
                 } else {
                     const docRef = await addDoc(collection(db, "tasks"), taskData);
-                    taskData.id = docRef.id;
-                    saveLocalData('tasks', userTasks);
+                    const localIdx = userTasks.findIndex(t => t.id === idToUse);
+                    if (localIdx !== -1) {
+                        userTasks[localIdx].id = docRef.id;
+                        saveLocalData('tasks', userTasks);
+                    }
                 }
             } catch (err) { console.log("Offline update saved locally:", err); }
         });
@@ -1759,8 +1809,9 @@
         // Save Event
         document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const tempId = 'local_' + Date.now();
             const eventData = {
-                id: 'local_' + Date.now(),
+                id: tempId,
                 uid: currentUser.uid,
                 name: document.getElementById('eventName').value,
                 date: document.getElementById('eventDate').value,
@@ -1777,16 +1828,20 @@
 
             try {
                 const docRef = await addDoc(collection(db, "events"), eventData);
-                eventData.id = docRef.id;
-                saveLocalData('events', userEvents);
+                const localIdx = userEvents.findIndex(e => e.id === tempId);
+                if (localIdx !== -1) {
+                    userEvents[localIdx].id = docRef.id;
+                    saveLocalData('events', userEvents);
+                }
             } catch (err) { console.log("Offline event saved locally:", err); }
         });
 
         // Save Study Hub / Memorials
         document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const tempId = 'local_' + Date.now();
             const studyData = {
-                id: 'local_' + Date.now(),
+                id: tempId,
                 uid: currentUser.uid,
                 bookName: document.getElementById('studyBookName').value,
                 chapter: document.getElementById('studyChapterName').value,
@@ -1805,8 +1860,11 @@
 
             try {
                 const docRef = await addDoc(collection(db, "studyHub"), studyData);
-                studyData.id = docRef.id;
-                saveLocalData('study', userStudyItems);
+                const localIdx = userStudyItems.findIndex(s => s.id === tempId);
+                if (localIdx !== -1) {
+                    userStudyItems[localIdx].id = docRef.id;
+                    saveLocalData('study', userStudyItems);
+                }
             } catch (err) { console.log("Offline study item saved locally:", err); }
         });
 
@@ -1822,7 +1880,20 @@
 
         document.getElementById('searchInput').addEventListener('input', renderTasks);
 
-        // RENDER TASKS (DAILY PLANNER ROUTINE TIMELINE)
+        function updateProgress() {
+            const total = userTasks.length;
+            if (total === 0) {
+                document.getElementById('progressBar').style.width = '0%';
+                document.getElementById('progressPercent').innerText = '0%';
+                return;
+            }
+            const done = userTasks.filter(t => t.completed).length;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('progressBar').style.width = `${pct}%`;
+            document.getElementById('progressPercent').innerText = `${pct}%`;
+        }
+
+        // RENDER TASKS
         function renderTasks() {
             const container = document.getElementById('tasksList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -1919,7 +1990,7 @@
                 card.innerHTML = `
                     <div class="task-left">
                         <div class="task-icon-box" style="color:#ec4899;">
-                            <i class="fa-solid fa-calendar-star"></i>
+                            <i class="fa-solid fa-calendar-day"></i>
                         </div>
                         <div class="task-details">
                             <div class="task-title">${evt.name}</div>
@@ -2005,52 +2076,9 @@
                         }
                     } catch (e) { console.log(e); }
                 };
+
                 container.appendChild(card);
             });
-        }
-
-        function extractYoutubeId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function updateProgress() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressBar').style.width = '0%';
-                document.getElementById('progressPercent').innerText = '0%';
-                return;
-            }
-            const completed = userTasks.filter(t => t.completed).length;
-            const percent = Math.round((completed / userTasks.length) * 100);
-            document.getElementById('progressBar').style.width = `${percent}%`;
-            document.getElementById('progressPercent').innerText = `${percent}%`;
-        }
-
-        function buildCalendar() {
-            const calendarGrid = document.getElementById('calendarGrid');
-            const monthYear = document.getElementById('calMonthYear');
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = date.getMonth();
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            
-            monthYear.innerText = `${monthNames[month]} ${year}`;
-            calendarGrid.innerHTML = `
-                <div class="calendar-day-head">S</div><div class="calendar-day-head">M</div><div class="calendar-day-head">T</div>
-                <div class="calendar-day-head">W</div><div class="calendar-day-head">T</div><div class="calendar-day-head">F</div>
-                <div class="calendar-day-head">S</div>
-            `;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = date.getDate();
-
-            for (let i = 0; i < firstDay; i++) { calendarGrid.innerHTML += `<div></div>`; }
-            for (let day = 1; day <= daysInMonth; day++) {
-                const isActive = day === today ? 'active' : '';
-                calendarGrid.innerHTML += `<div class="calendar-day ${isActive}">${day}</div>`;
-            }
         }
     </script>
 </body>
