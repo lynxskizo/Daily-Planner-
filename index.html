@@ -1730,6 +1730,32 @@
             if (e.target === document.getElementById('profileModal')) document.getElementById('profileModal').style.display = 'none';
         });
 
+        // Filter Handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                activeFilter = e.target.getAttribute('data-filter');
+                renderTasks();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderTasks();
+        });
+
+        function updateProgress() {
+            if (userTasks.length === 0) {
+                document.getElementById('progressPercent').innerText = '0%';
+                document.getElementById('progressBar').style.width = '0%';
+                return;
+            }
+            const completedCount = userTasks.filter(t => t.completed).length;
+            const percent = Math.round((completedCount / userTasks.length) * 100);
+            document.getElementById('progressPercent').innerText = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
         // Save Task (Create & Update)
         saveTaskForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1747,9 +1773,13 @@
                 alarmTone: document.getElementById('taskAlarmTone').value,
                 frequency: document.getElementById('taskFrequency').value,
                 priority: document.getElementById('taskPriority').value,
-                completed: false,
-                createdAt: new Date().toISOString()
+                completed: editId ? (userTasks.find(t => t.id === editId)?.completed || false) : false,
+                updatedAt: new Date().toISOString()
             };
+
+            if (!editId) {
+                taskData.createdAt = new Date().toISOString();
+            }
 
             try {
                 if (editId) {
@@ -1761,6 +1791,7 @@
                 saveTaskForm.reset();
             } catch (err) {
                 console.error("Error saving task:", err);
+                alert("Failed to save task. Please try again.");
             }
         });
 
@@ -1829,14 +1860,20 @@
         window.toggleTask = async (id, status) => {
             try {
                 await updateDoc(doc(db, "tasks", id), { completed: status });
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Error toggling task status:", e); }
         };
 
         window.deleteTask = async (id) => {
             if (confirm("Are you sure you want to delete this task?")) {
                 try {
                     await deleteDoc(doc(db, "tasks", id));
-                } catch (e) { console.error(e); }
+                    userTasks = userTasks.filter(t => t.id !== id);
+                    saveLocalData('tasks', userTasks);
+                    renderTasks();
+                } catch (e) { 
+                    console.error("Error deleting task:", e); 
+                    alert("Failed to delete task.");
+                }
             }
         };
 
@@ -1853,6 +1890,16 @@
 
             set12HourTimeInputs('start', task.startTime);
             set12HourTimeInputs('end', task.endTime);
+
+            selectedIcon = task.icon || "fa-book";
+            selectedColor = task.color || "#8b5cf6";
+
+            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
+            document.getElementById('selectedIconName').innerText = selectedIcon;
+
+            document.querySelectorAll('.color-dot').forEach(d => {
+                d.classList.toggle('selected', d.dataset.color === selectedColor);
+            });
 
             document.getElementById('taskModalTitle').innerText = currentLang === 'en' ? 'Edit Activity' : 'অ্যাক্টিভিটি এডিট করুন';
             taskModal.style.display = 'flex';
@@ -1875,7 +1922,9 @@
                 await addDoc(collection(db, "events"), eventData);
                 eventModal.style.display = 'none';
                 saveEventForm.reset();
-            } catch (err) { console.error(err); }
+            } catch (err) { 
+                console.error("Error saving event:", err); 
+            }
         });
 
         function renderEvents() {
@@ -1910,7 +1959,15 @@
 
         window.deleteEvent = async (id) => {
             if (confirm("Delete this event?")) {
-                try { await deleteDoc(doc(db, "events", id)); } catch(e) { console.error(e); }
+                try { 
+                    await deleteDoc(doc(db, "events", id)); 
+                    userEvents = userEvents.filter(e => e.id !== id);
+                    saveLocalData('events', userEvents);
+                    renderEvents();
+                } catch(e) { 
+                    console.error("Error deleting event:", e); 
+                    alert("Failed to delete event.");
+                }
             }
         };
 
@@ -1933,7 +1990,7 @@
                 await addDoc(collection(db, "studyHub"), studyData);
                 studyModal.style.display = 'none';
                 saveStudyForm.reset();
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error("Error saving study item:", err); }
         });
 
         function renderStudyHub() {
@@ -1976,85 +2033,18 @@
         }
 
         window.deleteStudy = async (id) => {
-            if (confirm("Remove this study material?")) {
-                try { await deleteDoc(doc(db, "studyHub", id)); } catch(e) { console.error(e); }
+            if (confirm("Delete this material?")) {
+                try { 
+                    await deleteDoc(doc(db, "studyHub", id)); 
+                    userStudyItems = userStudyItems.filter(s => s.id !== id);
+                    saveLocalData('study', userStudyItems);
+                    renderStudyHub();
+                } catch(e) { 
+                    console.error("Error deleting study material:", e); 
+                    alert("Failed to delete study material.");
+                }
             }
         };
-
-        // Progress Calculation
-        function updateProgress() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressPercent').innerText = '0%';
-                document.getElementById('progressBar').style.width = '0%';
-                return;
-            }
-
-            const completedCount = userTasks.filter(t => t.completed).length;
-            const percent = Math.round((completedCount / userTasks.length) * 100);
-
-            document.getElementById('progressPercent').innerText = `${percent}%`;
-            document.getElementById('progressBar').style.width = `${percent}%`;
-        }
-
-        // Filters and Search Input Events
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                activeFilter = e.target.dataset.filter;
-                renderTasks();
-            });
-        });
-
-        document.getElementById('searchInput').addEventListener('input', () => {
-            renderTasks();
-        });
-
-        // Pomodoro Focus Timer Logic
-        let pomoTimeLeft = 25 * 60;
-        let pomoTimerId = null;
-
-        const pomoDisplay = document.getElementById('pomoTimerDisplay');
-        const pomoStartBtn = document.getElementById('pomoStartBtn');
-        const pomoResetBtn = document.getElementById('pomoResetBtn');
-
-        function updatePomoDisplay() {
-            const mins = Math.floor(pomoTimeLeft / 60);
-            const secs = pomoTimeLeft % 60;
-            pomoDisplay.innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-        }
-
-        pomoStartBtn.addEventListener('click', () => {
-            if (pomoTimerId) {
-                clearInterval(pomoTimerId);
-                pomoTimerId = null;
-                pomoStartBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-            } else {
-                pomoTimerId = setInterval(() => {
-                    if (pomoTimeLeft > 0) {
-                        pomoTimeLeft--;
-                        updatePomoDisplay();
-                    } else {
-                        clearInterval(pomoTimerId);
-                        pomoTimerId = null;
-                        playAlarmSound('bell');
-                        alert("Pomodoro session completed! Take a break.");
-                        pomoStartBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-                    }
-                }, 1000);
-                pomoStartBtn.innerText = currentLang === 'en' ? 'Pause' : 'থামুন';
-            }
-        });
-
-        pomoResetBtn.addEventListener('click', () => {
-            if (pomoTimerId) {
-                clearInterval(pomoTimerId);
-                pomoTimerId = null;
-            }
-            pomoTimeLeft = 25 * 60;
-            updatePomoDisplay();
-            pomoStartBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-        });
     </script>
 </body>
 </html>
