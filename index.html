@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyPulse Pro - AI Smart System</title>
+    <title>StudyPulse Pro - Academic Command Center</title>
 
     <!-- PWA Manifest & Theme Settings -->
     <link rel="manifest" href="manifest.json">
@@ -27,6 +27,7 @@
             --accent-purple: #8b5cf6;
             --accent-pink: #ec4899;
             --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --success: #10b981;
@@ -125,7 +126,7 @@
 
         .custom-toast {
             pointer-events: auto;
-            background: rgba(17, 24, 39, 0.85);
+            background: rgba(17, 24, 39, 0.95);
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(15px);
             border-radius: 16px;
@@ -328,21 +329,50 @@
         }
 
         .profile-badges {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
             margin-top: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 10px;
             border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .badge-item {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 4px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
+        }
+
+        .diamond-purchase-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            padding: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .diamond-btn {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.78rem;
+            cursor: pointer;
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            justify-content: center;
+            text-decoration: none;
         }
 
         .clock-box {
@@ -576,11 +606,12 @@
         .tasks-container::-webkit-scrollbar { width: 6px; }
         .tasks-container::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
 
+        /* TASK CARD WITH FLEXIBLE COMPACT TEXT / SCROLLABLE TASK BAR FIX */
         .task-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             position: relative;
@@ -589,6 +620,7 @@
             backdrop-filter: blur(10px);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             gap: 12px;
+            min-height: 68px;
         }
 
         .task-card::before {
@@ -605,7 +637,7 @@
             border-color: rgba(255, 255, 255, 0.25);
         }
 
-        .task-card.completed { opacity: 0.5; }
+        .task-card.completed { opacity: 0.6; }
         .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
 
         .task-left {
@@ -614,7 +646,6 @@
             gap: 12px;
             min-width: 0;
             flex: 1;
-            overflow: hidden;
         }
 
         .task-order-badge {
@@ -662,8 +693,8 @@
         }
 
         .task-icon-box {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
@@ -675,36 +706,34 @@
             flex-shrink: 0;
         }
 
+        /* TEXT CLAMP FIX FOR TASK BOX OVERFLOW */
         .task-details {
             min-width: 0;
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            overflow-x: auto;
-            scrollbar-width: thin;
         }
 
-        .task-details::-webkit-scrollbar { height: 2px; }
-        .task-details::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
-
         .task-details .task-title {
-            font-size: 0.92rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             word-break: break-word;
-            line-height: 1.3;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .task-meta-info {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.75rem;
+            font-size: 0.73rem;
             color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 3px;
             flex-wrap: wrap;
         }
 
@@ -730,214 +759,65 @@
             justify-content: center;
         }
 
-        .action-btn.check:hover { background: rgba(16, 185, 129, 0.2); color: var(--success); border-color: var(--success); }
-        .action-btn.edit:hover { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border-color: var(--accent-blue); }
-        .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger); border-color: var(--danger); }
+        .action-btn.check:hover, .action-btn.check.active-complete { background: rgba(16, 185, 129, 0.25); color: var(--success); border-color: var(--success); }
+        .action-btn.restore:hover { background: rgba(245, 158, 11, 0.25); color: var(--warning); border-color: var(--warning); }
+        .action-btn.edit:hover { background: rgba(59, 130, 246, 0.25); color: var(--accent-blue); border-color: var(--accent-blue); }
+        .action-btn.delete:hover { background: rgba(239, 68, 68, 0.25); color: var(--danger); border-color: var(--danger); }
 
-        /* ADVANCED PROFESSIONAL AI CHAT SYSTEM DESIGN */
-        .ai-chat-box {
-            display: flex;
-            flex-direction: column;
-            height: 560px;
-            background: rgba(11, 15, 25, 0.6);
-            border-radius: 20px;
+        /* SYLLABUS SECTION STYLING */
+        .syllabus-subject-card {
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
-            overflow: hidden;
-            position: relative;
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
         }
 
-        .ai-chat-header {
-            padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid var(--glass-border);
+        .syllabus-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 12px;
         }
 
-        .ai-engine-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.82rem;
-            font-weight: 600;
-        }
-
-        .ai-engine-badge i {
-            color: #38bdf8;
-        }
-
-        .ai-chat-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .ai-quick-tools {
-            display: flex;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid var(--glass-border);
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .ai-quick-tool-btn {
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            color: #c4b5fd;
+        .syllabus-chapter-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
-            padding: 4px 10px;
-            font-size: 0.72rem;
-            cursor: pointer;
+            padding: 10px 14px;
+            margin-top: 8px;
+        }
+
+        .subchapter-tag {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-        }
-
-        .ai-quick-tool-btn:hover {
-            background: var(--accent-purple);
-            color: #ffffff;
-        }
-
-        .ai-action-btn {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid var(--glass-border);
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 4px 8px;
             border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
+            font-size: 0.72rem;
+            margin-top: 6px;
+            margin-right: 6px;
         }
 
-        .ai-action-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: rgba(239, 68, 68, 0.4);
-            color: #fca5a5;
-        }
-
-        .ai-messages {
-            flex: 1;
-            padding: 18px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .ai-msg {
-            max-width: 82%;
-            padding: 14px 18px;
-            border-radius: 18px;
-            font-size: 0.88rem;
-            line-height: 1.5;
-            word-break: break-word;
-            position: relative;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .ai-msg.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
-        }
-
-        .ai-msg.assistant {
-            align-self: flex-start;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--glass-border);
-            border-bottom-left-radius: 4px;
-        }
-
-        .ai-msg-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            font-size: 0.75rem;
-        }
-
-        .ai-copy-btn, .ai-regen-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.2s;
-        }
-
-        .ai-copy-btn:hover, .ai-regen-btn:hover { color: var(--accent-pink); }
-
-        .ai-img-preview {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 12px;
-            margin-top: 10px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .ai-preview-attachment {
-            padding: 6px 12px;
-            background: rgba(236, 72, 153, 0.15);
+        /* CHALLENGE TIMER BOX */
+        .challenge-box {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
             border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 0 12px 8px 12px;
-            font-size: 0.78rem;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .ai-input-bar {
-            padding: 12px 16px;
-            background: rgba(0,0,0,0.4);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .ai-input-bar input {
-            flex: 1;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 12px 16px;
-            outline: none;
-            font-size: 0.9rem;
-        }
-
-        .ai-input-bar input:focus {
-            border-color: var(--accent-purple);
-        }
-
-        .ai-send-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-
-        .ai-send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        .challenge-timer-display {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #f472b6;
+            letter-spacing: 2px;
+            margin: 12px 0;
+            text-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
         }
 
         /* MODALS */
@@ -1039,7 +919,7 @@
             .main-content { padding: 16px; }
             .sidebar { padding: 18px; }
             .form-row { flex-direction: column; gap: 0; }
-            .task-card { padding: 12px; }
+            .task-card { padding: 10px 12px; }
             .task-order-badge { display: none; }
             .header-actions { align-items: flex-start; }
             .header-actions .btn { width: 100%; }
@@ -1059,6 +939,7 @@
         </button>
     </div>
 
+    <!-- AUTH SECTION -->
     <div id="authSection" class="glass auth-container animate-fade">
         <h2 id="authTitle"><i class="fa-solid fa-graduation-cap"></i> StudyPulse Pro</h2>
         <p id="authSubtitle" data-en="Login to access your study tasks" data-bn="আপনার পড়ার রুটিন এক্সেস করতে লগইন করুন">Login to access your study tasks</p>
@@ -1085,6 +966,7 @@
         </div>
     </div>
 
+    <!-- MAIN DASHBOARD -->
     <div id="dashboardSection" class="dashboard">
         
         <aside class="glass sidebar animate-fade">
@@ -1108,9 +990,19 @@
                         <div class="badge-item" style="color: var(--accent-pink);">
                             <i class="fa-solid fa-bolt"></i> <span id="userXP">0</span> XP
                         </div>
+                        <div class="badge-item" style="color: #38bdf8; grid-column: span 2;">
+                            <i class="fa-solid fa-gem"></i> <span id="userDiamonds">0</span> Diamonds
+                        </div>
                     </div>
 
-                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:8px; cursor:pointer; font-weight:600;">
+                    <div class="diamond-purchase-card">
+                        <div style="font-size: 0.72rem; color: var(--text-muted);" data-en="10,000 XP = 1 Diamond (20৳)" data-bn="১০,০০০ XP = ১ ডায়মন্ড (২০৳)">10,000 XP = 1 Diamond (20৳)</div>
+                        <a href="https://wa.me/8801552463349?text=Hello%20Admin,%20I%20want%20to%20redeem/purchase%20Diamonds%20for%20StudyPulse%20Pro" target="_blank" class="diamond-btn">
+                            <i class="fa-brands fa-whatsapp"></i> <span data-en="Buy Diamond" data-bn="ডায়মন্ড কিনুন">Buy Diamond</span>
+                        </a>
+                    </div>
+
+                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:10px; cursor:pointer; font-weight:600;">
                         <i class="fa-solid fa-user-pen"></i> <span data-en="Edit Profile" data-bn="প্রোফাইল পরিবর্তন">Edit Profile</span>
                     </button>
                 </div>
@@ -1169,16 +1061,18 @@
             
             <div class="tabs-header">
                 <button class="tab-btn active" id="tabTasksBtn"><i class="fa-solid fa-list-check"></i> <span data-en="Routine Tasks" data-bn="দৈনিক রুটিন">Routine Tasks</span></button>
-                <button class="tab-btn" id="tabAiBtn"><i class="fa-solid fa-brain"></i> <span data-en="AI Tutor (Gemini/GPT)" data-bn="স্মার্ট এআই শিক্ষক">AI Tutor (Gemini/GPT)</span></button>
+                <button class="tab-btn" id="tabSyllabusBtn"><i class="fa-solid fa-book-open-reader"></i> <span data-en="Syllabus Tracker" data-bn="সিলেবাস ট্র্যাকার">Syllabus Tracker</span></button>
+                <button class="tab-btn" id="tabChallengeBtn"><i class="fa-solid fa-stopwatch-20"></i> <span data-en="Timer Challenge" data-bn="টাইমার চ্যালেঞ্জ">Timer Challenge</span></button>
                 <button class="tab-btn" id="tabEventsBtn"><i class="fa-solid fa-calendar-days"></i> <span data-en="Exams & Events" data-bn="পরীক্ষা ও ইভেন্ট">Exams & Events</span></button>
-                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> <span data-en="Study Material Hub" data-bn="স্টাডি হাব ও মেমোরিয়াল">Study Material Hub</span></button>
+                <button class="tab-btn" id="tabStudyBtn"><i class="fa-solid fa-book-bookmark"></i> <span data-en="Study Vault" data-bn="স্টাডি হাব">Study Vault</span></button>
             </div>
 
+            <!-- ROUTINE TASKS VIEW -->
             <div id="tasksTabView">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
                         <h2 data-en="Daily Routine & Planner" data-bn="দৈনিক রুটিন ও প্ল্যানার">Daily Routine & Planner</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Smart chronological routine management" data-bn="সময়ানুক্রমিক রুটিন ব্যবস্থাপনা">Smart chronological routine management</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Complete tasks to earn +15 XP every 10 completions" data-bn="প্রতি ১০টি টাস্ক সম্পন্ন করলে পাবেন +১৫ XP">Complete tasks to earn +15 XP every 10 completions</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openTaskModalBtn">
                         <i class="fa-solid fa-plus"></i> <span data-en="New Task" data-bn="নতুন কাজ">New Task</span>
@@ -1200,66 +1094,65 @@
                 <div class="tasks-container" id="tasksList"></div>
             </div>
 
-            <div id="aiTabView" style="display: none;">
+            <!-- SYLLABUS TRACKER VIEW -->
+            <div id="syllabusTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2 data-en="Intelligent AI Assistant (Gemini & GPT Level)" data-bn="বুদ্ধিমান এআই সহকারী">Intelligent AI Assistant (Gemini & GPT Level)</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Direct AI answers, photo problem visual solver & legal links" data-bn="সরাসরি সঠিক উত্তর, ছবি বিশ্লেষণ ও রেফারেন্স লিংক">Direct AI answers, photo problem visual solver & legal links</p>
+                        <h2 data-en="Academic Syllabus Tracker" data-bn="একাডেমিক সিলেবাস ট্র্যাকার">Academic Syllabus Tracker</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track subject completion & sync exam reminders to Events" data-bn="বিষয়, অধ্যায় ও সাব-অধ্যায় ট্র্যাকিং এবং পরীক্ষার নোটিফিকেশন">Track subject completion & sync exam reminders to Events</p>
+                    </div>
+                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openSyllabusModalBtn">
+                        <i class="fa-solid fa-plus"></i> <span data-en="Add Subject/Chapter" data-bn="বিষয়/অধ্যায় যোগ করুন">Add Subject/Chapter</span>
+                    </button>
+                </div>
+
+                <div id="syllabusProgressOverview" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 16px; border-radius: 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 0.85rem; font-weight: 700;" data-en="Academic Coverage" data-bn="একাডেমিক সিলেবাস কাভারেজ">Academic Coverage</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);" id="syllabusStatsText">0 Chapters Completed</div>
+                    </div>
+                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-pink);" id="syllabusPercentText">0%</div>
+                </div>
+
+                <div class="tasks-container" id="syllabusList"></div>
+            </div>
+
+            <!-- CHALLENGE TIMER VIEW -->
+            <div id="challengeTabView" style="display: none;">
+                <div class="header-actions" style="margin-bottom: 15px;">
+                    <div>
+                        <h2 data-en="Focus Challenge & Countdown" data-bn="ফোকাস চ্যালেঞ্জ ও কাউন্টডাউন">Focus Challenge & Countdown</h2>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Set custom timer challenges with live persistent tracking" data-bn="পড়াশোনার সময় চ্যলেঞ্জ সেটিং ও লাইভ নোটিফিকেশন">Set custom timer challenges with live persistent tracking</p>
                     </div>
                 </div>
 
-                <div class="ai-chat-box">
-                    <div class="ai-chat-header">
-                        <div class="ai-engine-badge">
-                            <i class="fa-solid fa-microchip"></i>
-                            <span>Gemini 1.5 Pro & ChatGPT Ultra Intelligence</span>
-                        </div>
-                        <div class="ai-chat-actions">
-                            <button class="ai-action-btn" id="clearAiHistoryBtn">
-                                <i class="fa-solid fa-trash"></i> Clear History
-                            </button>
-                        </div>
+                <div class="challenge-box">
+                    <i class="fa-solid fa-trophy" style="font-size: 2.5rem; color: var(--accent-amber);"></i>
+                    <h3 style="margin-top: 8px; font-size: 1.3rem;" data-en="Study Challenge Mode" data-bn="স্টাডি চ্যালেঞ্জ মোড">Study Challenge Mode</h3>
+                    <div class="challenge-timer-display" id="challengeDisplay">00:00:00</div>
+                    
+                    <div class="form-row" style="max-width: 360px; margin: 0 auto 15px auto;">
+                        <input type="number" id="challengeHours" min="0" max="24" placeholder="Hours" style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; text-align: center;">
+                        <input type="number" id="challengeMins" min="0" max="59" placeholder="Mins" style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; text-align: center;">
                     </div>
 
-                    <div class="ai-quick-tools">
-                        <button class="ai-quick-tool-btn" data-tool="summary"><i class="fa-solid fa-compress"></i> Summarize</button>
-                        <button class="ai-quick-tool-btn" data-tool="quiz"><i class="fa-solid fa-list-ol"></i> Generate Quiz</button>
-                        <button class="ai-quick-tool-btn" data-tool="studyplan"><i class="fa-solid fa-calendar-check"></i> Study Routine</button>
-                        <button class="ai-quick-tool-btn" data-tool="banglish"><i class="fa-solid fa-language"></i> Explain in Banglish</button>
-                    </div>
-
-                    <div class="ai-messages" id="aiMessages">
-                        <div class="ai-msg assistant">
-                            Hello! I am your Advanced AI Tutor. I give direct, ultra-high accuracy responses to your study questions or problem photos. How can I help you today?
-                            <div class="ai-msg-actions">
-                                <button class="ai-copy-btn" onclick="copyAiMsg(this)"><i class="fa-solid fa-copy"></i> Copy</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="aiAttachmentPreview" class="ai-preview-attachment" style="display: none;">
-                        <span><i class="fa-solid fa-paperclip"></i> Image attached</span>
-                        <i class="fa-solid fa-xmark" style="cursor: pointer;" id="removeAiImgBtn"></i>
-                    </div>
-
-                    <div class="ai-input-bar">
-                        <label for="aiImageInput" style="cursor: pointer; color: var(--accent-pink); font-size: 1.2rem;">
-                            <i class="fa-solid fa-image"></i>
-                        </label>
-                        <input type="file" id="aiImageInput" accept="image/*" style="display: none;">
-                        <input type="text" id="aiTextInput" placeholder="Ask any question or solve math/science image problem...">
-                        <button class="ai-send-btn" id="aiSendBtn" title="Send Question">
-                            <i class="fa-solid fa-paper-plane"></i>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="btn" id="startChallengeBtn" style="width: 140px;">
+                            <i class="fa-solid fa-play"></i> <span data-en="Start Challenge" data-bn="চ্যালেঞ্জ শুরু">Start Challenge</span>
+                        </button>
+                        <button class="btn" id="stopChallengeBtn" style="width: 120px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4);">
+                            <i class="fa-solid fa-square"></i> <span data-en="Stop" data-bn="বন্ধ করুন">Stop</span>
                         </button>
                     </div>
                 </div>
             </div>
 
+            <!-- EXAMS & EVENTS VIEW -->
             <div id="eventsTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
                         <h2 data-en="Exam & Event Schedule" data-bn="পরীক্ষা ও ইভেন্ট সময়সূচী">Exam & Event Schedule</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track exam dates & deadlines" data-bn="পরীক্ষার তারিখ ও ডেডলাইন ট্র্যাক করুন">Track exam dates & deadlines</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track exam dates & deadlines (Auto-synced from Syllabus)" data-bn="পরীক্ষার তারিখ ও ডেডলাইন ট্র্যাকিং">Track exam dates & deadlines (Auto-synced from Syllabus)</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openEventModalBtn">
                         <i class="fa-solid fa-calendar-plus"></i> <span data-en="New Event" data-bn="নতুন ইভেন্ট">New Event</span>
@@ -1269,10 +1162,11 @@
                 <div class="tasks-container" id="eventsList"></div>
             </div>
 
+            <!-- STUDY VAULT VIEW -->
             <div id="studyTabView" style="display: none;">
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
-                        <h2 data-en="Study Vault & Memorials" data-bn="স্টাডি মেমোরিয়াল ও ভল্ট">Study Vault & Memorials</h2>
+                        <h2 data-en="Study Vault & Resources" data-bn="স্টাডি মেমোরিয়াল ও ভল্ট">Study Vault & Resources</h2>
                         <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Subject Books, PDFs & Auto-Redirect Resources" data-bn="বই, নোটস এবং লিংকে অটো-রিডাইরেক্ট">Subject Books, PDFs & Auto-Redirect Resources</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openStudyModalBtn">
@@ -1286,7 +1180,7 @@
         </main>
     </div>
 
-    <!-- ADVANCED PROFILE DECORATION MODAL -->
+    <!-- PROFILE MODAL -->
     <div id="profileModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
@@ -1447,6 +1341,47 @@
         </div>
     </div>
 
+    <!-- SYLLABUS MODAL -->
+    <div id="syllabusModal" class="modal">
+        <div class="glass modal-content animate-fade">
+            <div class="modal-header">
+                <h3 data-en="Add Syllabus Chapter" data-bn="সিলেবাস অধ্যায় যোগ করুন">Add Syllabus Chapter</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeSyllabusModalBtn"></i>
+            </div>
+            <form id="saveSyllabusForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-book input-icon"></i>
+                    <input type="text" id="sylSubject" placeholder="Subject Name (e.g. Higher Math)" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-bookmark input-icon"></i>
+                    <input type="text" id="sylChapter" placeholder="Chapter Name (e.g. Integration)" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-list-ul input-icon"></i>
+                    <input type="text" id="sylSubchapters" placeholder="Subchapters (Comma separated e.g. 10.1, 10.2)">
+                </div>
+
+                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Sync Exam Reminder to Events?" data-bn="পরীক্ষার ইভেন্ট তৈরি করবেন?">Sync Exam Reminder to Events?</label>
+                <div class="form-row">
+                    <div class="input-group" style="flex:1;">
+                        <i class="fa-solid fa-bell input-icon"></i>
+                        <select id="sylAddExamEvent">
+                            <option value="no">No Event</option>
+                            <option value="yes">Create Exam Event 📅</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="flex:1;">
+                        <i class="fa-regular fa-calendar input-icon"></i>
+                        <input type="date" id="sylExamDate">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" data-en="Save Syllabus" data-bn="সিলেবাস সেভ করুন">Save Syllabus</button>
+            </form>
+        </div>
+    </div>
+
     <!-- EVENT MODAL -->
     <div id="eventModal" class="modal">
         <div class="glass modal-content animate-fade">
@@ -1512,7 +1447,7 @@
 
     <audio id="alarmSound" preload="auto"></audio>
 
-    <!-- FIREBASE & DYNAMIC LLM AI MODULE SCRIPT -->
+    <!-- FIREBASE & MAIN ENGINE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { 
@@ -1551,27 +1486,29 @@
         const db = getFirestore(app);
 
         enableIndexedDbPersistence(db).catch((err) => {
-            if (err.code === 'failed-precondition') console.log('Persistence enabled in first tab only');
+            if (err.code == 'failed-precondition') console.log('Persistence enabled in first tab only');
         });
 
         let isLoginMode = true;
         let currentUser = null;
         let userTasks = [];
+        let userSyllabus = [];
         let userEvents = [];
         let userStudyItems = [];
-        let aiChatHistory = [];
-        let userProfileData = { name: '', class: 'Class 12', board: 'Dhaka', inst: 'College', dreamInst: '', fbUrl: '', streak: 1, xp: 0, lastLoginDate: '', lastResetDate: '' };
+        let userProfileData = { name: '', class: 'Class 12', board: 'Dhaka', inst: 'College', dreamInst: '', fbUrl: '', streak: 1, xp: 0, completedTaskCount: 0, diamonds: 0, lastLoginDate: '', lastResetDate: '' };
         let currentLang = localStorage.getItem('studypulse_lang') || 'en';
 
         let selectedIcon = "fa-book";
         let selectedColor = "#8b5cf6";
         let activeFilter = "all";
-        let triggeredAlarms = new Set();
-        let attachedAiImageBase64 = null;
 
         let unsubscribeTasks = null;
+        let unsubscribeSyllabus = null;
         let unsubscribeEvents = null;
         let unsubscribeStudy = null;
+
+        let challengeInterval = null;
+        let challengeTotalSeconds = 0;
 
         const TONE_PRESETS = {
             synth: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
@@ -1592,7 +1529,7 @@
             Rajshahi: ["Rajshahi College", "Government Secondary College Rajshahi", "New Govt. Degree College", "Rajshahi Cantonment Board School & College", "Varendra College", "Shah Makhdum College", "Rajshahi Court College", "Govt. Women's College Rajshahi", "Paba College", "Birshreshtha College"],
             Khulna: ["B L College Khulna", "Government M. M. College Jessore", "Khulna Public College", "Govt. Pioneer Women's College", "Cantonment College Jessore", "Khulna Govt. Girls College", "Kushtia Govt. College", "City College Khulna", "Satkhira Govt. College", "Majid Memorial City College"],
             Barisal: ["Brojomohun (BM) College", "Barisal Govt. Women's College", "Amrit Lal Dey College", "Barisal Cadet College", "Government Syed Hatem Ali College", "Patuakhali Govt. College", "Bhola Govt. College", "Pirojpur Govt. College", "Barisal Model School and College", "Gournadi Govt. College"],
-            Sylhet: ["Murari Chand (MC) College", "Sylhet Govt. College", "Sylhet Govt. Women's College", "Madan Mohan College", "Sylhet Cadet College", "Scholarshome", "Jalalabad Cantonment Public School & College", "Habiganj Govt. College", "Sunamganj Govt. College", "Moulvibazar Govt. College"],
+            Sylhet: ["Murari Chand (MC) College", "Sylhet Govt. College", "Sylhet Govt. Women's College", "Madan Mohan College", "Sylhet Cadet College", "Scholarshome", " Jalalabad Cantonment Public School & College", "Habiganj Govt. College", "Sunamganj Govt. College", "Moulvibazar Govt. College"],
             Comilla: ["Comilla Victoria Government College", "Comilla Government College", "Comilla Cadet College", "Comilla Shiksha Board Model College", "Ispahani Public School & College Comilla", "Feni Govt. College", "Nawab Faizunnesa Govt. College", "Narsingdi Govt. College", "Brahmanbaria Govt. College", "Chandpur Govt. College"],
             Mymensingh: ["Ananda Mohan College", "Mymensingh Girls' Cadet College", "Mymensingh Govt. College", "Agricultural University College", "Shahid Syed Nazrul Islam College", "Cantonment Public School & College Momenshahi", "Netrokona Govt. College", "Jamalpur Govt. Ashek Mahmud College", "Sherpur Govt. College", "Gaffargaon Govt. College"],
             Dinajpur: ["Dinajpur Govt. College", "Carmichael College Rangpur", "Rangpur Cadet College", "Rangpur Govt. College", "Cantonment Public School & College Rangpur", "Dinajpur Govt. City College", "Thakurgaon Govt. College", "Panchagarh Govt. College", "Gaibandha Govt. College", "Kurigram Govt. College"],
@@ -1616,16 +1553,6 @@
             "IUT (Islamic University of Technology)"
         ];
 
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
         function showNotification(title, message, type = 'info', accent = '#8b5cf6') {
             const container = document.getElementById('notificationContainer');
             const toast = document.createElement('div');
@@ -1640,8 +1567,8 @@
             toast.innerHTML = `
                 <i class="fa-solid ${iconClass} toast-icon"></i>
                 <div class="toast-content">
-                    <div class="toast-title">${escapeHtml(title)}</div>
-                    <div class="toast-msg">${escapeHtml(message)}</div>
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-msg">${message}</div>
                 </div>
             `;
 
@@ -1650,6 +1577,21 @@
                 toast.style.animation = 'slideInRight 0.3s ease reverse forwards';
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
+        }
+
+        // Persistent Browser Notification for Challenge Timer
+        function sendSystemNotification(title, body) {
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/3429/3429149.png' });
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/3429/3429149.png' });
+                        }
+                    });
+                }
+            }
         }
 
         function setLanguage(lang) {
@@ -1688,6 +1630,33 @@
             return saved ? JSON.parse(saved) : null;
         }
 
+        // NAVIGATION TABS
+        const tabTasksBtn = document.getElementById('tabTasksBtn');
+        const tabSyllabusBtn = document.getElementById('tabSyllabusBtn');
+        const tabChallengeBtn = document.getElementById('tabChallengeBtn');
+        const tabEventsBtn = document.getElementById('tabEventsBtn');
+        const tabStudyBtn = document.getElementById('tabStudyBtn');
+
+        const tasksTabView = document.getElementById('tasksTabView');
+        const syllabusTabView = document.getElementById('syllabusTabView');
+        const challengeTabView = document.getElementById('challengeTabView');
+        const eventsTabView = document.getElementById('eventsTabView');
+        const studyTabView = document.getElementById('studyTabView');
+
+        function switchTab(activeBtn, activeView) {
+            [tabTasksBtn, tabSyllabusBtn, tabChallengeBtn, tabEventsBtn, tabStudyBtn].forEach(b => b.classList.remove('active'));
+            [tasksTabView, syllabusTabView, challengeTabView, eventsTabView, studyTabView].forEach(v => v.style.display = 'none');
+
+            activeBtn.classList.add('active');
+            activeView.style.display = 'block';
+        }
+
+        tabTasksBtn.addEventListener('click', () => switchTab(tabTasksBtn, tasksTabView));
+        tabSyllabusBtn.addEventListener('click', () => switchTab(tabSyllabusBtn, syllabusTabView));
+        tabChallengeBtn.addEventListener('click', () => switchTab(tabChallengeBtn, challengeTabView));
+        tabEventsBtn.addEventListener('click', () => switchTab(tabEventsBtn, eventsTabView));
+        tabStudyBtn.addEventListener('click', () => switchTab(tabStudyBtn, studyTabView));
+
         onAuthStateChanged(auth, async (user) => {
             setLanguage(currentLang);
             if (user) {
@@ -1696,26 +1665,28 @@
                 document.getElementById('dashboardSection').style.display = 'grid';
 
                 userTasks = loadLocalData('tasks') || [];
+                userSyllabus = loadLocalData('syllabus') || [];
                 userEvents = loadLocalData('events') || [];
                 userStudyItems = loadLocalData('study') || [];
-                aiChatHistory = loadLocalData('ai_history') || [];
                 
                 populateTimeSelects();
                 checkTaskDailyRefresh();
                 renderTasks();
+                renderSyllabus();
                 renderEvents();
                 renderStudyHub();
-                renderAiHistory();
 
                 buildIconGrid();
                 buildCalendar();
                 listenToTasks(user.uid);
+                listenToSyllabus(user.uid);
                 listenToEvents(user.uid);
                 listenToStudyHub(user.uid);
                 loadUserProfile(user.uid);
             } else {
                 currentUser = null;
                 if (unsubscribeTasks) unsubscribeTasks();
+                if (unsubscribeSyllabus) unsubscribeSyllabus();
                 if (unsubscribeEvents) unsubscribeEvents();
                 if (unsubscribeStudy) unsubscribeStudy();
                 document.getElementById('dashboardSection').style.display = 'none';
@@ -1785,6 +1756,7 @@
             }
         }
 
+        // REALTIME FIREBASE LISTENERS
         function listenToTasks(userId) {
             try {
                 const q = query(collection(db, "tasks"), where("uid", "==", userId));
@@ -1797,6 +1769,19 @@
                     saveLocalData('tasks', userTasks);
                     renderTasks();
                 }, (err) => console.log("Firebase sync:", err));
+            } catch (e) { console.log(e); }
+        }
+
+        function listenToSyllabus(userId) {
+            try {
+                const q = query(collection(db, "syllabus"), where("uid", "==", userId));
+                unsubscribeSyllabus = onSnapshot(q, (snapshot) => {
+                    const fetched = [];
+                    snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
+                    userSyllabus = fetched;
+                    saveLocalData('syllabus', userSyllabus);
+                    renderSyllabus();
+                }, (err) => console.log(err));
             } catch (e) { console.log(e); }
         }
 
@@ -1826,6 +1811,7 @@
             } catch (e) { console.log(e); }
         }
 
+        // USER PROFILE & XP / DIAMOND REWARD SYSTEM
         async function loadUserProfile(userId) {
             try {
                 const docRef = doc(db, "users", userId);
@@ -1865,7 +1851,7 @@
             
             const dreamElem = document.getElementById('userDreamDisplay');
             if (userProfileData.dreamInst) {
-                dreamElem.innerHTML = `<i class="fa-solid fa-star"></i> ${escapeHtml(userProfileData.dreamInst)}`;
+                dreamElem.innerHTML = `<i class="fa-solid fa-star"></i> ${userProfileData.dreamInst}`;
                 dreamElem.style.display = 'block';
             } else {
                 dreamElem.style.display = 'none';
@@ -1873,6 +1859,11 @@
 
             document.getElementById('userStreak').innerText = userProfileData.streak || 1;
             document.getElementById('userXP').innerText = userProfileData.xp || 0;
+            
+            // Calculate diamonds dynamically or display stored diamonds
+            const calculatedDiamonds = Math.floor((userProfileData.xp || 0) / 10000);
+            userProfileData.diamonds = Math.max(userProfileData.diamonds || 0, calculatedDiamonds);
+            document.getElementById('userDiamonds').innerText = userProfileData.diamonds;
         }
 
         async function syncProfileData() {
@@ -1885,8 +1876,14 @@
             }
         }
 
-        async function addXP(amount) {
-            userProfileData.xp = Math.max(0, (userProfileData.xp || 0) + amount);
+        // TASK COMPLETION REWARD: +15 XP EVERY 10 TASKS
+        async function incrementTaskReward() {
+            userProfileData.completedTaskCount = (userProfileData.completedTaskCount || 0) + 1;
+            if (userProfileData.completedTaskCount >= 10) {
+                userProfileData.completedTaskCount = 0;
+                userProfileData.xp = (userProfileData.xp || 0) + 15;
+                showNotification("🎉 XP Reward Unlocked!", "You earned +15 XP for completing 10 study tasks!", "success", "#10b981");
+            }
             await syncProfileData();
         }
 
@@ -1966,288 +1963,229 @@
             }
         });
 
+        // TIME SELECTOR POPULATOR
         function populateTimeSelects() {
             ['start', 'end'].forEach(prefix => {
                 const hourSel = document.getElementById(`${prefix}Hour`);
                 const minSel = document.getElementById(`${prefix}Min`);
+                if (!hourSel || !minSel) return;
                 
-                hourSel.innerHTML = '';
-                minSel.innerHTML = '';
-
-                for (let h = 1; h <= 12; h++) {
-                    const val = String(h).padStart(2, '0');
+                hourSel.innerHTML = ''; minSel.innerHTML = '';
+                for (let i = 1; i <= 12; i++) {
+                    const val = i < 10 ? '0' + i : i.toString();
                     hourSel.appendChild(new Option(val, val));
                 }
-
-                for (let m = 0; m <= 59; m++) {
-                    const val = String(m).padStart(2, '0');
+                for (let i = 0; i < 60; i += 5) {
+                    const val = i < 10 ? '0' + i : i.toString();
                     minSel.appendChild(new Option(val, val));
                 }
             });
         }
 
-        const tabBtns = {
-            tasks: document.getElementById('tabTasksBtn'),
-            ai: document.getElementById('tabAiBtn'),
-            events: document.getElementById('tabEventsBtn'),
-            study: document.getElementById('tabStudyBtn')
-        };
+        function compare12HrTimes(t1, t2) {
+            if (!t1 || !t2) return 0;
+            const parseMinutes = (str) => {
+                const parts = str.split(' ');
+                if (parts.length < 2) return 0;
+                const timeParts = parts[0].split(':');
+                let h = parseInt(timeParts[0]);
+                const m = parseInt(timeParts[1]);
+                const ampm = parts[1].toUpperCase();
+                if (ampm === 'PM' && h < 12) h += 12;
+                if (ampm === 'AM' && h === 12) h = 0;
+                return h * 60 + m;
+            };
+            return parseMinutes(t1) - parseMinutes(t2);
+        }
 
-        const tabViews = {
-            tasks: document.getElementById('tasksTabView'),
-            ai: document.getElementById('aiTabView'),
-            events: document.getElementById('eventsTabView'),
-            study: document.getElementById('studyTabView')
-        };
-
-        function switchTab(tabKey) {
-            Object.keys(tabBtns).forEach(k => {
-                tabBtns[k].classList.toggle('active', k === tabKey);
-                tabViews[k].style.display = k === tabKey ? 'block' : 'none';
+        // ICON SELECTOR GRID
+        function buildIconGrid() {
+            const grid = document.getElementById('iconGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            ICON_LIST.forEach(iconName => {
+                const item = document.createElement('div');
+                item.className = `icon-option ${iconName === selectedIcon ? 'selected' : ''}`;
+                item.innerHTML = `<i class="fa-solid ${iconName}"></i>`;
+                item.addEventListener('click', () => {
+                    selectedIcon = iconName;
+                    document.getElementById('selectedIconPreview').className = `fa-solid ${iconName}`;
+                    document.getElementById('selectedIconName').innerText = iconName;
+                    grid.style.display = 'none';
+                    buildIconGrid();
+                });
+                grid.appendChild(item);
             });
         }
 
-        tabBtns.tasks.addEventListener('click', () => switchTab('tasks'));
-        tabBtns.ai.addEventListener('click', () => switchTab('ai'));
-        tabBtns.events.addEventListener('click', () => switchTab('events'));
-        tabBtns.study.addEventListener('click', () => switchTab('study'));
+        document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
+            const grid = document.getElementById('iconGrid');
+            grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+        });
 
-        function convertTo24Hour(timeStr) {
-            if (!timeStr) return "00:00";
-            const parts = timeStr.trim().split(' ');
-            if (parts.length < 2) return timeStr;
-            let [hours, minutes] = parts[0].split(':').map(Number);
-            const ampm = parts[1].toUpperCase();
+        document.querySelectorAll('#colorPickerGrid .color-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                document.querySelectorAll('#colorPickerGrid .color-dot').forEach(d => d.classList.remove('selected'));
+                dot.classList.add('selected');
+                selectedColor = dot.getAttribute('data-color');
+            });
+        });
 
-            if (ampm === 'PM' && hours < 12) hours += 12;
-            if (ampm === 'AM' && hours === 12) hours = 0;
-
-            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-        }
-
-        function compare12HrTimes(timeA, timeB) {
-            return convertTo24Hour(timeA).localeCompare(convertTo24Hour(timeB));
-        }
-
-        function calculateDurationMinutes(startTimeStr, endTimeStr) {
-            if (!startTimeStr || !endTimeStr) return 0;
-            const t1 = convertTo24Hour(startTimeStr).split(':').map(Number);
-            const t2 = convertTo24Hour(endTimeStr).split(':').map(Number);
-
-            let m1 = t1[0] * 60 + t1[1];
-            let m2 = t2[0] * 60 + t2[1];
-
-            if (m2 < m1) m2 += 24 * 60;
-            return Math.max(0, m2 - m1);
-        }
-
-        function formatDuration(totalMins) {
-            if (!totalMins || totalMins <= 0) return '0 min';
-            const h = Math.floor(totalMins / 60);
-            const m = totalMins % 60;
-            if (h === 0) return `${m} min`;
-            if (m === 0) return `${h} hr`;
-            return `${h} hr ${m} min`;
-        }
-
+        // ROUTINE TASK ACTIONS (COMPLETE TICK, RESTORE & DELETE FIX)
         function renderTasks() {
-            const listEl = document.getElementById('tasksList');
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            listEl.innerHTML = '';
+            const list = document.getElementById('tasksList');
+            if (!list) return;
+            list.innerHTML = '';
 
-            let filtered = userTasks.filter(t => {
-                const matchesSearch = t.name.toLowerCase().includes(searchVal);
-                if (activeFilter === 'active') return matchesSearch && !t.completed;
-                if (activeFilter === 'completed') return matchesSearch && t.completed;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = userTasks.filter(task => {
+                const matchesSearch = task.name.toLowerCase().includes(searchTerm);
+                if (activeFilter === 'active') return matchesSearch && !task.completed;
+                if (activeFilter === 'completed') return matchesSearch && task.completed;
                 return matchesSearch;
             });
 
-            filtered.sort((a, b) => compare12HrTimes(a.startTime, b.startTime));
+            let doneCount = userTasks.filter(t => t.completed).length;
+            let totalCount = userTasks.length;
+            let percent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
+
+            document.getElementById('progressPercent').innerText = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
 
             if (filtered.length === 0) {
-                listEl.innerHTML = `
-                    <div style="text-align: center; padding: 40px 10px; color: var(--text-muted);">
-                        <i class="fa-solid fa-clipboard-check" style="font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5;"></i>
-                        <p data-en="No tasks found for this view." data-bn="কোন রুটিন কাজ পাওয়া যায়নি।">No tasks found for this view.</p>
-                    </div>
-                `;
-                updateProgressBar();
-                setLanguage(currentLang);
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No tasks found" data-bn="কোন টাস্ক পাওয়া যায়নি">No tasks found</div>`;
                 return;
             }
 
-            filtered.forEach((task, idx) => {
+            filtered.forEach((task, index) => {
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
                 card.style.setProperty('--card-color', task.color || '#8b5cf6');
 
-                const durationMins = calculateDurationMinutes(task.startTime, task.endTime);
-                const durationTxt = formatDuration(durationMins);
-                const priorityClass = `priority-${task.priority || 'medium'}`;
-
                 card.innerHTML = `
                     <div class="task-left">
-                        <span class="task-order-badge">#${idx + 1}</span>
+                        <span class="task-order-badge">#${index + 1}</span>
                         <div class="task-icon-box">
                             <i class="fa-solid ${task.icon || 'fa-book'}"></i>
                         </div>
                         <div class="task-details">
-                            <div class="task-title">
-                                <span>${escapeHtml(task.name)}</span>
-                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator" title="Alarm Enabled"></i>' : ''}
-                            </div>
+                            <div class="task-title">${task.name}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
-                                <span class="duration-badge"><i class="fa-solid fa-hourglass-half"></i> ${durationTxt}</span>
-                                <span class="priority-badge ${priorityClass}">${task.priority || 'medium'}</span>
-                                <span>• ${task.frequency === 'everyday' ? 'Everyday' : 'One-time'}</span>
+                                <span class="duration-badge"><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
+                                <span class="priority-badge priority-${task.priority || 'medium'}">${task.priority || 'medium'}</span>
+                                ${task.alarmEnable === 'yes' ? '<span class="alarm-indicator"><i class="fa-solid fa-bell"></i></span>' : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn check" title="Toggle Done" onclick="toggleTaskStatus('${task.id}')">
-                            <i class="fa-solid ${task.completed ? 'fa-rotate-left' : 'fa-check'}"></i>
-                        </button>
-                        <button class="action-btn edit" title="Edit Task" onclick="openEditTaskModal('${task.id}')">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="action-btn delete" title="Delete Task" onclick="deleteTaskItem('${task.id}')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        ${task.completed ? 
+                            `<button class="action-btn restore" title="Restore Task" onclick="restoreTaskAction('${task.id}')"><i class="fa-solid fa-rotate-left"></i></button>` : 
+                            `<button class="action-btn check" title="Complete Task" onclick="completeTaskAction('${task.id}')"><i class="fa-solid fa-check"></i></button>`
+                        }
+                        <button class="action-btn edit" title="Edit Task" onclick="editTaskAction('${task.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="action-btn delete" title="Delete Task" onclick="deleteTaskAction('${task.id}')"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
-                listEl.appendChild(card);
+                list.appendChild(card);
             });
-
-            updateProgressBar();
-            setLanguage(currentLang);
         }
 
-        function updateProgressBar() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressPercent').innerText = '0%';
-                document.getElementById('progressBar').style.width = '0%';
-                return;
-            }
-            const doneCount = userTasks.filter(t => t.completed).length;
-            const pct = Math.round((doneCount / userTasks.length) * 100);
-            document.getElementById('progressPercent').innerText = `${pct}%`;
-            document.getElementById('progressBar').style.width = `${pct}%`;
-        }
-
-        window.toggleTaskStatus = async (id) => {
+        window.completeTaskAction = async function(id) {
             const task = userTasks.find(t => t.id === id);
-            if (!task) return;
-            const newStatus = !task.completed;
-            task.completed = newStatus;
-
-            if (newStatus) {
-                await addXP(20);
-                showNotification("Task Completed", "+20 XP Earned! Great job!", "success", "#10b981");
-            } else {
-                await addXP(-20);
-            }
-
-            renderTasks();
-            saveLocalData('tasks', userTasks);
-
-            if (currentUser) {
-                try {
-                    await updateDoc(doc(db, "tasks", id), { completed: newStatus });
-                } catch (e) { console.log(e); }
+            if (task) {
+                task.completed = true;
+                saveLocalData('tasks', userTasks);
+                renderTasks();
+                if (currentUser) {
+                    await updateDoc(doc(db, "tasks", id), { completed: true });
+                }
+                await incrementTaskReward();
+                showNotification("Task Completed", "Great job staying consistent!", "success");
             }
         };
 
-        window.deleteTaskItem = async (id) => {
-            if (!confirm("Are you sure you want to delete this activity?")) return;
-            userTasks = userTasks.filter(t => t.id !== id);
-            renderTasks();
-            saveLocalData('tasks', userTasks);
-            showNotification("Activity Deleted", "Task removed from your schedule.", "danger", "#ef4444");
+        window.restoreTaskAction = async function(id) {
+            const task = userTasks.find(t => t.id === id);
+            if (task) {
+                task.completed = false;
+                saveLocalData('tasks', userTasks);
+                renderTasks();
+                if (currentUser) {
+                    await updateDoc(doc(db, "tasks", id), { completed: false });
+                }
+                showNotification("Task Restored", "Task moved back to active routine", "info");
+            }
+        };
 
-            if (currentUser) {
-                try {
+        window.deleteTaskAction = async function(id) {
+            if (confirm("Are you sure you want to delete this task?")) {
+                userTasks = userTasks.filter(t => t.id !== id);
+                saveLocalData('tasks', userTasks);
+                renderTasks();
+                if (currentUser) {
                     await deleteDoc(doc(db, "tasks", id));
-                } catch (e) { console.log(e); }
+                }
+                showNotification("Task Deleted", "Removed from routine", "danger");
             }
         };
 
-        const taskModal = document.getElementById('taskModal');
-        document.getElementById('openTaskModalBtn').addEventListener('click', () => {
-            document.getElementById('editTaskId').value = '';
-            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
-            document.getElementById('saveTaskForm').reset();
-            selectedIcon = 'fa-book';
-            selectedColor = '#8b5cf6';
-            updateIconPreviewUI();
-            updateColorPickerUI();
-            taskModal.style.display = 'flex';
-        });
-
-        document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
-            taskModal.style.display = 'none';
-        });
-
-        window.openEditTaskModal = (id) => {
+        window.editTaskAction = function(id) {
             const task = userTasks.find(t => t.id === id);
             if (!task) return;
 
             document.getElementById('editTaskId').value = task.id;
-            document.getElementById('taskModalTitle').innerText = 'Edit Activity';
             document.getElementById('taskName').value = task.name;
+            selectedIcon = task.icon || 'fa-book';
+            selectedColor = task.color || '#8b5cf6';
 
-            const [sH, sM, sA] = parse12HourParts(task.startTime);
-            document.getElementById('startHour').value = sH;
-            document.getElementById('startMin').value = sM;
-            document.getElementById('startAmpm').value = sA;
+            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
+            document.getElementById('selectedIconName').innerText = selectedIcon;
 
-            const [eH, eM, eA] = parse12HourParts(task.endTime);
-            document.getElementById('endHour').value = eH;
-            document.getElementById('endMin').value = eM;
-            document.getElementById('endAmpm').value = eA;
+            const startParts = (task.startTime || '08:00 AM').split(' ');
+            const startHoursMins = startParts[0].split(':');
+            document.getElementById('startHour').value = startHoursMins[0];
+            document.getElementById('startMin').value = startHoursMins[1];
+            document.getElementById('startAmpm').value = startParts[1];
+
+            const endParts = (task.endTime || '09:00 AM').split(' ');
+            const endHoursMins = endParts[0].split(':');
+            document.getElementById('endHour').value = endHoursMins[0];
+            document.getElementById('endMin').value = endHoursMins[1];
+            document.getElementById('endAmpm').value = endParts[1];
 
             document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
             document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
             document.getElementById('taskFrequency').value = task.frequency || 'everyday';
             document.getElementById('taskPriority').value = task.priority || 'medium';
 
-            selectedIcon = task.icon || 'fa-book';
-            selectedColor = task.color || '#8b5cf6';
-            updateIconPreviewUI();
-            updateColorPickerUI();
-
-            taskModal.style.display = 'flex';
+            document.getElementById('taskModalTitle').innerText = "Edit Task";
+            document.getElementById('taskModal').style.display = 'flex';
         };
 
-        function parse12HourParts(timeStr) {
-            if (!timeStr) return ['09', '00', 'AM'];
-            const parts = timeStr.trim().split(' ');
-            const [h, m] = parts[0].split(':');
-            const ampm = parts[1] || 'AM';
-            return [String(h).padStart(2, '0'), String(m).padStart(2, '0'), ampm];
-        }
+        document.getElementById('openTaskModalBtn').addEventListener('click', () => {
+            document.getElementById('saveTaskForm').reset();
+            document.getElementById('editTaskId').value = '';
+            document.getElementById('taskModalTitle').innerText = "Create New Activity";
+            document.getElementById('taskModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
+            document.getElementById('taskModal').style.display = 'none';
+        });
 
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const editId = document.getElementById('editTaskId').value;
             const name = document.getElementById('taskName').value.trim();
-
-            const sH = document.getElementById('startHour').value;
-            const sM = document.getElementById('startMin').value;
-            const sA = document.getElementById('startAmpm').value;
-            const startTime = `${sH}:${sM} ${sA}`;
-
-            const eH = document.getElementById('endHour').value;
-            const eM = document.getElementById('endMin').value;
-            const eA = document.getElementById('endAmpm').value;
-            const endTime = `${eH}:${eM} ${eA}`;
-
+            const startTime = `${document.getElementById('startHour').value}:${document.getElementById('startMin').value} ${document.getElementById('startAmpm').value}`;
+            const endTime = `${document.getElementById('endHour').value}:${document.getElementById('endMin').value} ${document.getElementById('endAmpm').value}`;
             const alarmEnable = document.getElementById('taskAlarmEnable').value;
             const alarmTone = document.getElementById('taskAlarmTone').value;
             const frequency = document.getElementById('taskFrequency').value;
             const priority = document.getElementById('taskPriority').value;
 
-            const payload = {
+            const taskData = {
+                uid: currentUser.uid,
                 name,
                 startTime,
                 endTime,
@@ -2257,86 +2195,30 @@
                 alarmTone,
                 frequency,
                 priority,
-                uid: currentUser.uid,
-                updatedAt: new Date().toISOString()
+                completed: false,
+                createdAt: new Date().toISOString()
             };
-
-            taskModal.style.display = 'none';
 
             if (editId) {
                 const idx = userTasks.findIndex(t => t.id === editId);
-                if (idx !== -1) userTasks[idx] = { ...userTasks[idx], ...payload };
-                saveLocalData('tasks', userTasks);
-                renderTasks();
-                showNotification("Activity Updated", name, "success");
-
-                if (currentUser) {
-                    try { await updateDoc(doc(db, "tasks", editId), payload); } catch (err) { console.log(err); }
-                }
+                if (idx !== -1) userTasks[idx] = { ...userTasks[idx], ...taskData };
+                if (currentUser) await updateDoc(doc(db, "tasks", editId), taskData);
+                showNotification("Task Updated", "Routine schedule revised", "info");
             } else {
-                const newObj = { ...payload, completed: false, createdAt: new Date().toISOString(), id: 'temp_' + Date.now() };
-                userTasks.push(newObj);
-                saveLocalData('tasks', userTasks);
-                renderTasks();
-                showNotification("Activity Created", name, "success");
-
                 if (currentUser) {
-                    try {
-                        delete newObj.id;
-                        const docRef = await addDoc(collection(db, "tasks"), newObj);
-                        newObj.id = docRef.id;
-                        saveLocalData('tasks', userTasks);
-                    } catch (err) { console.log(err); }
+                    const docRef = await addDoc(collection(db, "tasks"), taskData);
+                    taskData.id = docRef.id;
                 }
+                userTasks.push(taskData);
+                showNotification("Task Added", "New activity added to routine", "success");
             }
+
+            saveLocalData('tasks', userTasks);
+            renderTasks();
+            document.getElementById('taskModal').style.display = 'none';
         });
 
-        function buildIconGrid() {
-            const grid = document.getElementById('iconGrid');
-            grid.innerHTML = '';
-            ICON_LIST.forEach(icon => {
-                const item = document.createElement('div');
-                item.className = `icon-option ${icon === selectedIcon ? 'selected' : ''}`;
-                item.innerHTML = `<i class="fa-solid ${icon}"></i>`;
-                item.onclick = () => {
-                    selectedIcon = icon;
-                    updateIconPreviewUI();
-                    grid.style.display = 'none';
-                };
-                grid.appendChild(item);
-            });
-        }
-
-        function updateIconPreviewUI() {
-            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-            document.getElementById('selectedIconName').innerText = selectedIcon;
-            document.querySelectorAll('.icon-option').forEach(el => {
-                const iconTag = el.querySelector('i');
-                if (iconTag) {
-                    el.classList.toggle('selected', iconTag.classList.contains(selectedIcon));
-                }
-            });
-        }
-
-        document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
-            const grid = document.getElementById('iconGrid');
-            grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
-        });
-
-        function updateColorPickerUI() {
-            document.querySelectorAll('.color-dot').forEach(dot => {
-                dot.classList.toggle('selected', dot.getAttribute('data-color') === selectedColor);
-            });
-        }
-
-        document.getElementById('colorPickerGrid').addEventListener('click', (e) => {
-            const dot = e.target.closest('.color-dot');
-            if (dot) {
-                selectedColor = dot.getAttribute('data-color');
-                updateColorPickerUI();
-            }
-        });
-
+        document.getElementById('searchInput').addEventListener('input', renderTasks);
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -2346,391 +2228,246 @@
             });
         });
 
-        document.getElementById('searchInput').addEventListener('input', renderTasks);
+        // SYLLABUS SECTION ENGINE
+        function renderSyllabus() {
+            const list = document.getElementById('syllabusList');
+            if (!list) return;
+            list.innerHTML = '';
 
-        function checkAlarms() {
-            const now = new Date();
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            const currentFormattedTime = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+            let totalChapters = userSyllabus.length;
+            let doneChapters = userSyllabus.filter(s => s.completed).length;
+            let percent = totalChapters > 0 ? Math.round((doneChapters / totalChapters) * 100) : 0;
 
-            userTasks.forEach(task => {
-                if (task.alarmEnable === 'yes' && !task.completed && task.startTime === currentFormattedTime) {
-                    const alarmKey = `${task.id}_${currentFormattedTime}`;
-                    if (!triggeredAlarms.has(alarmKey)) {
-                        triggeredAlarms.add(alarmKey);
-                        playAlarmSound(task.alarmTone || 'synth');
-                        showNotification(`⏰ Alarm: ${task.name}`, `Time to start your scheduled activity! (${task.startTime})`, 'alarm', task.color || '#ec4899');
-                    }
-                }
-            });
-        }
+            document.getElementById('syllabusStatsText').innerText = `${doneChapters} / ${totalChapters} Chapters Completed`;
+            document.getElementById('syllabusPercentText').innerText = `${percent}%`;
 
-        function playAlarmSound(tone) {
-            const soundUrl = TONE_PRESETS[tone] || TONE_PRESETS.synth;
-            const audio = document.getElementById('alarmSound');
-            audio.src = soundUrl;
-            audio.play().catch(e => console.log("Audio play blocked by browser:", e));
-        }
-
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString();
-            document.getElementById('liveDate').innerText = now.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
-            checkAlarms();
-        }, 1000);
-
-        let pomoTime = 25 * 60;
-        let pomoInterval = null;
-        let pomoRunning = false;
-
-        function updatePomoDisplay() {
-            const m = Math.floor(pomoTime / 60);
-            const s = pomoTime % 60;
-            document.getElementById('pomoTimerDisplay').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        }
-
-        document.getElementById('pomoStartBtn').addEventListener('click', () => {
-            if (pomoRunning) {
-                clearInterval(pomoInterval);
-                pomoRunning = false;
-                document.getElementById('pomoStartBtn').innerText = 'Start';
-            } else {
-                pomoRunning = true;
-                document.getElementById('pomoStartBtn').innerText = 'Pause';
-                pomoInterval = setInterval(() => {
-                    if (pomoTime > 0) {
-                        pomoTime--;
-                        updatePomoDisplay();
-                    } else {
-                        clearInterval(pomoInterval);
-                        pomoRunning = false;
-                        document.getElementById('pomoStartBtn').innerText = 'Start';
-                        playAlarmSound('bell');
-                        addXP(50);
-                        showNotification("Pomodoro Complete!", "Great 25-minute focus session! +50 XP", "success");
-                    }
-                }, 1000);
-            }
-        });
-
-        document.getElementById('pomoResetBtn').addEventListener('click', () => {
-            clearInterval(pomoInterval);
-            pomoRunning = false;
-            pomoTime = 25 * 60;
-            updatePomoDisplay();
-            document.getElementById('pomoStartBtn').innerText = 'Start';
-        });
-
-        function buildCalendar() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-
-            const dayHeads = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-            dayHeads.forEach(d => {
-                grid.appendChild(Object.assign(document.createElement('div'), { className: 'calendar-day-head', innerText: d }));
-            });
-
-            for (let i = 0; i < firstDay; i++) {
-                grid.appendChild(document.createElement('div'));
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = 'calendar-day';
-                if (day === now.getDate()) dayEl.classList.add('active');
-                dayEl.innerText = day;
-                grid.appendChild(dayEl);
-            }
-        }
-
-        /* --- DYNAMIC LLM AI TUTOR INTEGRATION WITH MULTI-KEY & BASE64 VISION --- */
-        
-        function renderAiHistory() {
-            const chatContainer = document.getElementById('aiMessages');
-            chatContainer.innerHTML = '';
-
-            if (aiChatHistory.length === 0) {
-                chatContainer.innerHTML = `
-                    <div class="ai-msg assistant">
-                        Hello! I am your Advanced AI Tutor. Ask me any question, attach homework photos, generate notes, or summarize topics!
-                        <div class="ai-msg-actions">
-                            <button class="ai-copy-btn" onclick="copyAiMsg(this)"><i class="fa-solid fa-copy"></i> Copy</button>
-                        </div>
-                    </div>
-                `;
+            if (userSyllabus.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No syllabus items added yet" data-bn="কোন সিলেবাস যুক্ত করা হয়নি">No syllabus items added yet</div>`;
                 return;
             }
 
-            aiChatHistory.forEach((msg, idx) => {
-                const msgEl = document.createElement('div');
-                msgEl.className = `ai-msg ${msg.role}`;
-                
-                let contentHtml = escapeHtml(msg.content).replace(/\n/g, '<br>');
-                if (msg.image) {
-                    contentHtml += `<br><img src="${msg.image}" class="ai-img-preview" alt="Attachment">`;
-                }
+            // Group syllabus by subject
+            const grouped = {};
+            userSyllabus.forEach(item => {
+                if (!grouped[item.subject]) grouped[item.subject] = [];
+                grouped[item.subject].push(item);
+            });
 
-                if (msg.role === 'assistant') {
-                    msgEl.innerHTML = `
-                        ${contentHtml}
-                        <div class="ai-msg-actions">
-                            <button class="ai-copy-btn" onclick="copyAiMsg(this)"><i class="fa-solid fa-copy"></i> Copy</button>
-                            ${idx === aiChatHistory.length - 1 ? '<button class="ai-regen-btn" id="regenAiBtn"><i class="fa-solid fa-rotate-right"></i> Regenerate</button>' : ''}
+            for (const subject in grouped) {
+                const subjCard = document.createElement('div');
+                subjCard.className = 'syllabus-subject-card';
+
+                let chaptersHtml = '';
+                grouped[subject].forEach(ch => {
+                    const subchaps = ch.subchapters ? ch.subchapters.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
+                    let subTags = subchaps.map(sub => `<span class="subchapter-tag"><i class="fa-solid fa-angle-right"></i> ${sub}</span>`).join('');
+
+                    chaptersHtml += `
+                        <div class="syllabus-chapter-item">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div style="font-weight:600; font-size:0.88rem; ${ch.completed ? 'text-decoration:line-through; opacity:0.6;' : ''}">
+                                    <i class="fa-solid fa-bookmark" style="color:var(--accent-purple); margin-right:6px;"></i> ${ch.chapter}
+                                </div>
+                                <div class="task-actions">
+                                    ${ch.completed ? 
+                                        `<button class="action-btn restore" onclick="toggleSyllabusComplete('${ch.id}', false)"><i class="fa-solid fa-rotate-left"></i></button>` : 
+                                        `<button class="action-btn check" onclick="toggleSyllabusComplete('${ch.id}', true)"><i class="fa-solid fa-check"></i></button>`
+                                    }
+                                    <button class="action-btn delete" onclick="deleteSyllabusItem('${ch.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </div>
+                            ${subTags ? `<div style="margin-top:4px;">${subTags}</div>` : ''}
                         </div>
                     `;
-                } else {
-                    msgEl.innerHTML = contentHtml;
-                }
-                chatContainer.appendChild(msgEl);
-            });
+                });
 
-            const regenBtn = document.getElementById('regenAiBtn');
-            if (regenBtn) {
-                regenBtn.addEventListener('click', regenerateLastAiResponse);
+                subjCard.innerHTML = `
+                    <div class="syllabus-header-row">
+                        <div style="font-size:1rem; font-weight:700; color:var(--accent-pink);">
+                            <i class="fa-solid fa-book" style="margin-right:8px;"></i> ${subject}
+                        </div>
+                    </div>
+                    ${chaptersHtml}
+                `;
+                list.appendChild(subjCard);
             }
-
-            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        window.copyAiMsg = (btn) => {
-            const parent = btn.closest('.ai-msg');
-            const text = parent.innerText.replace('Copy', '').replace('Regenerate', '').trim();
-            navigator.clipboard.writeText(text);
-            showNotification("Copied", "Text copied to clipboard", "success");
+        window.toggleSyllabusComplete = async function(id, status) {
+            const item = userSyllabus.find(s => s.id === id);
+            if (item) {
+                item.completed = status;
+                saveLocalData('syllabus', userSyllabus);
+                renderSyllabus();
+                if (currentUser) {
+                    await updateDoc(doc(db, "syllabus", id), { completed: status });
+                }
+                showNotification(status ? "Chapter Completed" : "Chapter Restored", "Syllabus progress updated", "success");
+            }
         };
 
-        document.getElementById('aiImageInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    attachedAiImageBase64 = evt.target.result;
-                    document.getElementById('aiAttachmentPreview').style.display = 'flex';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('removeAiImgBtn').addEventListener('click', () => {
-            attachedAiImageBase64 = null;
-            document.getElementById('aiImageInput').value = '';
-            document.getElementById('aiAttachmentPreview').style.display = 'none';
-        });
-
-        document.getElementById('clearAiHistoryBtn').addEventListener('click', () => {
-            if (confirm("Clear AI Chat History?")) {
-                aiChatHistory = [];
-                saveLocalData('ai_history', aiChatHistory);
-                renderAiHistory();
-            }
-        });
-
-        document.querySelectorAll('.ai-quick-tool-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tool = btn.getAttribute('data-tool');
-                const input = document.getElementById('aiTextInput');
-                if (tool === 'summary') input.value = "Summarize the key concepts of: ";
-                if (tool === 'quiz') input.value = "Generate a 5-question multiple choice quiz on: ";
-                if (tool === 'studyplan') input.value = "Create a structured 7-day study routine for: ";
-                if (tool === 'banglish') input.value = "Explain this concept in simple Banglish: ";
-                input.focus();
-            });
-        });
-
-        async function fetchDynamicLlmResponse(prompt, imageBase64) {
-            const systemContext = `You are StudyPulse Pro AI, an intelligent academic tutor for students in Bangladesh and globally.
-            - Provide clear, direct, and step-by-step solutions to math, science, and academic questions.
-            - Support English, Bangla, and Banglish (Bangla in Roman script).
-            - Keep responses encouraging, well-structured, and easy to read using markdown formatting.
-            - User Context: Name: ${userProfileData.name || 'Student'}, Class: ${userProfileData.class || 'Class 12'}, Board: ${userProfileData.board || 'General'}.`;
-
-            const contents = [];
-            
-            // Context history window
-            const recentHistory = aiChatHistory.slice(-6);
-            recentHistory.forEach(m => {
-                contents.push({
-                    role: m.role === 'user' ? 'user' : 'model',
-                    parts: [{ text: m.content }]
-                });
-            });
-
-            // New prompt & optional image payload
-            const currentParts = [{ text: `${systemContext}\n\nStudent Query: ${prompt}` }];
-            if (imageBase64) {
-                const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
-                const base64Data = imageBase64.split(",")[1];
-                currentParts.push({
-                    inline_data: {
-                        mime_type: mimeType,
-                        data: base64Data
-                    }
-                });
-            }
-
-            contents.push({ role: 'user', parts: currentParts });
-
-            // Dynamic API Key candidates to ensure dynamic & uptime generation
-            const API_KEYS = [
-                "AIzaSyBjWYDAdRZT7dCPhK1XD07XlWc2oaWA9EY", // Primary
-                "AIzaSyC_FallbackKey_Gemini_StudyPulsePro"
-            ];
-
-            let lastError = null;
-
-            for (const key of API_KEYS) {
-                try {
-                    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents })
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
-                            return data.candidates[0].content.parts[0].text;
-                        }
-                    }
-                } catch (err) {
-                    lastError = err;
+        window.deleteSyllabusItem = async function(id) {
+            if (confirm("Delete this syllabus chapter?")) {
+                userSyllabus = userSyllabus.filter(s => s.id !== id);
+                saveLocalData('syllabus', userSyllabus);
+                renderSyllabus();
+                if (currentUser) {
+                    await deleteDoc(doc(db, "syllabus", id));
                 }
+                showNotification("Syllabus Removed", "Chapter deleted", "danger");
             }
+        };
 
-            // Fallback response if API calls are unreachable
-            return `I'm having trouble connecting to the network right now. Here is a guided breakdown for **"${prompt}"**:\n\n1. **Core Concept**: Review your textbook chapter notes.\n2. **Formula / Steps**: Write down key equations and solve systematically.\n3. **Banglish Summary**: Apnar question-er basic step-gulo clear thakle math/theory easy hobe. Retry when connected!`;
-        }
-
-        async function handleSendAiQuestion() {
-            const textInput = document.getElementById('aiTextInput');
-            const prompt = textInput.value.trim();
-            const imgData = attachedAiImageBase64;
-
-            if (!prompt && !imgData) return;
-
-            textInput.value = '';
-            attachedAiImageBase64 = null;
-            document.getElementById('aiAttachmentPreview').style.display = 'none';
-
-            aiChatHistory.push({ role: 'user', content: prompt || "Analyze attached image problem", image: imgData });
-            renderAiHistory();
-
-            // Thinking placeholder indicator
-            const chatContainer = document.getElementById('aiMessages');
-            const loaderEl = document.createElement('div');
-            loaderEl.className = 'ai-msg assistant';
-            loaderEl.id = 'aiThinkingLoader';
-            loaderEl.innerHTML = `<i class="fa-solid fa-robot fa-spin"></i> StudyPulse AI is solving and generating response...`;
-            chatContainer.appendChild(loaderEl);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            try {
-                const aiReply = await fetchDynamicLlmResponse(prompt || "Analyze and solve this image problem step-by-step", imgData);
-                const loader = document.getElementById('aiThinkingLoader');
-                if (loader) loader.remove();
-
-                aiChatHistory.push({ role: 'assistant', content: aiReply });
-                saveLocalData('ai_history', aiChatHistory);
-                renderAiHistory();
-            } catch (err) {
-                const loader = document.getElementById('aiThinkingLoader');
-                if (loader) loader.remove();
-
-                aiChatHistory.push({ role: 'assistant', content: "An error occurred while generating the response. Please try again." });
-                renderAiHistory();
-            }
-        }
-
-        async function regenerateLastAiResponse() {
-            if (aiChatHistory.length < 2) return;
-            if (aiChatHistory[aiChatHistory.length - 1].role === 'assistant') {
-                aiChatHistory.pop(); // Remove previous assistant reply
-            }
-
-            const lastUserMsg = aiChatHistory[aiChatHistory.length - 1];
-            if (!lastUserMsg || lastUserMsg.role !== 'user') return;
-
-            const chatContainer = document.getElementById('aiMessages');
-            const loaderEl = document.createElement('div');
-            loaderEl.className = 'ai-msg assistant';
-            loaderEl.id = 'aiThinkingLoader';
-            loaderEl.innerHTML = `<i class="fa-solid fa-rotate fa-spin"></i> Regenerating fresh dynamic answer...`;
-            chatContainer.appendChild(loaderEl);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            const aiReply = await fetchDynamicLlmResponse(lastUserMsg.content, lastUserMsg.image);
-            const loader = document.getElementById('aiThinkingLoader');
-            if (loader) loader.remove();
-
-            aiChatHistory.push({ role: 'assistant', content: aiReply });
-            saveLocalData('ai_history', aiChatHistory);
-            renderAiHistory();
-        }
-
-        document.getElementById('aiSendBtn').addEventListener('click', handleSendAiQuestion);
-        document.getElementById('aiTextInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSendAiQuestion();
+        document.getElementById('openSyllabusModalBtn').addEventListener('click', () => {
+            document.getElementById('saveSyllabusForm').reset();
+            document.getElementById('syllabusModal').style.display = 'flex';
         });
 
-        /* --- EXAMS & EVENTS TAB IMPLEMENTATION --- */
-        function renderEvents() {
-            const container = document.getElementById('eventsList');
-            container.innerHTML = '';
+        document.getElementById('closeSyllabusModalBtn').addEventListener('click', () => {
+            document.getElementById('syllabusModal').style.display = 'none';
+        });
 
-            if (userEvents.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px 10px; color: var(--text-muted);">
-                        <i class="fa-solid fa-calendar-check" style="font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5;"></i>
-                        <p data-en="No upcoming exams or events scheduled." data-bn="কোন আগামী পরীক্ষা বা ইভেন্ট নেই।">No upcoming exams or events scheduled.</p>
-                    </div>
-                `;
-                setLanguage(currentLang);
+        document.getElementById('saveSyllabusForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const subject = document.getElementById('sylSubject').value.trim();
+            const chapter = document.getElementById('sylChapter').value.trim();
+            const subchapters = document.getElementById('sylSubchapters').value.trim();
+            const addExam = document.getElementById('sylAddExamEvent').value;
+            const examDate = document.getElementById('sylExamDate').value;
+
+            const sylData = {
+                uid: currentUser.uid,
+                subject,
+                chapter,
+                subchapters,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+
+            if (currentUser) {
+                const docRef = await addDoc(collection(db, "syllabus"), sylData);
+                sylData.id = docRef.id;
+            }
+            userSyllabus.push(sylData);
+            saveLocalData('syllabus', userSyllabus);
+            renderSyllabus();
+
+            // Auto-sync Exam Reminder to Events if selected
+            if (addExam === 'yes' && examDate) {
+                const eventData = {
+                    uid: currentUser.uid,
+                    title: `${subject} Exam (${chapter})`,
+                    date: examDate,
+                    notes: `Exam on chapter: ${chapter}. Subchapters: ${subchapters}`,
+                    createdAt: new Date().toISOString()
+                };
+                if (currentUser) {
+                    const evRef = await addDoc(collection(db, "events"), eventData);
+                    eventData.id = evRef.id;
+                }
+                userEvents.push(eventData);
+                saveLocalData('events', userEvents);
+                renderEvents();
+                showNotification("Exam Event Created", `Added ${subject} exam to Events calendar`, "info", "#ec4899");
+            }
+
+            document.getElementById('syllabusModal').style.display = 'none';
+            showNotification("Syllabus Added", "Subject chapter saved", "success");
+        });
+
+        // CHALLENGE TIMER WITH NOTIFICATION BAR COUNTDOWN
+        document.getElementById('startChallengeBtn').addEventListener('click', () => {
+            const h = parseInt(document.getElementById('challengeHours').value) || 0;
+            const m = parseInt(document.getElementById('challengeMins').value) || 0;
+
+            if (h === 0 && m === 0) {
+                showNotification("Set Duration", "Please enter hours or minutes for challenge", "warning");
                 return;
             }
 
-            userEvents.forEach(evt => {
+            challengeTotalSeconds = (h * 3600) + (m * 60);
+            if (challengeInterval) clearInterval(challengeInterval);
+
+            showNotification("Challenge Started!", `${h}h ${m}m study challenge in progress`, "success", "#ec4899");
+            sendSystemNotification("Study Challenge Active", `Challenge timer set for ${h}h ${m}m.`);
+
+            updateChallengeDisplay();
+            challengeInterval = setInterval(() => {
+                challengeTotalSeconds--;
+                if (challengeTotalSeconds <= 0) {
+                    clearInterval(challengeInterval);
+                    document.getElementById('challengeDisplay').innerText = "00:00:00";
+                    showNotification("Challenge Completed! 🎉", "You finished your study challenge!", "success", "#10b981");
+                    sendSystemNotification("Challenge Completed!", "Great work! You accomplished your study target!");
+                } else {
+                    updateChallengeDisplay();
+                }
+            }, 1000);
+        });
+
+        document.getElementById('stopChallengeBtn').addEventListener('click', () => {
+            if (challengeInterval) clearInterval(challengeInterval);
+            challengeTotalSeconds = 0;
+            document.getElementById('challengeDisplay').innerText = "00:00:00";
+            showNotification("Challenge Stopped", "Timer reset", "info");
+        });
+
+        function updateChallengeDisplay() {
+            const hrs = Math.floor(challengeTotalSeconds / 3600);
+            const mins = Math.floor((challengeTotalSeconds % 3600) / 60);
+            const secs = challengeTotalSeconds % 60;
+
+            const formatted = `${hrs < 10 ? '0' + hrs : hrs}:${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+            document.getElementById('challengeDisplay').innerText = formatted;
+
+            // Notification bar indicator title update
+            document.title = `(${formatted}) StudyPulse Pro`;
+        }
+
+        // EXAMS & EVENTS SECTION ENGINE
+        function renderEvents() {
+            const list = document.getElementById('eventsList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (userEvents.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No events scheduled" data-bn="কোন ইভেন্ট সিডিউল করা নেই">No events scheduled</div>`;
+                return;
+            }
+
+            userEvents.forEach(ev => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
                 card.style.setProperty('--card-color', '#ec4899');
 
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="color: #ec4899;">
-                            <i class="fa-solid fa-calendar-day"></i>
-                        </div>
+                        <div class="task-icon-box"><i class="fa-solid fa-calendar-day"></i></div>
                         <div class="task-details">
-                            <div class="task-title"><span>${escapeHtml(evt.name)}</span></div>
+                            <div class="task-title">${ev.title}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-regular fa-calendar"></i> Date: ${evt.date}</span>
-                                ${evt.notes ? `<span>• ${escapeHtml(evt.notes)}</span>` : ''}
+                                <span class="duration-badge"><i class="fa-regular fa-calendar"></i> ${ev.date}</span>
+                                ${ev.notes ? `<span>${ev.notes}</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn delete" onclick="deleteEvent('${evt.id}')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <button class="action-btn delete" onclick="deleteEventAction('${ev.id}')"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
-                container.appendChild(card);
+                list.appendChild(card);
             });
-            setLanguage(currentLang);
         }
+
+        window.deleteEventAction = async function(id) {
+            if (confirm("Delete this event?")) {
+                userEvents = userEvents.filter(e => e.id !== id);
+                saveLocalData('events', userEvents);
+                renderEvents();
+                if (currentUser) await deleteDoc(doc(db, "events", id));
+                showNotification("Event Deleted", "Removed from schedule", "danger");
+            }
+        };
 
         document.getElementById('openEventModalBtn').addEventListener('click', () => {
             document.getElementById('saveEventForm').reset();
@@ -2743,60 +2480,37 @@
 
         document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('eventName').value.trim();
+            const title = document.getElementById('eventName').value.trim();
             const date = document.getElementById('eventDate').value;
             const notes = document.getElementById('eventNotes').value.trim();
 
-            const newEvt = {
-                name,
+            const evData = {
+                uid: currentUser.uid,
+                title,
                 date,
                 notes,
-                uid: currentUser.uid,
-                createdAt: new Date().toISOString(),
-                id: 'temp_evt_' + Date.now()
+                createdAt: new Date().toISOString()
             };
 
-            userEvents.push(newEvt);
+            if (currentUser) {
+                const docRef = await addDoc(collection(db, "events"), evData);
+                evData.id = docRef.id;
+            }
+            userEvents.push(evData);
             saveLocalData('events', userEvents);
             renderEvents();
             document.getElementById('eventModal').style.display = 'none';
-            showNotification("Event Scheduled", name, "success");
-
-            if (currentUser) {
-                try {
-                    delete newEvt.id;
-                    const ref = await addDoc(collection(db, "events"), newEvt);
-                    newEvt.id = ref.id;
-                    saveLocalData('events', userEvents);
-                } catch(err) { console.log(err); }
-            }
+            showNotification("Event Saved", "Scheduled in events planner", "success");
         });
 
-        window.deleteEvent = async (id) => {
-            if (!confirm("Delete this event?")) return;
-            userEvents = userEvents.filter(e => e.id !== id);
-            saveLocalData('events', userEvents);
-            renderEvents();
-            showNotification("Event Deleted", "Removed from schedule", "danger", "#ef4444");
-
-            if (currentUser) {
-                try { await deleteDoc(doc(db, "events", id)); } catch(e) { console.log(e); }
-            }
-        };
-
-        /* --- STUDY HUB TAB IMPLEMENTATION --- */
+        // STUDY VAULT SECTION ENGINE
         function renderStudyHub() {
-            const container = document.getElementById('studyList');
-            container.innerHTML = '';
+            const list = document.getElementById('studyList');
+            if (!list) return;
+            list.innerHTML = '';
 
             if (userStudyItems.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 40px 10px; color: var(--text-muted);">
-                        <i class="fa-solid fa-book-open-reader" style="font-size: 2.5rem; margin-bottom: 10px; opacity: 0.5;"></i>
-                        <p data-en="No study materials or links added yet." data-bn="কোন স্টাডি মেটেরিয়াল বা লিংক যুক্ত করা হয়নি।">No study materials or links added yet.</p>
-                    </div>
-                `;
-                setLanguage(currentLang);
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No study materials saved" data-bn="কোন মেটেরিয়াল সেভ করা নেই">No study materials saved</div>`;
                 return;
             }
 
@@ -2807,29 +2521,34 @@
 
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="color: #3b82f6;">
-                            <i class="fa-solid fa-book-bookmark"></i>
-                        </div>
+                        <div class="task-icon-box"><i class="fa-solid fa-book-bookmark"></i></div>
                         <div class="task-details">
-                            <div class="task-title"><span>${escapeHtml(item.bookName)}</span></div>
+                            <div class="task-title">${item.bookName}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-solid fa-bookmark"></i> ${escapeHtml(item.chapterName)}</span>
-                                ${item.notes ? `<span>• ${escapeHtml(item.notes)}</span>` : ''}
+                                <span><i class="fa-solid fa-bookmark"></i> ${item.chapterName}</span>
+                                ${item.notes ? `<span>• ${item.notes}</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        ${item.targetUrl ? `<a href="${escapeHtml(item.targetUrl)}" target="_blank" class="action-btn edit" title="Open Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
-                        ${item.youtubeUrl ? `<a href="${escapeHtml(item.youtubeUrl)}" target="_blank" class="action-btn check" style="color:#ef4444;" title="Watch Video"><i class="fa-brands fa-youtube"></i></a>` : ''}
-                        <button class="action-btn delete" onclick="deleteStudyItem('${item.id}')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn edit" title="Open Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn check" title="Watch Video" style="color:#ef4444;"><i class="fa-brands fa-youtube"></i></a>` : ''}
+                        <button class="action-btn delete" onclick="deleteStudyItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
-                container.appendChild(card);
+                list.appendChild(card);
             });
-            setLanguage(currentLang);
         }
+
+        window.deleteStudyItem = async function(id) {
+            if (confirm("Delete this study item?")) {
+                userStudyItems = userStudyItems.filter(s => s.id !== id);
+                saveLocalData('study', userStudyItems);
+                renderStudyHub();
+                if (currentUser) await deleteDoc(doc(db, "studyHub", id));
+                showNotification("Material Deleted", "Removed from study vault", "danger");
+            }
+        };
 
         document.getElementById('openStudyModalBtn').addEventListener('click', () => {
             document.getElementById('saveStudyForm').reset();
@@ -2848,64 +2567,124 @@
             const youtubeUrl = document.getElementById('studyYoutubeUrl').value.trim();
             const notes = document.getElementById('studyNotes').value.trim();
 
-            const newStudy = {
+            const studyData = {
+                uid: currentUser.uid,
                 bookName,
                 chapterName,
                 targetUrl,
                 youtubeUrl,
                 notes,
-                uid: currentUser.uid,
-                createdAt: new Date().toISOString(),
-                id: 'temp_study_' + Date.now()
+                createdAt: new Date().toISOString()
             };
 
-            userStudyItems.push(newStudy);
+            if (currentUser) {
+                const docRef = await addDoc(collection(db, "studyHub"), studyData);
+                studyData.id = docRef.id;
+            }
+            userStudyItems.push(studyData);
             saveLocalData('study', userStudyItems);
             renderStudyHub();
             document.getElementById('studyModal').style.display = 'none';
-            showNotification("Study Material Saved", bookName, "success");
+            showNotification("Saved to Vault", "Resource material stored", "success");
+        });
 
-            if (currentUser) {
-                try {
-                    delete newStudy.id;
-                    const ref = await addDoc(collection(db, "studyHub"), newStudy);
-                    newStudy.id = ref.id;
-                    saveLocalData('study', userStudyItems);
-                } catch(err) { console.log(err); }
+        // LIVE CLOCK & CALENDAR ENGINE
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+
+            const strTime = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${ampm}`;
+            document.getElementById('liveClock').innerText = strTime;
+
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', options);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function buildCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
+
+            const daysHead = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            daysHead.forEach(d => {
+                const h = document.createElement('div');
+                h.className = 'calendar-day-head';
+                h.innerText = d;
+                grid.appendChild(h);
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.className = `calendar-day ${day === now.getDate() ? 'active' : ''}`;
+                dayEl.innerText = day;
+                grid.appendChild(dayEl);
+            }
+        }
+
+        // FOCUS POMODORO TIMER
+        let pomoInterval = null;
+        let pomoSeconds = 25 * 60;
+        let isPomoRunning = false;
+
+        document.getElementById('pomoStartBtn').addEventListener('click', () => {
+            const btn = document.getElementById('pomoStartBtn');
+            if (isPomoRunning) {
+                clearInterval(pomoInterval);
+                isPomoRunning = false;
+                btn.innerText = "Start";
+            } else {
+                isPomoRunning = true;
+                btn.innerText = "Pause";
+                pomoInterval = setInterval(() => {
+                    pomoSeconds--;
+                    if (pomoSeconds <= 0) {
+                        clearInterval(pomoInterval);
+                        isPomoRunning = false;
+                        btn.innerText = "Start";
+                        pomoSeconds = 25 * 60;
+                        showNotification("Pomodoro Done!", "Time to take a 5 minute break!", "success");
+                    }
+                    updatePomoDisplay();
+                }, 1000);
             }
         });
 
-        window.deleteStudyItem = async (id) => {
-            if (!confirm("Delete this study item?")) return;
-            userStudyItems = userStudyItems.filter(s => s.id !== id);
-            saveLocalData('study', userStudyItems);
-            renderStudyHub();
-            showNotification("Material Deleted", "Removed from vault", "danger", "#ef4444");
-
-            if (currentUser) {
-                try { await deleteDoc(doc(db, "studyHub", id)); } catch(e) { console.log(e); }
-            }
-        };
-
-        // PWA Install Prompt Handler
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const btn = document.getElementById('pwaInstallBtn');
-            if (btn) btn.style.display = 'inline-flex';
+        document.getElementById('pomoResetBtn').addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            pomoSeconds = 25 * 60;
+            document.getElementById('pomoStartBtn').innerText = "Start";
+            updatePomoDisplay();
         });
 
-        document.getElementById('pwaInstallBtn')?.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('pwaInstallBtn').style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
+        function updatePomoDisplay() {
+            const m = Math.floor(pomoSeconds / 60);
+            const s = pomoSeconds % 60;
+            document.getElementById('pomoTimerDisplay').innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+        }
+
     </script>
 </body>
-    </html>
+</html>
