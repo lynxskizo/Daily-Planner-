@@ -35,6 +35,13 @@
             --warning: #f59e0b;
             --font-en: 'Poppins', sans-serif;
             --font-bn: 'Hind Siliguri', sans-serif;
+            
+            /* Avatar Level Color Variables */
+            --level-bronze: #cd7f32;
+            --level-silver: #c0c0c0;
+            --level-gold: #ffd700;
+            --level-diamond: #00ffff;
+            --level-elite: #ff007f;
         }
 
         * {
@@ -110,7 +117,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* NOTIFICATION TOAST CONTAINER */
+        /* NOTIFICATION TOAST CONTAINER - STUDY PULSE THEMED GITHUB-IO COMPATIBLE */
         #notificationContainer {
             position: fixed;
             top: 20px;
@@ -119,23 +126,23 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-width: 340px;
+            max-width: 360px;
             width: 100%;
             pointer-events: none;
         }
 
         .custom-toast {
             pointer-events: auto;
-            background: rgba(17, 24, 39, 0.95);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            backdrop-filter: blur(16px);
             border-radius: 16px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideInRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            animation: slideInRight 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             overflow: hidden;
             position: relative;
         }
@@ -149,8 +156,7 @@
         }
 
         .toast-icon {
-            font-size: 1.2rem;
-            margin-top: 2px;
+            font-size: 1.3rem;
             color: var(--toast-accent, var(--accent-purple));
         }
 
@@ -302,22 +308,27 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 16px;
+            padding: 18px;
             margin-bottom: 15px;
             text-align: center;
             position: relative;
         }
 
+        /* AVATAR RINGS & LEVEL DESIGNS */
         .avatar-container {
             position: relative;
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 10px;
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
         .avatar {
-            width: 100%;
-            height: 100%;
+            width: 68px;
+            height: 68px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             display: flex;
@@ -325,14 +336,87 @@
             justify-content: center;
             font-size: 1.6rem;
             font-weight: bold;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            z-index: 2;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* UNIQUE AVATAR RINGS PER LEVEL */
+        .avatar-ring {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            transition: all 0.4s ease;
+        }
+
+        /* Bronze Level Ring */
+        .ring-bronze {
+            border: 4px dashed var(--level-bronze);
+            box-shadow: 0 0 10px rgba(205, 127, 50, 0.4);
+        }
+
+        /* Silver Level Ring */
+        .ring-silver {
+            border: 4px solid var(--level-silver);
+            box-shadow: 0 0 12px rgba(192, 192, 192, 0.6);
+        }
+
+        /* Gold Level Ring */
+        .ring-gold {
+            border: 4px double var(--level-gold);
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.8);
+            animation: rotateRing 10s linear infinite;
+        }
+
+        /* Diamond Level Ring - Half Flaming Fox-Tail */
+        .ring-diamond {
+            border: 4px solid transparent;
+            border-top: 4px solid var(--level-diamond);
+            border-right: 4px solid var(--accent-purple);
+            border-bottom: 4px solid var(--level-diamond);
+            box-shadow: 0 0 20px var(--level-diamond);
+            filter: drop-shadow(0 0 8px #00ffff);
+            animation: rotateRing 4s linear infinite;
+        }
+
+        /* Elite Level Ring - Animated Flame Tail Aura */
+        .ring-elite {
+            border: 4px solid transparent;
+            border-top: 4px solid #ff007f;
+            border-right: 4px solid #ff9900;
+            border-bottom: 4px solid #f59e0b;
+            box-shadow: 0 0 25px #ff007f, inset 0 0 10px #ff9900;
+            animation: rotateRing 2.5s linear infinite;
+        }
+
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar-upload-overlay {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 26px; height: 26px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            z-index: 3;
+            border: 2px solid #111827;
         }
 
         .profile-badges {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 12px;
             background: rgba(0, 0, 0, 0.25);
             padding: 10px;
             border-radius: 12px;
@@ -348,31 +432,18 @@
             font-weight: 700;
         }
 
-        .diamond-purchase-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.15));
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 16px;
-            padding: 12px;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .diamond-btn {
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.78rem;
-            cursor: pointer;
-            margin-top: 6px;
-            display: inline-flex;
+        .level-badge-container {
+            grid-column: span 2;
+            padding: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-pink);
+            display: flex;
             align-items: center;
-            gap: 6px;
-            width: 100%;
             justify-content: center;
-            text-decoration: none;
+            gap: 6px;
         }
 
         .clock-box {
@@ -606,7 +677,7 @@
         .tasks-container::-webkit-scrollbar { width: 6px; }
         .tasks-container::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
 
-        /* TASK CARD WITH FLEXIBLE COMPACT TEXT / SCROLLABLE TASK BAR FIX */
+        /* FLEXIBLE COMPACT CARDS FOR TASK, EVENT, SYLLABUS, STUDY */
         .task-card {
             display: flex;
             align-items: center;
@@ -621,6 +692,7 @@
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             gap: 12px;
             min-height: 68px;
+            height: auto;
         }
 
         .task-card::before {
@@ -637,7 +709,7 @@
             border-color: rgba(255, 255, 255, 0.25);
         }
 
-        .task-card.completed { opacity: 0.6; }
+        .task-card.completed { opacity: 0.65; }
         .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
 
         .task-left {
@@ -646,50 +718,6 @@
             gap: 12px;
             min-width: 0;
             flex: 1;
-        }
-
-        .task-order-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 6px;
-            border-radius: 6px;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .duration-badge {
-            font-size: 0.7rem;
-            background: rgba(139, 92, 246, 0.2);
-            color: #c4b5fd;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 2px 6px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .priority-badge {
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .priority-high { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
-        .priority-medium { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
-        .priority-low { background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid rgba(16, 185, 129, 0.4); }
-
-        .alarm-indicator {
-            font-size: 0.72rem;
-            color: var(--warning);
-            margin-left: 6px;
-            flex-shrink: 0;
         }
 
         .task-icon-box {
@@ -706,7 +734,6 @@
             flex-shrink: 0;
         }
 
-        /* TEXT CLAMP FIX FOR TASK BOX OVERFLOW */
         .task-details {
             min-width: 0;
             flex: 1;
@@ -720,11 +747,6 @@
             font-weight: 600;
             word-break: break-word;
             line-height: 1.35;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .task-meta-info {
@@ -733,7 +755,7 @@
             gap: 8px;
             font-size: 0.73rem;
             color: var(--text-muted);
-            margin-top: 3px;
+            margin-top: 4px;
             flex-wrap: wrap;
         }
 
@@ -760,17 +782,17 @@
         }
 
         .action-btn.check:hover, .action-btn.check.active-complete { background: rgba(16, 185, 129, 0.25); color: var(--success); border-color: var(--success); }
-        .action-btn.restore:hover { background: rgba(245, 158, 11, 0.25); color: var(--warning); border-color: var(--warning); }
         .action-btn.edit:hover { background: rgba(59, 130, 246, 0.25); color: var(--accent-blue); border-color: var(--accent-blue); }
         .action-btn.delete:hover { background: rgba(239, 68, 68, 0.25); color: var(--danger); border-color: var(--danger); }
 
-        /* SYLLABUS SECTION STYLING */
+        /* MULTIPLE CHAPTERS SYLLABUS STYLING */
         .syllabus-subject-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 18px;
             padding: 16px;
             margin-bottom: 14px;
+            height: auto;
         }
 
         .syllabus-header-row {
@@ -778,14 +800,42 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
         .syllabus-chapter-item {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             padding: 10px 14px;
             margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chapter-title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .chapter-checkbox-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .subchapter-list-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+            padding-left: 26px;
         }
 
         .subchapter-tag {
@@ -794,11 +844,10 @@
             gap: 6px;
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.72rem;
-            margin-top: 6px;
-            margin-right: 6px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            color: #d8b4fe;
         }
 
         /* CHALLENGE TIMER BOX */
@@ -835,7 +884,7 @@
 
         .modal-content {
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             padding: 24px;
             max-height: 90vh;
             overflow-y: auto;
@@ -913,6 +962,14 @@
             font-size: 0.85rem;
         }
 
+        /* DYNAMIC MULTIPLE CHAPTER INPUT LIST IN MODAL */
+        .chapter-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
         @media (max-width: 850px) {
             body { padding: 10px; }
             .dashboard { grid-template-columns: 1fr; gap: 15px; margin-top: 50px; }
@@ -920,7 +977,6 @@
             .sidebar { padding: 18px; }
             .form-row { flex-direction: column; gap: 0; }
             .task-card { padding: 10px 12px; }
-            .task-order-badge { display: none; }
             .header-actions { align-items: flex-start; }
             .header-actions .btn { width: 100%; }
         }
@@ -972,9 +1028,14 @@
         <aside class="glass sidebar animate-fade">
             <div>
                 <div class="user-profile-duo">
-                    <div class="avatar-container">
+                    <!-- AVATAR WITH DYNAMIC LEVEL RINGS & IMAGE UPLOAD -->
+                    <div class="avatar-container" id="avatarClickContainer" title="Click to Upload Profile Photo">
+                        <div class="avatar-ring ring-bronze" id="avatarLevelRing"></div>
                         <div class="avatar" id="userAvatar">U</div>
+                        <div class="avatar-upload-overlay"><i class="fa-solid fa-camera"></i></div>
                     </div>
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+
                     <h3 id="userNameDisplay" style="font-size: 0.95rem; font-weight: 700;">User</h3>
                     
                     <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;" id="userClassInstDisplay">
@@ -990,19 +1051,12 @@
                         <div class="badge-item" style="color: var(--accent-pink);">
                             <i class="fa-solid fa-bolt"></i> <span id="userXP">0</span> XP
                         </div>
-                        <div class="badge-item" style="color: #38bdf8; grid-column: span 2;">
-                            <i class="fa-solid fa-gem"></i> <span id="userDiamonds">0</span> Diamonds
+                        <div class="level-badge-container" id="userLevelBadge">
+                            <i class="fa-solid fa-shield-halved"></i> <span id="userLevelTitle">Bronze (100 XP)</span>
                         </div>
                     </div>
 
-                    <div class="diamond-purchase-card">
-                        <div style="font-size: 0.72rem; color: var(--text-muted);" data-en="10,000 XP = 1 Diamond (20৳)" data-bn="১০,০০০ XP = ১ ডায়মন্ড (২০৳)">10,000 XP = 1 Diamond (20৳)</div>
-                        <a href="https://wa.me/8801552463349?text=Hello%20Admin,%20I%20want%20to%20redeem/purchase%20Diamonds%20for%20StudyPulse%20Pro" target="_blank" class="diamond-btn">
-                            <i class="fa-brands fa-whatsapp"></i> <span data-en="Buy Diamond" data-bn="ডায়মন্ড কিনুন">Buy Diamond</span>
-                        </a>
-                    </div>
-
-                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:10px; cursor:pointer; font-weight:600;">
+                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:12px; cursor:pointer; font-weight:600;">
                         <i class="fa-solid fa-user-pen"></i> <span data-en="Edit Profile" data-bn="প্রোফাইল পরিবর্তন">Edit Profile</span>
                     </button>
                 </div>
@@ -1072,7 +1126,7 @@
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
                         <h2 data-en="Daily Routine & Planner" data-bn="দৈনিক রুটিন ও প্ল্যানার">Daily Routine & Planner</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Complete tasks to earn +15 XP every 10 completions" data-bn="প্রতি ১০টি টাস্ক সম্পন্ন করলে পাবেন +১৫ XP">Complete tasks to earn +15 XP every 10 completions</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Complete tasks to earn +5 XP every 10 completions" data-bn="প্রতি ১০টি টাস্ক সম্পন্ন করলে পাবেন +৫ XP">Complete tasks to earn +5 XP every 10 completions</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openTaskModalBtn">
                         <i class="fa-solid fa-plus"></i> <span data-en="New Task" data-bn="নতুন কাজ">New Task</span>
@@ -1099,10 +1153,10 @@
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
                         <h2 data-en="Academic Syllabus Tracker" data-bn="একাডেমিক সিলেবাস ট্র্যাকার">Academic Syllabus Tracker</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track subject completion & sync exam reminders to Events" data-bn="বিষয়, অধ্যায় ও সাব-অধ্যায় ট্র্যাকিং এবং পরীক্ষার নোটিফিকেশন">Track subject completion & sync exam reminders to Events</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track subject completion & multiple chapters (+5 XP per chapter completed)" data-bn="বিষয় ও একাধিক অধ্যায় ট্র্যাকিং (অধ্যায় সম্পন্নে +৫ XP)">Track subject completion & multiple chapters (+5 XP per chapter completed)</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 16px;" id="openSyllabusModalBtn">
-                        <i class="fa-solid fa-plus"></i> <span data-en="Add Subject/Chapter" data-bn="বিষয়/অধ্যায় যোগ করুন">Add Subject/Chapter</span>
+                        <i class="fa-solid fa-plus"></i> <span data-en="Add Subject & Chapters" data-bn="বিষয় ও অধ্যায় যোগ করুন">Add Subject & Chapters</span>
                     </button>
                 </div>
 
@@ -1122,7 +1176,7 @@
                 <div class="header-actions" style="margin-bottom: 15px;">
                     <div>
                         <h2 data-en="Focus Challenge & Countdown" data-bn="ফোকাস চ্যালেঞ্জ ও কাউন্টডাউন">Focus Challenge & Countdown</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Set custom timer challenges with live persistent tracking" data-bn="পড়াশোনার সময় চ্যলেঞ্জ সেটিং ও লাইভ নোটিফিকেশন">Set custom timer challenges with live persistent tracking</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Set custom timer challenges (+5 XP reward upon completion)" data-bn="পড়াশোনার সময় চ্যালেঞ্জ সেটিং (সম্পন্নে +৫ XP)">Set custom timer challenges (+5 XP reward upon completion)</p>
                     </div>
                 </div>
 
@@ -1341,25 +1395,31 @@
         </div>
     </div>
 
-    <!-- SYLLABUS MODAL -->
+    <!-- MULTIPLE CHAPTER SYLLABUS MODAL WITH EDIT OPTION -->
     <div id="syllabusModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
-                <h3 data-en="Add Syllabus Chapter" data-bn="সিলেবাস অধ্যায় যোগ করুন">Add Syllabus Chapter</h3>
+                <h3 id="syllabusModalTitle" data-en="Add Subject & Multiple Chapters" data-bn="বিষয় ও একাধিক অধ্যায় যোগ করুন">Add Subject & Multiple Chapters</h3>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" id="closeSyllabusModalBtn"></i>
             </div>
             <form id="saveSyllabusForm">
+                <input type="hidden" id="editSyllabusId">
+
                 <div class="input-group">
                     <i class="fa-solid fa-book input-icon"></i>
                     <input type="text" id="sylSubject" placeholder="Subject Name (e.g. Higher Math)" required>
                 </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-bookmark input-icon"></i>
-                    <input type="text" id="sylChapter" placeholder="Chapter Name (e.g. Integration)" required>
-                </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-list-ul input-icon"></i>
-                    <input type="text" id="sylSubchapters" placeholder="Subchapters (Comma separated e.g. 10.1, 10.2)">
+
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="font-size: 0.8rem; font-weight: 600;" data-en="Chapter Names & Subchapters" data-bn="অধ্যায় এবং সাব-অধ্যায়সমূহ">Chapter Names & Subchapters</label>
+                        <button type="button" id="addMoreChapterBtn" style="background: rgba(139, 92, 246, 0.2); border: 1px solid var(--accent-purple); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; cursor: pointer;">
+                            <i class="fa-solid fa-plus"></i> <span data-en="Add Chapter" data-bn="অধ্যায় যোগ করুন">Add Chapter</span>
+                        </button>
+                    </div>
+                    <div id="modalChapterListContainer">
+                        <!-- Dynamic Chapter Rows will render here -->
+                    </div>
                 </div>
 
                 <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Sync Exam Reminder to Events?" data-bn="পরীক্ষার ইভেন্ট তৈরি করবেন?">Sync Exam Reminder to Events?</label>
@@ -1495,7 +1555,7 @@
         let userSyllabus = [];
         let userEvents = [];
         let userStudyItems = [];
-        let userProfileData = { name: '', class: 'Class 12', board: 'Dhaka', inst: 'College', dreamInst: '', fbUrl: '', streak: 1, xp: 0, completedTaskCount: 0, diamonds: 0, lastLoginDate: '', lastResetDate: '' };
+        let userProfileData = { name: '', class: 'Class 12', board: 'Dhaka', inst: 'College', dreamInst: '', fbUrl: '', streak: 1, xp: 0, completedTaskCount: 0, avatarUrl: '', lastLoginDate: '', lastResetDate: '' };
         let currentLang = localStorage.getItem('studypulse_lang') || 'en';
 
         let selectedIcon = "fa-book";
@@ -1553,6 +1613,7 @@
             "IUT (Islamic University of Technology)"
         ];
 
+        // STUDYPULSE GITHUB-IO THEMED NOTIFICATION PALETTE
         function showNotification(title, message, type = 'info', accent = '#8b5cf6') {
             const container = document.getElementById('notificationContainer');
             const toast = document.createElement('div');
@@ -1574,12 +1635,12 @@
 
             container.appendChild(toast);
             setTimeout(() => {
-                toast.style.animation = 'slideInRight 0.3s ease reverse forwards';
-                setTimeout(() => toast.remove(), 300);
+                toast.style.animation = 'slideInRight 0.35s ease reverse forwards';
+                setTimeout(() => toast.remove(), 350);
             }, 3500);
         }
 
-        // Persistent Browser Notification for Challenge Timer
+        // PERSISTENT BROWSER NOTIFICATIONS
         function sendSystemNotification(title, body) {
             if ("Notification" in window) {
                 if (Notification.permission === "granted") {
@@ -1811,7 +1872,7 @@
             } catch (e) { console.log(e); }
         }
 
-        // USER PROFILE & XP / DIAMOND REWARD SYSTEM
+        // USER PROFILE, LEVEL SYSTEM & XP ENGINE
         async function loadUserProfile(userId) {
             try {
                 const docRef = doc(db, "users", userId);
@@ -1845,7 +1906,16 @@
 
         function updateProfileUI() {
             document.getElementById('userNameDisplay').innerText = userProfileData.name || currentUser.email.split('@')[0];
-            document.getElementById('userAvatar').innerText = (userProfileData.name || currentUser.email).charAt(0).toUpperCase();
+            
+            const avatarElem = document.getElementById('userAvatar');
+            if (userProfileData.avatarUrl) {
+                avatarElem.style.backgroundImage = `url(${userProfileData.avatarUrl})`;
+                avatarElem.innerText = '';
+            } else {
+                avatarElem.style.backgroundImage = 'none';
+                avatarElem.innerText = (userProfileData.name || currentUser.email).charAt(0).toUpperCase();
+            }
+
             document.getElementById('userClassText').innerText = userProfileData.class || 'Class 12';
             document.getElementById('userInstText').innerText = userProfileData.inst || 'Institution';
             
@@ -1858,12 +1928,37 @@
             }
 
             document.getElementById('userStreak').innerText = userProfileData.streak || 1;
-            document.getElementById('userXP').innerText = userProfileData.xp || 0;
+            const currentXP = userProfileData.xp || 0;
+            document.getElementById('userXP').innerText = currentXP;
             
-            // Calculate diamonds dynamically or display stored diamonds
-            const calculatedDiamonds = Math.floor((userProfileData.xp || 0) / 10000);
-            userProfileData.diamonds = Math.max(userProfileData.diamonds || 0, calculatedDiamonds);
-            document.getElementById('userDiamonds').innerText = userProfileData.diamonds;
+            // PROFILE LEVEL SYSTEM WITH UNIQUE AVATAR RINGS
+            // Levels: Bronze (100) - Silver (600) - Gold (1500) - Diamond (5000) - Elite (10000+)
+            const ringElem = document.getElementById('avatarLevelRing');
+            const levelBadgeText = document.getElementById('userLevelTitle');
+            
+            ringElem.className = 'avatar-ring';
+
+            if (currentXP >= 10000) {
+                ringElem.classList.add('ring-elite');
+                levelBadgeText.innerText = 'Elite (10,000+ XP)';
+                levelBadgeText.style.color = '#ff007f';
+            } else if (currentXP >= 5000) {
+                ringElem.classList.add('ring-diamond');
+                levelBadgeText.innerText = 'Diamond (5,000 XP)';
+                levelBadgeText.style.color = '#00ffff';
+            } else if (currentXP >= 1500) {
+                ringElem.classList.add('ring-gold');
+                levelBadgeText.innerText = 'Gold (1,500 XP)';
+                levelBadgeText.style.color = '#ffd700';
+            } else if (currentXP >= 600) {
+                ringElem.classList.add('ring-silver');
+                levelBadgeText.innerText = 'Silver (600 XP)';
+                levelBadgeText.style.color = '#c0c0c0';
+            } else {
+                ringElem.classList.add('ring-bronze');
+                levelBadgeText.innerText = 'Bronze (100 XP)';
+                levelBadgeText.style.color = '#cd7f32';
+            }
         }
 
         async function syncProfileData() {
@@ -1876,16 +1971,51 @@
             }
         }
 
-        // TASK COMPLETION REWARD: +15 XP EVERY 10 TASKS
+        // ADD XP HELPER FUNCTION
+        async function addXP(amount, reason) {
+            userProfileData.xp = (userProfileData.xp || 0) + amount;
+            showNotification("⚡ XP Earned!", `+${amount} XP for ${reason}`, "success", "#ec4899");
+            await syncProfileData();
+        }
+
+        // TASK COMPLETION REWARD: +5 XP EVERY 10 TASKS
         async function incrementTaskReward() {
             userProfileData.completedTaskCount = (userProfileData.completedTaskCount || 0) + 1;
             if (userProfileData.completedTaskCount >= 10) {
                 userProfileData.completedTaskCount = 0;
-                userProfileData.xp = (userProfileData.xp || 0) + 15;
-                showNotification("🎉 XP Reward Unlocked!", "You earned +15 XP for completing 10 study tasks!", "success", "#10b981");
+                await addXP(5, "completing 10 daily tasks");
+            } else {
+                await syncProfileData();
             }
-            await syncProfileData();
         }
+
+        // PROFILE GALLERY UPLOAD WITH PERMISSION SIMULATION
+        const avatarContainer = document.getElementById('avatarClickContainer');
+        const profileImageInput = document.getElementById('profileImageInput');
+
+        avatarContainer.addEventListener('click', () => {
+            const confirmed = confirm("StudyPulse Pro requests permission to access your Device Photo Gallery to set your Profile Picture. Allow access?");
+            if (confirmed) {
+                profileImageInput.click();
+            }
+        });
+
+        profileImageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    showNotification("File Too Large", "Please choose an image under 2MB.", "warning", "#f59e0b");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = async function(evt) {
+                    userProfileData.avatarUrl = evt.target.result;
+                    await syncProfileData();
+                    showNotification("Profile Picture Updated", "Your gallery avatar has been applied!", "success");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         const profClassSelect = document.getElementById('profClass');
         const profBoardSelect = document.getElementById('profBoard');
@@ -1998,62 +2128,85 @@
             return parseMinutes(t1) - parseMinutes(t2);
         }
 
-        // ICON SELECTOR GRID
-        function buildIconGrid() {
-            const grid = document.getElementById('iconGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            ICON_LIST.forEach(iconName => {
-                const item = document.createElement('div');
-                item.className = `icon-option ${iconName === selectedIcon ? 'selected' : ''}`;
-                item.innerHTML = `<i class="fa-solid ${iconName}"></i>`;
-                item.addEventListener('click', () => {
-                    selectedIcon = iconName;
-                    document.getElementById('selectedIconPreview').className = `fa-solid ${iconName}`;
-                    document.getElementById('selectedIconName').innerText = iconName;
-                    grid.style.display = 'none';
-                    buildIconGrid();
-                });
-                grid.appendChild(item);
-            });
-        }
+        // ROUTINE TASKS LOGIC
+        const tasksList = document.getElementById('tasksList');
+        const openTaskModalBtn = document.getElementById('openTaskModalBtn');
+        const taskModal = document.getElementById('taskModal');
+        const closeTaskModalBtn = document.getElementById('closeTaskModalBtn');
+        const saveTaskForm = document.getElementById('saveTaskForm');
 
-        document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
-            const grid = document.getElementById('iconGrid');
-            grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+        openTaskModalBtn.addEventListener('click', () => {
+            document.getElementById('editTaskId').value = '';
+            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
+            saveTaskForm.reset();
+            taskModal.style.display = 'flex';
         });
 
-        document.querySelectorAll('#colorPickerGrid .color-dot').forEach(dot => {
-            dot.addEventListener('click', () => {
-                document.querySelectorAll('#colorPickerGrid .color-dot').forEach(d => d.classList.remove('selected'));
-                dot.classList.add('selected');
-                selectedColor = dot.getAttribute('data-color');
-            });
+        closeTaskModalBtn.addEventListener('click', () => taskModal.style.display = 'none');
+
+        saveTaskForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const editId = document.getElementById('editTaskId').value;
+            const name = document.getElementById('taskName').value.trim();
+            const startH = document.getElementById('startHour').value;
+            const startM = document.getElementById('startMin').value;
+            const startA = document.getElementById('startAmpm').value;
+            const endH = document.getElementById('endHour').value;
+            const endM = document.getElementById('endMin').value;
+            const endA = document.getElementById('endAmpm').value;
+
+            const startTime = `${startH}:${startM} ${startA}`;
+            const endTime = `${endH}:${endM} ${endA}`;
+
+            const taskData = {
+                uid: currentUser.uid,
+                name: name,
+                color: selectedColor,
+                icon: selectedIcon,
+                startTime: startTime,
+                endTime: endTime,
+                alarmEnable: document.getElementById('taskAlarmEnable').value,
+                alarmTone: document.getElementById('taskAlarmTone').value,
+                frequency: document.getElementById('taskFrequency').value,
+                priority: document.getElementById('taskPriority').value,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+
+            if (editId) {
+                if (currentUser) await updateDoc(doc(db, "tasks", editId), taskData);
+                const idx = userTasks.findIndex(t => t.id === editId);
+                if (idx !== -1) userTasks[idx] = { ...userTasks[idx], ...taskData };
+            } else {
+                if (currentUser) {
+                    const docRef = await addDoc(collection(db, "tasks"), taskData);
+                    taskData.id = docRef.id;
+                } else {
+                    taskData.id = 'local_' + Date.now();
+                }
+                userTasks.push(taskData);
+            }
+
+            taskModal.style.display = 'none';
+            saveLocalData('tasks', userTasks);
+            renderTasks();
+            showNotification("Task Saved", "Your routine activity was saved successfully!", "success");
         });
 
-        // ROUTINE TASK ACTIONS (COMPLETE TICK, RESTORE & DELETE FIX)
         function renderTasks() {
-            const list = document.getElementById('tasksList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            let filtered = userTasks.filter(task => {
-                const matchesSearch = task.name.toLowerCase().includes(searchTerm);
-                if (activeFilter === 'active') return matchesSearch && !task.completed;
-                if (activeFilter === 'completed') return matchesSearch && task.completed;
+            tasksList.innerHTML = '';
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = userTasks.filter(t => {
+                const matchesSearch = t.name.toLowerCase().includes(searchVal);
+                if (activeFilter === 'active') return matchesSearch && !t.completed;
+                if (activeFilter === 'completed') return matchesSearch && t.completed;
                 return matchesSearch;
             });
 
-            let doneCount = userTasks.filter(t => t.completed).length;
-            let totalCount = userTasks.length;
-            let percent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0;
-
-            document.getElementById('progressPercent').innerText = `${percent}%`;
-            document.getElementById('progressBar').style.width = `${percent}%`;
-
             if (filtered.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No tasks found" data-bn="কোন টাস্ক পাওয়া যায়নি">No tasks found</div>`;
+                tasksList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No routine tasks found.</div>`;
+                updateGoalProgress();
                 return;
             }
 
@@ -2064,627 +2217,685 @@
 
                 card.innerHTML = `
                     <div class="task-left">
-                        <span class="task-order-badge">#${index + 1}</span>
-                        <div class="task-icon-box">
+                        <div class="task-icon-box" style="--card-color: ${task.color};">
                             <i class="fa-solid ${task.icon || 'fa-book'}"></i>
                         </div>
                         <div class="task-details">
                             <div class="task-title">${task.name}</div>
                             <div class="task-meta-info">
-                                <span class="duration-badge"><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
-                                <span class="priority-badge priority-${task.priority || 'medium'}">${task.priority || 'medium'}</span>
-                                ${task.alarmEnable === 'yes' ? '<span class="alarm-indicator"><i class="fa-solid fa-bell"></i></span>' : ''}
+                                <span><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
+                                <span class="priority-badge priority-${task.priority}">${task.priority}</span>
+                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator" title="Alarm Active"></i>' : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        ${task.completed ? 
-                            `<button class="action-btn restore" title="Restore Task" onclick="restoreTaskAction('${task.id}')"><i class="fa-solid fa-rotate-left"></i></button>` : 
-                            `<button class="action-btn check" title="Complete Task" onclick="completeTaskAction('${task.id}')"><i class="fa-solid fa-check"></i></button>`
-                        }
-                        <button class="action-btn edit" title="Edit Task" onclick="editTaskAction('${task.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="action-btn delete" title="Delete Task" onclick="deleteTaskAction('${task.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="action-btn check ${task.completed ? 'active-complete' : ''}" onclick="toggleTaskComplete('${task.id}')" title="Mark Done">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                        <button class="action-btn edit" onclick="editTask('${task.id}')" title="Edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="deleteTask('${task.id}')" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 `;
-                list.appendChild(card);
+                tasksList.appendChild(card);
             });
+
+            updateGoalProgress();
         }
 
-        window.completeTaskAction = async function(id) {
+        window.toggleTaskComplete = async (id) => {
             const task = userTasks.find(t => t.id === id);
             if (task) {
-                task.completed = true;
-                saveLocalData('tasks', userTasks);
-                renderTasks();
-                if (currentUser) {
-                    await updateDoc(doc(db, "tasks", id), { completed: true });
+                task.completed = !task.completed;
+                if (task.completed) {
+                    await incrementTaskReward();
                 }
-                await incrementTaskReward();
-                showNotification("Task Completed", "Great job staying consistent!", "success");
+                saveLocalData('tasks', userTasks);
+                if (currentUser && !id.startsWith('local_')) {
+                    await updateDoc(doc(db, "tasks", id), { completed: task.completed });
+                }
+                renderTasks();
             }
         };
 
-        window.restoreTaskAction = async function(id) {
-            const task = userTasks.find(t => t.id === id);
-            if (task) {
-                task.completed = false;
-                saveLocalData('tasks', userTasks);
-                renderTasks();
-                if (currentUser) {
-                    await updateDoc(doc(db, "tasks", id), { completed: false });
-                }
-                showNotification("Task Restored", "Task moved back to active routine", "info");
-            }
-        };
-
-        window.deleteTaskAction = async function(id) {
-            if (confirm("Are you sure you want to delete this task?")) {
-                userTasks = userTasks.filter(t => t.id !== id);
-                saveLocalData('tasks', userTasks);
-                renderTasks();
-                if (currentUser) {
-                    await deleteDoc(doc(db, "tasks", id));
-                }
-                showNotification("Task Deleted", "Removed from routine", "danger");
-            }
-        };
-
-        window.editTaskAction = function(id) {
+        window.editTask = (id) => {
             const task = userTasks.find(t => t.id === id);
             if (!task) return;
-
             document.getElementById('editTaskId').value = task.id;
+            document.getElementById('taskModalTitle').innerText = 'Edit Routine Activity';
             document.getElementById('taskName').value = task.name;
-            selectedIcon = task.icon || 'fa-book';
-            selectedColor = task.color || '#8b5cf6';
-
-            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-            document.getElementById('selectedIconName').innerText = selectedIcon;
-
-            const startParts = (task.startTime || '08:00 AM').split(' ');
-            const startHoursMins = startParts[0].split(':');
-            document.getElementById('startHour').value = startHoursMins[0];
-            document.getElementById('startMin').value = startHoursMins[1];
-            document.getElementById('startAmpm').value = startParts[1];
-
-            const endParts = (task.endTime || '09:00 AM').split(' ');
-            const endHoursMins = endParts[0].split(':');
-            document.getElementById('endHour').value = endHoursMins[0];
-            document.getElementById('endMin').value = endHoursMins[1];
-            document.getElementById('endAmpm').value = endParts[1];
+            
+            if (task.startTime) {
+                const parts = task.startTime.split(' ');
+                const times = parts[0].split(':');
+                document.getElementById('startHour').value = times[0];
+                document.getElementById('startMin').value = times[1];
+                document.getElementById('startAmpm').value = parts[1];
+            }
+            if (task.endTime) {
+                const parts = task.endTime.split(' ');
+                const times = parts[0].split(':');
+                document.getElementById('endHour').value = times[0];
+                document.getElementById('endMin').value = times[1];
+                document.getElementById('endAmpm').value = parts[1];
+            }
 
             document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
             document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
             document.getElementById('taskFrequency').value = task.frequency || 'everyday';
             document.getElementById('taskPriority').value = task.priority || 'medium';
 
-            document.getElementById('taskModalTitle').innerText = "Edit Task";
-            document.getElementById('taskModal').style.display = 'flex';
+            selectedColor = task.color || '#8b5cf6';
+            selectedIcon = task.icon || 'fa-book';
+            
+            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
+            document.getElementById('selectedIconName').innerText = selectedIcon;
+
+            taskModal.style.display = 'flex';
         };
 
-        document.getElementById('openTaskModalBtn').addEventListener('click', () => {
-            document.getElementById('saveTaskForm').reset();
-            document.getElementById('editTaskId').value = '';
-            document.getElementById('taskModalTitle').innerText = "Create New Activity";
-            document.getElementById('taskModal').style.display = 'flex';
-        });
-
-        document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
-            document.getElementById('taskModal').style.display = 'none';
-        });
-
-        document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const editId = document.getElementById('editTaskId').value;
-            const name = document.getElementById('taskName').value.trim();
-            const startTime = `${document.getElementById('startHour').value}:${document.getElementById('startMin').value} ${document.getElementById('startAmpm').value}`;
-            const endTime = `${document.getElementById('endHour').value}:${document.getElementById('endMin').value} ${document.getElementById('endAmpm').value}`;
-            const alarmEnable = document.getElementById('taskAlarmEnable').value;
-            const alarmTone = document.getElementById('taskAlarmTone').value;
-            const frequency = document.getElementById('taskFrequency').value;
-            const priority = document.getElementById('taskPriority').value;
-
-            const taskData = {
-                uid: currentUser.uid,
-                name,
-                startTime,
-                endTime,
-                icon: selectedIcon,
-                color: selectedColor,
-                alarmEnable,
-                alarmTone,
-                frequency,
-                priority,
-                completed: false,
-                createdAt: new Date().toISOString()
-            };
-
-            if (editId) {
-                const idx = userTasks.findIndex(t => t.id === editId);
-                if (idx !== -1) userTasks[idx] = { ...userTasks[idx], ...taskData };
-                if (currentUser) await updateDoc(doc(db, "tasks", editId), taskData);
-                showNotification("Task Updated", "Routine schedule revised", "info");
-            } else {
-                if (currentUser) {
-                    const docRef = await addDoc(collection(db, "tasks"), taskData);
-                    taskData.id = docRef.id;
+        window.deleteTask = async (id) => {
+            if (confirm("Delete this routine task?")) {
+                userTasks = userTasks.filter(t => t.id !== id);
+                saveLocalData('tasks', userTasks);
+                if (currentUser && !id.startsWith('local_')) {
+                    await deleteDoc(doc(db, "tasks", id));
                 }
-                userTasks.push(taskData);
-                showNotification("Task Added", "New activity added to routine", "success");
+                renderTasks();
+                showNotification("Task Deleted", "Task removed from your schedule.", "danger");
             }
-
-            saveLocalData('tasks', userTasks);
-            renderTasks();
-            document.getElementById('taskModal').style.display = 'none';
-        });
+        };
 
         document.getElementById('searchInput').addEventListener('input', renderTasks);
         document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                activeFilter = btn.getAttribute('data-filter');
+                e.target.classList.add('active');
+                activeFilter = e.target.getAttribute('data-filter');
                 renderTasks();
             });
         });
 
-        // SYLLABUS SECTION ENGINE
-        function renderSyllabus() {
-            const list = document.getElementById('syllabusList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            let totalChapters = userSyllabus.length;
-            let doneChapters = userSyllabus.filter(s => s.completed).length;
-            let percent = totalChapters > 0 ? Math.round((doneChapters / totalChapters) * 100) : 0;
-
-            document.getElementById('syllabusStatsText').innerText = `${doneChapters} / ${totalChapters} Chapters Completed`;
-            document.getElementById('syllabusPercentText').innerText = `${percent}%`;
-
-            if (userSyllabus.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No syllabus items added yet" data-bn="কোন সিলেবাস যুক্ত করা হয়নি">No syllabus items added yet</div>`;
+        function updateGoalProgress() {
+            if (userTasks.length === 0) {
+                document.getElementById('progressPercent').innerText = '0%';
+                document.getElementById('progressBar').style.width = '0%';
                 return;
             }
-
-            // Group syllabus by subject
-            const grouped = {};
-            userSyllabus.forEach(item => {
-                if (!grouped[item.subject]) grouped[item.subject] = [];
-                grouped[item.subject].push(item);
-            });
-
-            for (const subject in grouped) {
-                const subjCard = document.createElement('div');
-                subjCard.className = 'syllabus-subject-card';
-
-                let chaptersHtml = '';
-                grouped[subject].forEach(ch => {
-                    const subchaps = ch.subchapters ? ch.subchapters.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
-                    let subTags = subchaps.map(sub => `<span class="subchapter-tag"><i class="fa-solid fa-angle-right"></i> ${sub}</span>`).join('');
-
-                    chaptersHtml += `
-                        <div class="syllabus-chapter-item">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <div style="font-weight:600; font-size:0.88rem; ${ch.completed ? 'text-decoration:line-through; opacity:0.6;' : ''}">
-                                    <i class="fa-solid fa-bookmark" style="color:var(--accent-purple); margin-right:6px;"></i> ${ch.chapter}
-                                </div>
-                                <div class="task-actions">
-                                    ${ch.completed ? 
-                                        `<button class="action-btn restore" onclick="toggleSyllabusComplete('${ch.id}', false)"><i class="fa-solid fa-rotate-left"></i></button>` : 
-                                        `<button class="action-btn check" onclick="toggleSyllabusComplete('${ch.id}', true)"><i class="fa-solid fa-check"></i></button>`
-                                    }
-                                    <button class="action-btn delete" onclick="deleteSyllabusItem('${ch.id}')"><i class="fa-solid fa-trash-can"></i></button>
-                                </div>
-                            </div>
-                            ${subTags ? `<div style="margin-top:4px;">${subTags}</div>` : ''}
-                        </div>
-                    `;
-                });
-
-                subjCard.innerHTML = `
-                    <div class="syllabus-header-row">
-                        <div style="font-size:1rem; font-weight:700; color:var(--accent-pink);">
-                            <i class="fa-solid fa-book" style="margin-right:8px;"></i> ${subject}
-                        </div>
-                    </div>
-                    ${chaptersHtml}
-                `;
-                list.appendChild(subjCard);
-            }
+            const completedCount = userTasks.filter(t => t.completed).length;
+            const percent = Math.round((completedCount / userTasks.length) * 100);
+            document.getElementById('progressPercent').innerText = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
         }
 
-        window.toggleSyllabusComplete = async function(id, status) {
-            const item = userSyllabus.find(s => s.id === id);
-            if (item) {
-                item.completed = status;
-                saveLocalData('syllabus', userSyllabus);
-                renderSyllabus();
-                if (currentUser) {
-                    await updateDoc(doc(db, "syllabus", id), { completed: status });
-                }
-                showNotification(status ? "Chapter Completed" : "Chapter Restored", "Syllabus progress updated", "success");
-            }
-        };
+        // MULTIPLE CHAPTERS SYLLABUS SYSTEM WITH FULL EDIT & CHECKMARK CONTROLS
+        const syllabusList = document.getElementById('syllabusList');
+        const openSyllabusModalBtn = document.getElementById('openSyllabusModalBtn');
+        const syllabusModal = document.getElementById('syllabusModal');
+        const closeSyllabusModalBtn = document.getElementById('closeSyllabusModalBtn');
+        const saveSyllabusForm = document.getElementById('saveSyllabusForm');
+        const modalChapterListContainer = document.getElementById('modalChapterListContainer');
+        const addMoreChapterBtn = document.getElementById('addMoreChapterBtn');
 
-        window.deleteSyllabusItem = async function(id) {
-            if (confirm("Delete this syllabus chapter?")) {
-                userSyllabus = userSyllabus.filter(s => s.id !== id);
-                saveLocalData('syllabus', userSyllabus);
-                renderSyllabus();
-                if (currentUser) {
-                    await deleteDoc(doc(db, "syllabus", id));
+        function createChapterInputRow(chapterName = '', subchapters = '') {
+            const row = document.createElement('div');
+            row.className = 'chapter-input-row';
+            row.innerHTML = `
+                <input type="text" class="chap-name-input" placeholder="Chapter Name" value="${chapterName}" required style="flex:1; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.8rem;">
+                <input type="text" class="chap-sub-input" placeholder="Subchapters (comma separated)" value="${subchapters}" style="flex:1; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.8rem;">
+                <button type="button" class="remove-chap-btn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; padding: 6px 10px; border-radius: 8px; cursor: pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            row.querySelector('.remove-chap-btn').addEventListener('click', () => {
+                if (modalChapterListContainer.children.length > 1) {
+                    row.remove();
+                } else {
+                    showNotification("Requirement", "At least one chapter is required.", "warning");
                 }
-                showNotification("Syllabus Removed", "Chapter deleted", "danger");
-            }
-        };
+            });
+            modalChapterListContainer.appendChild(row);
+        }
 
-        document.getElementById('openSyllabusModalBtn').addEventListener('click', () => {
-            document.getElementById('saveSyllabusForm').reset();
-            document.getElementById('syllabusModal').style.display = 'flex';
+        addMoreChapterBtn.addEventListener('click', () => createChapterInputRow());
+
+        openSyllabusModalBtn.addEventListener('click', () => {
+            document.getElementById('editSyllabusId').value = '';
+            document.getElementById('syllabusModalTitle').innerText = 'Add Subject & Multiple Chapters';
+            saveSyllabusForm.reset();
+            modalChapterListContainer.innerHTML = '';
+            createChapterInputRow();
+            syllabusModal.style.display = 'flex';
         });
 
-        document.getElementById('closeSyllabusModalBtn').addEventListener('click', () => {
-            document.getElementById('syllabusModal').style.display = 'none';
-        });
+        closeSyllabusModalBtn.addEventListener('click', () => syllabusModal.style.display = 'none');
 
-        document.getElementById('saveSyllabusForm').addEventListener('submit', async (e) => {
+        saveSyllabusForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const editId = document.getElementById('editSyllabusId').value;
             const subject = document.getElementById('sylSubject').value.trim();
-            const chapter = document.getElementById('sylChapter').value.trim();
-            const subchapters = document.getElementById('sylSubchapters').value.trim();
             const addExam = document.getElementById('sylAddExamEvent').value;
             const examDate = document.getElementById('sylExamDate').value;
 
-            const sylData = {
+            const chapterRows = modalChapterListContainer.querySelectorAll('.chapter-input-row');
+            let chapters = [];
+
+            chapterRows.forEach((row, idx) => {
+                const name = row.querySelector('.chap-name-input').value.trim();
+                const subStr = row.querySelector('.chap-sub-input').value.trim();
+                const subs = subStr ? subStr.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
+                
+                let isCompleted = false;
+                if (editId) {
+                    const existingSubj = userSyllabus.find(s => s.id === editId);
+                    if (existingSubj && existingSubj.chapters && existingSubj.chapters[idx]) {
+                        isCompleted = existingSubj.chapters[idx].completed || false;
+                    }
+                }
+
+                if (name) {
+                    chapters.push({ id: 'chap_' + Date.now() + '_' + idx, name, subchapters: subs, completed: isCompleted });
+                }
+            });
+
+            const syllabusData = {
                 uid: currentUser.uid,
-                subject,
-                chapter,
-                subchapters,
-                completed: false,
+                subject: subject,
+                chapters: chapters,
                 createdAt: new Date().toISOString()
             };
 
-            if (currentUser) {
-                const docRef = await addDoc(collection(db, "syllabus"), sylData);
-                sylData.id = docRef.id;
+            if (editId) {
+                if (currentUser) await updateDoc(doc(db, "syllabus", editId), syllabusData);
+                const idx = userSyllabus.findIndex(s => s.id === editId);
+                if (idx !== -1) userSyllabus[idx] = { ...userSyllabus[idx], ...syllabusData };
+            } else {
+                if (currentUser) {
+                    const docRef = await addDoc(collection(db, "syllabus"), syllabusData);
+                    syllabusData.id = docRef.id;
+                } else {
+                    syllabusData.id = 'local_syl_' + Date.now();
+                }
+                userSyllabus.push(syllabusData);
             }
-            userSyllabus.push(sylData);
-            saveLocalData('syllabus', userSyllabus);
-            renderSyllabus();
 
-            // Auto-sync Exam Reminder to Events if selected
             if (addExam === 'yes' && examDate) {
                 const eventData = {
                     uid: currentUser.uid,
-                    title: `${subject} Exam (${chapter})`,
+                    title: `${subject} Exam`,
                     date: examDate,
-                    notes: `Exam on chapter: ${chapter}. Subchapters: ${subchapters}`,
+                    notes: `Exam synced from Syllabus Tracker. Covers ${chapters.length} chapters.`,
                     createdAt: new Date().toISOString()
                 };
                 if (currentUser) {
-                    const evRef = await addDoc(collection(db, "events"), eventData);
-                    eventData.id = evRef.id;
+                    await addDoc(collection(db, "events"), eventData);
+                } else {
+                    eventData.id = 'local_evt_' + Date.now();
+                    userEvents.push(eventData);
                 }
-                userEvents.push(eventData);
-                saveLocalData('events', userEvents);
-                renderEvents();
-                showNotification("Exam Event Created", `Added ${subject} exam to Events calendar`, "info", "#ec4899");
             }
 
-            document.getElementById('syllabusModal').style.display = 'none';
-            showNotification("Syllabus Added", "Subject chapter saved", "success");
+            syllabusModal.style.display = 'none';
+            saveLocalData('syllabus', userSyllabus);
+            renderSyllabus();
+            showNotification("Syllabus Saved", "Subject and multiple chapters updated!", "success");
         });
 
-        // CHALLENGE TIMER WITH NOTIFICATION BAR COUNTDOWN
-        document.getElementById('startChallengeBtn').addEventListener('click', () => {
-            const h = parseInt(document.getElementById('challengeHours').value) || 0;
-            const m = parseInt(document.getElementById('challengeMins').value) || 0;
+        function renderSyllabus() {
+            syllabusList.innerHTML = '';
+            let totalChapters = 0;
+            let completedChapters = 0;
 
-            if (h === 0 && m === 0) {
-                showNotification("Set Duration", "Please enter hours or minutes for challenge", "warning");
+            if (userSyllabus.length === 0) {
+                syllabusList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No subjects added to syllabus yet.</div>`;
+                document.getElementById('syllabusStatsText').innerText = '0 Chapters Completed';
+                document.getElementById('syllabusPercentText').innerText = '0%';
                 return;
             }
 
+            userSyllabus.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = 'syllabus-subject-card';
+
+                let chaptersHtml = '';
+                if (sub.chapters && sub.chapters.length > 0) {
+                    sub.chapters.forEach((chap, cIdx) => {
+                        totalChapters++;
+                        if (chap.completed) completedChapters++;
+
+                        let subsHtml = '';
+                        if (chap.subchapters && chap.subchapters.length > 0) {
+                            chap.subchapters.forEach(subTitle => {
+                                subsHtml += `<span class="subchapter-tag"><i class="fa-solid fa-angle-right"></i> ${subTitle}</span>`;
+                            });
+                        }
+
+                        chaptersHtml += `
+                            <div class="syllabus-chapter-item">
+                                <div class="chapter-title-bar">
+                                    <div class="chapter-checkbox-title" onclick="toggleChapterDone('${sub.id}', ${cIdx})">
+                                        <i class="${chap.completed ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" style="font-size: 1.1rem; color: ${chap.completed ? 'var(--success)' : 'var(--text-muted)'};"></i>
+                                        <span style="font-size: 0.85rem; font-weight: 600; ${chap.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${chap.name}</span>
+                                    </div>
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">${chap.completed ? 'Completed (+5 XP)' : 'Pending'}</span>
+                                </div>
+                                ${subsHtml ? `<div class="subchapter-list-wrap">${subsHtml}</div>` : ''}
+                            </div>
+                        `;
+                    });
+                }
+
+                card.innerHTML = `
+                    <div class="syllabus-header-row">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid fa-book-bookmark" style="color: var(--accent-pink); font-size: 1.2rem;"></i>
+                            <h3 style="font-size: 1rem; font-weight: 700;">${sub.subject}</h3>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-btn edit" onclick="editSyllabus('${sub.id}')" title="Edit Subject/Chapters"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn delete" onclick="deleteSyllabus('${sub.id}')" title="Delete Subject"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div>${chaptersHtml}</div>
+                `;
+
+                syllabusList.appendChild(card);
+            });
+
+            const overallPercent = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
+            document.getElementById('syllabusStatsText').innerText = `${completedChapters} of ${totalChapters} Chapters Completed`;
+            document.getElementById('syllabusPercentText').innerText = `${overallPercent}%`;
+        }
+
+        window.toggleChapterDone = async (subId, chapIndex) => {
+            const sub = userSyllabus.find(s => s.id === subId);
+            if (sub && sub.chapters && sub.chapters[chapIndex]) {
+                const targetChap = sub.chapters[chapIndex];
+                targetChap.completed = !targetChap.completed;
+                
+                if (targetChap.completed) {
+                    await addXP(5, "completing a syllabus chapter");
+                }
+
+                saveLocalData('syllabus', userSyllabus);
+                if (currentUser && !subId.startsWith('local_')) {
+                    await updateDoc(doc(db, "syllabus", subId), { chapters: sub.chapters });
+                }
+                renderSyllabus();
+            }
+        };
+
+        window.editSyllabus = (id) => {
+            const sub = userSyllabus.find(s => s.id === id);
+            if (!sub) return;
+
+            document.getElementById('editSyllabusId').value = sub.id;
+            document.getElementById('syllabusModalTitle').innerText = 'Edit Subject & Chapters';
+            document.getElementById('sylSubject').value = sub.subject;
+
+            modalChapterListContainer.innerHTML = '';
+            if (sub.chapters && sub.chapters.length > 0) {
+                sub.chapters.forEach(chap => {
+                    createChapterInputRow(chap.name, (chap.subchapters || []).join(', '));
+                });
+            } else {
+                createChapterInputRow();
+            }
+
+            syllabusModal.style.display = 'flex';
+        };
+
+        window.deleteSyllabus = async (id) => {
+            if (confirm("Delete this subject and all its chapters?")) {
+                userSyllabus = userSyllabus.filter(s => s.id !== id);
+                saveLocalData('syllabus', userSyllabus);
+                if (currentUser && !id.startsWith('local_')) {
+                    await deleteDoc(doc(db, "syllabus", id));
+                }
+                renderSyllabus();
+                showNotification("Syllabus Removed", "Subject deleted from tracker.", "danger");
+            }
+        };
+
+        // CHALLENGE TIMER WITH XP REWARDS
+        const startChallengeBtn = document.getElementById('startChallengeBtn');
+        const stopChallengeBtn = document.getElementById('stopChallengeBtn');
+        const challengeDisplay = document.getElementById('challengeDisplay');
+
+        startChallengeBtn.addEventListener('click', () => {
+            const h = parseInt(document.getElementById('challengeHours').value) || 0;
+            const m = parseInt(document.getElementById('challengeMins').value) || 0;
+            
+            if (h === 0 && m === 0) {
+                showNotification("Invalid Duration", "Please set hours or minutes for the challenge.", "warning");
+                return;
+            }
+
+            clearInterval(challengeInterval);
             challengeTotalSeconds = (h * 3600) + (m * 60);
-            if (challengeInterval) clearInterval(challengeInterval);
 
-            showNotification("Challenge Started!", `${h}h ${m}m study challenge in progress`, "success", "#ec4899");
-            sendSystemNotification("Study Challenge Active", `Challenge timer set for ${h}h ${m}m.`);
+            showNotification("Challenge Started", "Stay focused until time is up!", "info", "#f472b6");
 
-            updateChallengeDisplay();
             challengeInterval = setInterval(() => {
                 challengeTotalSeconds--;
                 if (challengeTotalSeconds <= 0) {
                     clearInterval(challengeInterval);
-                    document.getElementById('challengeDisplay').innerText = "00:00:00";
-                    showNotification("Challenge Completed! 🎉", "You finished your study challenge!", "success", "#10b981");
-                    sendSystemNotification("Challenge Completed!", "Great work! You accomplished your study target!");
-                } else {
-                    updateChallengeDisplay();
+                    challengeDisplay.innerText = "00:00:00";
+                    sendSystemNotification("Timer Challenge Complete!", "Awesome job staying focused!");
+                    addXP(5, "completing a study timer challenge");
+                    showNotification("🏆 Challenge Complete!", "You earned +5 XP for completing your timer challenge!", "success", "#f59e0b");
+                    return;
                 }
+
+                const hrs = Math.floor(challengeTotalSeconds / 3600);
+                const mins = Math.floor((challengeTotalSeconds % 3600) / 60);
+                const secs = challengeTotalSeconds % 60;
+
+                challengeDisplay.innerText = 
+                    `${hrs < 10 ? '0' + hrs : hrs}:${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
             }, 1000);
         });
 
-        document.getElementById('stopChallengeBtn').addEventListener('click', () => {
-            if (challengeInterval) clearInterval(challengeInterval);
-            challengeTotalSeconds = 0;
-            document.getElementById('challengeDisplay').innerText = "00:00:00";
-            showNotification("Challenge Stopped", "Timer reset", "info");
+        stopChallengeBtn.addEventListener('click', () => {
+            clearInterval(challengeInterval);
+            challengeDisplay.innerText = "00:00:00";
+            showNotification("Challenge Cancelled", "Timer stopped.", "warning");
         });
 
-        function updateChallengeDisplay() {
-            const hrs = Math.floor(challengeTotalSeconds / 3600);
-            const mins = Math.floor((challengeTotalSeconds % 3600) / 60);
-            const secs = challengeTotalSeconds % 60;
+        // EVENTS SECTION
+        const eventsList = document.getElementById('eventsList');
+        const openEventModalBtn = document.getElementById('openEventModalBtn');
+        const eventModal = document.getElementById('eventModal');
+        const closeEventModalBtn = document.getElementById('closeEventModalBtn');
+        const saveEventForm = document.getElementById('saveEventForm');
 
-            const formatted = `${hrs < 10 ? '0' + hrs : hrs}:${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
-            document.getElementById('challengeDisplay').innerText = formatted;
-
-            // Notification bar indicator title update
-            document.title = `(${formatted}) StudyPulse Pro`;
-        }
-
-        // EXAMS & EVENTS SECTION ENGINE
-        function renderEvents() {
-            const list = document.getElementById('eventsList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            if (userEvents.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No events scheduled" data-bn="কোন ইভেন্ট সিডিউল করা নেই">No events scheduled</div>`;
-                return;
-            }
-
-            userEvents.forEach(ev => {
-                const card = document.createElement('div');
-                card.className = 'task-card';
-                card.style.setProperty('--card-color', '#ec4899');
-
-                card.innerHTML = `
-                    <div class="task-left">
-                        <div class="task-icon-box"><i class="fa-solid fa-calendar-day"></i></div>
-                        <div class="task-details">
-                            <div class="task-title">${ev.title}</div>
-                            <div class="task-meta-info">
-                                <span class="duration-badge"><i class="fa-regular fa-calendar"></i> ${ev.date}</span>
-                                ${ev.notes ? `<span>${ev.notes}</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="task-actions">
-                        <button class="action-btn delete" onclick="deleteEventAction('${ev.id}')"><i class="fa-solid fa-trash-can"></i></button>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        window.deleteEventAction = async function(id) {
-            if (confirm("Delete this event?")) {
-                userEvents = userEvents.filter(e => e.id !== id);
-                saveLocalData('events', userEvents);
-                renderEvents();
-                if (currentUser) await deleteDoc(doc(db, "events", id));
-                showNotification("Event Deleted", "Removed from schedule", "danger");
-            }
-        };
-
-        document.getElementById('openEventModalBtn').addEventListener('click', () => {
-            document.getElementById('saveEventForm').reset();
-            document.getElementById('eventModal').style.display = 'flex';
+        openEventModalBtn.addEventListener('click', () => {
+            saveEventForm.reset();
+            eventModal.style.display = 'flex';
         });
 
-        document.getElementById('closeEventModalBtn').addEventListener('click', () => {
-            document.getElementById('eventModal').style.display = 'none';
-        });
+        closeEventModalBtn.addEventListener('click', () => eventModal.style.display = 'none');
 
-        document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
+        saveEventForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const title = document.getElementById('eventName').value.trim();
-            const date = document.getElementById('eventDate').value;
-            const notes = document.getElementById('eventNotes').value.trim();
-
-            const evData = {
+            const eventData = {
                 uid: currentUser.uid,
-                title,
-                date,
-                notes,
+                title: document.getElementById('eventName').value.trim(),
+                date: document.getElementById('eventDate').value,
+                notes: document.getElementById('eventNotes').value.trim(),
                 createdAt: new Date().toISOString()
             };
 
             if (currentUser) {
-                const docRef = await addDoc(collection(db, "events"), evData);
-                evData.id = docRef.id;
+                const docRef = await addDoc(collection(db, "events"), eventData);
+                eventData.id = docRef.id;
+            } else {
+                eventData.id = 'local_evt_' + Date.now();
             }
-            userEvents.push(evData);
+
+            userEvents.push(eventData);
+            eventModal.style.display = 'none';
             saveLocalData('events', userEvents);
             renderEvents();
-            document.getElementById('eventModal').style.display = 'none';
-            showNotification("Event Saved", "Scheduled in events planner", "success");
+            showNotification("Event Scheduled", "Your academic event has been recorded!", "success");
         });
 
-        // STUDY VAULT SECTION ENGINE
-        function renderStudyHub() {
-            const list = document.getElementById('studyList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            if (userStudyItems.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;" data-en="No study materials saved" data-bn="কোন মেটেরিয়াল সেভ করা নেই">No study materials saved</div>`;
+        function renderEvents() {
+            eventsList.innerHTML = '';
+            if (userEvents.length === 0) {
+                eventsList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No upcoming exams or events scheduled.</div>`;
                 return;
             }
 
-            userStudyItems.forEach(item => {
+            userEvents.forEach(evt => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
                 card.style.setProperty('--card-color', '#3b82f6');
 
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box"><i class="fa-solid fa-book-bookmark"></i></div>
+                        <div class="task-icon-box" style="--card-color: #3b82f6;">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
                         <div class="task-details">
-                            <div class="task-title">${item.bookName}</div>
+                            <div class="task-title">${evt.title}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-solid fa-bookmark"></i> ${item.chapterName}</span>
-                                ${item.notes ? `<span>• ${item.notes}</span>` : ''}
+                                <span><i class="fa-regular fa-calendar"></i> ${evt.date}</span>
+                                ${evt.notes ? `<span>• ${evt.notes}</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn edit" title="Open Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
-                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn check" title="Watch Video" style="color:#ef4444;"><i class="fa-brands fa-youtube"></i></a>` : ''}
-                        <button class="action-btn delete" onclick="deleteStudyItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="action-btn delete" onclick="deleteEvent('${evt.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-                list.appendChild(card);
+                eventsList.appendChild(card);
             });
         }
 
-        window.deleteStudyItem = async function(id) {
-            if (confirm("Delete this study item?")) {
-                userStudyItems = userStudyItems.filter(s => s.id !== id);
-                saveLocalData('study', userStudyItems);
-                renderStudyHub();
-                if (currentUser) await deleteDoc(doc(db, "studyHub", id));
-                showNotification("Material Deleted", "Removed from study vault", "danger");
+        window.deleteEvent = async (id) => {
+            if (confirm("Delete this event?")) {
+                userEvents = userEvents.filter(e => e.id !== id);
+                saveLocalData('events', userEvents);
+                if (currentUser && !id.startsWith('local_')) {
+                    await deleteDoc(doc(db, "events", id));
+                }
+                renderEvents();
+                showNotification("Event Removed", "Event deleted.", "danger");
             }
         };
 
-        document.getElementById('openStudyModalBtn').addEventListener('click', () => {
-            document.getElementById('saveStudyForm').reset();
-            document.getElementById('studyModal').style.display = 'flex';
+        // STUDY VAULT / MEMORIALS
+        const studyList = document.getElementById('studyList');
+        const openStudyModalBtn = document.getElementById('openStudyModalBtn');
+        const studyModal = document.getElementById('studyModal');
+        const closeStudyModalBtn = document.getElementById('closeStudyModalBtn');
+        const saveStudyForm = document.getElementById('saveStudyForm');
+
+        openStudyModalBtn.addEventListener('click', () => {
+            saveStudyForm.reset();
+            studyModal.style.display = 'flex';
         });
 
-        document.getElementById('closeStudyModalBtn').addEventListener('click', () => {
-            document.getElementById('studyModal').style.display = 'none';
-        });
+        closeStudyModalBtn.addEventListener('click', () => studyModal.style.display = 'none');
 
-        document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
+        saveStudyForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const bookName = document.getElementById('studyBookName').value.trim();
-            const chapterName = document.getElementById('studyChapterName').value.trim();
-            const targetUrl = document.getElementById('studyTargetUrl').value.trim();
-            const youtubeUrl = document.getElementById('studyYoutubeUrl').value.trim();
-            const notes = document.getElementById('studyNotes').value.trim();
-
             const studyData = {
                 uid: currentUser.uid,
-                bookName,
-                chapterName,
-                targetUrl,
-                youtubeUrl,
-                notes,
+                bookName: document.getElementById('studyBookName').value.trim(),
+                chapterName: document.getElementById('studyChapterName').value.trim(),
+                targetUrl: document.getElementById('studyTargetUrl').value.trim(),
+                youtubeUrl: document.getElementById('studyYoutubeUrl').value.trim(),
+                notes: document.getElementById('studyNotes').value.trim(),
                 createdAt: new Date().toISOString()
             };
 
             if (currentUser) {
                 const docRef = await addDoc(collection(db, "studyHub"), studyData);
                 studyData.id = docRef.id;
+            } else {
+                studyData.id = 'local_std_' + Date.now();
             }
+
             userStudyItems.push(studyData);
+            studyModal.style.display = 'none';
             saveLocalData('study', userStudyItems);
             renderStudyHub();
-            document.getElementById('studyModal').style.display = 'none';
-            showNotification("Saved to Vault", "Resource material stored", "success");
+            showNotification("Resource Saved", "Material added to your Study Vault!", "success");
         });
 
-        // LIVE CLOCK & CALENDAR ENGINE
+        function renderStudyHub() {
+            studyList.innerHTML = '';
+            if (userStudyItems.length === 0) {
+                studyList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No study materials added yet.</div>`;
+                return;
+            }
+
+            userStudyItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'task-card';
+                card.style.setProperty('--card-color', '#10b981');
+
+                card.innerHTML = `
+                    <div class="task-left">
+                        <div class="task-icon-box" style="--card-color: #10b981;">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                        </div>
+                        <div class="task-details">
+                            <div class="task-title">${item.bookName} - ${item.chapterName}</div>
+                            <div class="task-meta-info">
+                                ${item.notes ? `<span>${item.notes}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn check" title="Open Link"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn edit" title="Watch Video"><i class="fa-brands fa-youtube"></i></a>` : ''}
+                        <button class="action-btn delete" onclick="deleteStudyItem('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                studyList.appendChild(card);
+            });
+        }
+
+        window.deleteStudyItem = async (id) => {
+            if (confirm("Delete this study resource?")) {
+                userStudyItems = userStudyItems.filter(s => s.id !== id);
+                saveLocalData('study', userStudyItems);
+                if (currentUser && !id.startsWith('local_')) {
+                    await deleteDoc(doc(db, "studyHub", id));
+                }
+                renderStudyHub();
+                showNotification("Resource Deleted", "Material removed.", "danger");
+            }
+        };
+
+        // POMODORO TIMER
+        let pomoTime = 25 * 60;
+        let pomoInterval = null;
+        let pomoRunning = false;
+
+        const pomoDisplay = document.getElementById('pomoTimerDisplay');
+        const pomoStartBtn = document.getElementById('pomoStartBtn');
+        const pomoResetBtn = document.getElementById('pomoResetBtn');
+
+        pomoStartBtn.addEventListener('click', () => {
+            if (pomoRunning) {
+                clearInterval(pomoInterval);
+                pomoRunning = false;
+                pomoStartBtn.innerText = 'Start';
+            } else {
+                pomoRunning = true;
+                pomoStartBtn.innerText = 'Pause';
+                pomoInterval = setInterval(() => {
+                    pomoTime--;
+                    if (pomoTime <= 0) {
+                        clearInterval(pomoInterval);
+                        pomoRunning = false;
+                        pomoDisplay.innerText = "00:00";
+                        showNotification("Pomodoro Complete!", "Take a 5 minute break!", "success");
+                        return;
+                    }
+                    const m = Math.floor(pomoTime / 60);
+                    const s = pomoTime % 60;
+                    pomoDisplay.innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+                }, 1000);
+            }
+        });
+
+        pomoResetBtn.addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            pomoRunning = false;
+            pomoTime = 25 * 60;
+            pomoDisplay.innerText = "25:00";
+            pomoStartBtn.innerText = 'Start';
+        });
+
+        // CLOCK ENGINE
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
             const ampm = hours >= 12 ? 'PM' : 'AM';
-
             hours = hours % 12;
             hours = hours ? hours : 12;
 
-            const strTime = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${ampm}`;
-            document.getElementById('liveClock').innerText = strTime;
+            const timeStr = `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds} ${ampm}`;
+            document.getElementById('liveClock').innerText = timeStr;
 
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
             document.getElementById('liveDate').innerText = now.toLocaleDateString('en-US', options);
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        function buildCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            if (!grid) return;
+        // ICON SELECTOR GRID
+        function buildIconGrid() {
+            const grid = document.getElementById('iconGrid');
             grid.innerHTML = '';
+            ICON_LIST.forEach(iconName => {
+                const item = document.createElement('div');
+                item.className = `icon-option ${iconName === selectedIcon ? 'selected' : ''}`;
+                item.innerHTML = `<i class="fa-solid ${iconName}"></i>`;
+                item.addEventListener('click', () => {
+                    selectedIcon = iconName;
+                    document.querySelectorAll('.icon-option').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    document.getElementById('selectedIconPreview').className = `fa-solid ${iconName}`;
+                    document.getElementById('selectedIconName').innerText = iconName;
+                    grid.style.display = 'none';
+                });
+                grid.appendChild(item);
+            });
+        }
 
+        document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
+            const grid = document.getElementById('iconGrid');
+            grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+        });
+
+        document.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+                e.target.classList.add('selected');
+                selectedColor = e.target.getAttribute('data-color');
+            });
+        });
+
+        // MINI CALENDAR BUILDER
+        function buildCalendar() {
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
-
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
             document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
 
-            const daysHead = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-            daysHead.forEach(d => {
-                const h = document.createElement('div');
-                h.className = 'calendar-day-head';
-                h.innerText = d;
-                grid.appendChild(h);
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            days.forEach(d => {
+                grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
             });
 
             const firstDay = new Date(year, month, 1).getDay();
             const totalDays = new Date(year, month + 1, 0).getDate();
 
             for (let i = 0; i < firstDay; i++) {
-                grid.appendChild(document.createElement('div'));
+                grid.innerHTML += `<div></div>`;
             }
 
             for (let day = 1; day <= totalDays; day++) {
-                const dayEl = document.createElement('div');
-                dayEl.className = `calendar-day ${day === now.getDate() ? 'active' : ''}`;
-                dayEl.innerText = day;
-                grid.appendChild(dayEl);
+                const isToday = day === now.getDate();
+                grid.innerHTML += `<div class="calendar-day ${isToday ? 'active' : ''}">${day}</div>`;
             }
         }
-
-        // FOCUS POMODORO TIMER
-        let pomoInterval = null;
-        let pomoSeconds = 25 * 60;
-        let isPomoRunning = false;
-
-        document.getElementById('pomoStartBtn').addEventListener('click', () => {
-            const btn = document.getElementById('pomoStartBtn');
-            if (isPomoRunning) {
-                clearInterval(pomoInterval);
-                isPomoRunning = false;
-                btn.innerText = "Start";
-            } else {
-                isPomoRunning = true;
-                btn.innerText = "Pause";
-                pomoInterval = setInterval(() => {
-                    pomoSeconds--;
-                    if (pomoSeconds <= 0) {
-                        clearInterval(pomoInterval);
-                        isPomoRunning = false;
-                        btn.innerText = "Start";
-                        pomoSeconds = 25 * 60;
-                        showNotification("Pomodoro Done!", "Time to take a 5 minute break!", "success");
-                    }
-                    updatePomoDisplay();
-                }, 1000);
-            }
-        });
-
-        document.getElementById('pomoResetBtn').addEventListener('click', () => {
-            clearInterval(pomoInterval);
-            isPomoRunning = false;
-            pomoSeconds = 25 * 60;
-            document.getElementById('pomoStartBtn').innerText = "Start";
-            updatePomoDisplay();
-        });
-
-        function updatePomoDisplay() {
-            const m = Math.floor(pomoSeconds / 60);
-            const s = pomoSeconds % 60;
-            document.getElementById('pomoTimerDisplay').innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
-        }
-
     </script>
 </body>
 </html>
