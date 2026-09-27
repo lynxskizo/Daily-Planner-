@@ -1552,7 +1552,9 @@
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
         import { 
-            getFirestore, 
+            initializeFirestore,
+            persistentLocalCache,
+            persistentMultipleTabManager,
             collection, 
             addDoc, 
             deleteDoc, 
@@ -1560,8 +1562,7 @@
             doc, 
             setDoc,
             getDoc,
-            onSnapshot, 
-            enableIndexedDbPersistence
+            onSnapshot
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1576,10 +1577,10 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
-        const db = getFirestore(app);
-
-        enableIndexedDbPersistence(db).catch((err) => {
-            if (err.code == 'failed-precondition') console.log('Persistence enabled in first tab only');
+        
+        // Updated Firestore settings: replaces deprecated enableIndexedDbPersistence()
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
         });
 
         let isLoginMode = true;
@@ -1598,6 +1599,10 @@
         let challengeInterval = null;
         let challengeTotalSeconds = 0;
 
+        let pomoInterval = null;
+        let pomoSecondsLeft = 25 * 60;
+        let isPomoRunning = false;
+
         const ICON_LIST = [
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school",
             "fa-atom", "fa-palette", "fa-dumbbell", "fa-sun", "fa-moon", "fa-compass", "fa-dna", "fa-language", "fa-music", "fa-headphones",
@@ -1605,14 +1610,14 @@
             "fa-desktop", "fa-mobile-screen", "fa-terminal", "fa-code", "fa-database", "fa-microchip", "fa-network-wired", "fa-wifi", "fa-robot", "fa-gears"
         ];
 
-        // Top 3 Colleges of Dhaka (Fixed requirements)
+        // Top 3 Colleges of Dhaka
         const TOP_DHAKA_COLLEGES = [
             "Notre Dame College", 
             "Viqarunnisa Noon College", 
             "Holy Cross College"
         ];
 
-        // 7 more colleges per board for Class 9-10 choice
+        // Colleges per board
         const BOARD_COLLEGES = {
             Dhaka: ["Dhaka College", "Residential Model College", "Rajuk Uttara Model College", "Adamjee Cantonment College", "Government Science College", "City College Dhaka", "Birshreshtha Noor Mohammad Public College"],
             Chittagong: ["Chittagong College", "Government Hazi Mohammad Mohsin College", "Chittagong Govt. City College", "Cantonment English School & College", "Chittagong Public School & College", "Fouzderhat Collegiate School", "Govt. Commerce College"],
@@ -1627,7 +1632,6 @@
             Technical: ["Dhaka Polytechnic Institute", "Chittagong Polytechnic Institute", "Rajshahi Polytechnic Institute", "Sylhet Polytechnic Institute", "Khulna Polytechnic Institute", "Barisal Polytechnic Institute", "Comilla Polytechnic Institute"]
         };
 
-        // Famous Universities across all districts for Inter 1st/2nd Year
         const UNIVERSITIES_BD = [
             "BUET (Bangladesh University of Engineering and Technology) - Dhaka",
             "DU (University of Dhaka) - Dhaka",
@@ -1895,7 +1899,6 @@
             updateDreamInstitutions(document.getElementById('profBoard').value, e.target.value);
         });
 
-        // FIXED FUNCTION FOR SELECTING CLASS 9-10 vs INTER 1st/2nd YEAR
         function updateDreamInstitutions(board, className) {
             const container = document.getElementById('dreamInstContainer');
             const select = document.getElementById('profDreamInst');
@@ -1903,8 +1906,6 @@
 
             if (className === 'Class 9-10') {
                 container.style.display = 'block';
-                
-                // Add Top 3 Dhaka Colleges
                 let groupDhaka = document.createElement('optgroup');
                 groupDhaka.label = "Top 3 Colleges of Dhaka";
                 TOP_DHAKA_COLLEGES.forEach(c => {
@@ -1915,7 +1916,6 @@
                 });
                 select.appendChild(groupDhaka);
 
-                // Add 7 More Colleges from User's Board
                 if (board && BOARD_COLLEGES[board]) {
                     let groupBoard = document.createElement('optgroup');
                     groupBoard.label = `${board} Board Colleges`;
@@ -1929,8 +1929,6 @@
                 }
             } else if (className.includes('Inter')) {
                 container.style.display = 'block';
-                
-                // Show all famous universities & medicals from all districts
                 let groupUniv = document.createElement('optgroup');
                 groupUniv.label = "Famous Universities & Medicals (All Districts)";
                 UNIVERSITIES_BD.forEach(u => {
@@ -2015,92 +2013,70 @@
             div.className = `icon-option ${icon === selectedIcon ? 'selected' : ''}`;
             div.innerHTML = `<i class="fa-solid ${icon}"></i>`;
             div.addEventListener('click', () => {
-                document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
-                div.classList.add('selected');
                 selectedIcon = icon;
                 document.getElementById('selectedIconPreview').className = `fa-solid ${icon}`;
                 document.getElementById('selectedIconName').innerText = icon;
+                document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('selected'));
+                div.classList.add('selected');
                 iconGridEl.style.display = 'none';
             });
             iconGridEl.appendChild(div);
         });
 
         document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
-            iconGridEl.style.display = iconGridEl.style.display === 'grid' ? 'none' : 'grid';
+            iconGridEl.style.display = iconGridEl.style.display === 'none' ? 'grid' : 'none';
         });
 
+        // Task Form submit
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const taskId = document.getElementById('editTaskId').value;
+            const editId = document.getElementById('editTaskId').value;
             const taskData = {
-                title: document.getElementById('taskName').value,
+                name: document.getElementById('taskName').value,
                 color: selectedColor,
                 icon: selectedIcon,
-                time: `${document.getElementById('startHour').value}:${document.getElementById('startMin').value} ${document.getElementById('startAmpm').value} - ${document.getElementById('endHour').value}:${document.getElementById('endMin').value} ${document.getElementById('endAmpm').value}`,
+                startHour: document.getElementById('startHour').value,
+                startMin: document.getElementById('startMin').value,
+                startAmpm: document.getElementById('startAmpm').value,
+                endHour: document.getElementById('endHour').value,
+                endMin: document.getElementById('endMin').value,
+                endAmpm: document.getElementById('endAmpm').value,
                 alarmEnable: document.getElementById('taskAlarmEnable').value,
                 alarmTone: document.getElementById('taskAlarmTone').value,
                 frequency: document.getElementById('taskFrequency').value,
                 priority: document.getElementById('taskPriority').value,
                 completed: false,
-                updatedAt: new Date().toISOString()
+                createdAt: new Date().toISOString()
             };
 
-            const tasksRef = collection(db, "users", currentUser.uid, "tasks");
-            if (taskId) {
-                await updateDoc(doc(db, "users", currentUser.uid, "tasks", taskId), taskData);
-                showNotification("Updated", "Task updated successfully", "success", "#10b981");
-            } else {
-                taskData.createdAt = new Date().toISOString();
-                await addDoc(tasksRef, taskData);
-                showNotification("Created", "New task added successfully", "success", "#10b981");
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "users", currentUser.uid, "tasks", editId), taskData);
+                    showNotification("Task Updated", "Task updated successfully!", "success", "#10b981");
+                } else {
+                    await addDoc(collection(db, "users", currentUser.uid, "tasks"), taskData);
+                    showNotification("Task Created", "New task added to routine!", "success", "#10b981");
+                }
+                document.getElementById('taskModal').style.display = 'none';
+            } catch (err) {
+                showNotification("Error", err.message, "danger", "#ef4444");
             }
-            document.getElementById('taskModal').style.display = 'none';
         });
 
-        async function toggleTaskComplete(task) {
-            const newCompleted = !task.completed;
-            const todayStr = new Date().toDateString();
-            let currentXp = userProfileData.xp || 0;
-            let currentCount = userProfileData.completedTaskCount || 0;
-            let lastReset = userProfileData.lastResetDate || '';
-
-            if (lastReset !== todayStr) {
-                currentCount = 0;
-                lastReset = todayStr;
-            }
-
-            let xpChange = 0;
-            if (newCompleted) {
-                currentCount++;
-                if (currentCount % 10 === 0) {
-                    xpChange = 5;
-                    showNotification("XP Bonus! ⚡", "+5 XP earned for completing 10 tasks!", "success", "#ec4899");
-                }
-            } else {
-                if (currentCount > 0) currentCount--;
-            }
-
-            const newXp = Math.max(0, currentXp + xpChange);
-            checkLevelUp(currentXp, newXp);
-
-            await updateDoc(doc(db, "users", currentUser.uid, "tasks", task.id), { completed: newCompleted });
-            await updateProfileFirestore({ xp: newXp, completedTaskCount: currentCount, lastResetDate: lastReset });
-        }
-
         function renderTasks() {
-            const listEl = document.getElementById('tasksList');
+            const list = document.getElementById('tasksList');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            listEl.innerHTML = '';
+            list.innerHTML = '';
 
-            const filtered = userTasks.filter(t => {
-                const matchSearch = t.title.toLowerCase().includes(searchVal);
-                if (activeFilter === 'active') return matchSearch && !t.completed;
-                if (activeFilter === 'completed') return matchSearch && t.completed;
-                return matchSearch;
+            let filtered = userTasks.filter(t => {
+                const matchesSearch = t.name.toLowerCase().includes(searchVal);
+                if (activeFilter === 'active') return matchesSearch && !t.completed;
+                if (activeFilter === 'completed') return matchesSearch && t.completed;
+                return matchesSearch;
             });
 
             if (filtered.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No tasks found.</div>`;
+                list.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px;">No tasks found.</div>`;
                 return;
             }
 
@@ -2108,42 +2084,71 @@
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
                 card.style.setProperty('--card-color', task.color || '#8b5cf6');
+
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box"><i class="fa-solid ${task.icon || 'fa-book'}"></i></div>
+                        <div class="task-icon-box">
+                            <i class="fa-solid ${task.icon || 'fa-book'}"></i>
+                        </div>
                         <div class="task-details">
-                            <div class="task-title">${task.title}</div>
+                            <div class="task-title">${task.name}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-solid fa-clock"></i> ${task.time}</span>
-                                <span>•</span>
-                                <span style="text-transform: capitalize;">${task.priority} Priority</span>
+                                <span><i class="fa-regular fa-clock"></i> ${task.startHour}:${task.startMin} ${task.startAmpm} - ${task.endHour}:${task.endMin} ${task.endAmpm}</span>
+                                <span>• ${task.priority || 'medium'}</span>
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn check ${task.completed ? 'active-complete' : ''}" title="Complete Task"><i class="fa-solid fa-check"></i></button>
-                        <button class="action-btn edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                        <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        <button class="action-btn check ${task.completed ? 'active-complete' : ''}" data-id="${task.id}">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                        <button class="action-btn edit" data-id="${task.id}">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="action-btn delete" data-id="${task.id}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 `;
 
-                card.querySelector('.check').addEventListener('click', () => toggleTaskComplete(task));
-                card.querySelector('.delete').addEventListener('click', async () => {
-                    await deleteDoc(doc(db, "users", currentUser.uid, "tasks", task.id));
-                    showNotification("Deleted", "Task removed", "danger", "#ef4444");
+                card.querySelector('.action-btn.check').addEventListener('click', async () => {
+                    const isComp = !task.completed;
+                    await updateDoc(doc(db, "users", currentUser.uid, "tasks", task.id), { completed: isComp });
+                    if (isComp) {
+                        const oldXp = userProfileData.xp || 0;
+                        const newXp = oldXp + 10;
+                        await updateProfileFirestore({ xp: newXp, completedTaskCount: (userProfileData.completedTaskCount || 0) + 1 });
+                        checkLevelUp(oldXp, newXp);
+                        showNotification("Task Done!", "+10 XP Earned", "success", "#10b981");
+                    }
                 });
-                card.querySelector('.edit').addEventListener('click', () => {
+
+                card.querySelector('.action-btn.edit').addEventListener('click', () => {
                     document.getElementById('editTaskId').value = task.id;
-                    document.getElementById('taskModalTitle').innerText = "Edit Activity";
-                    document.getElementById('taskName').value = task.title;
+                    document.getElementById('taskName').value = task.name;
+                    document.getElementById('startHour').value = task.startHour;
+                    document.getElementById('startMin').value = task.startMin;
+                    document.getElementById('startAmpm').value = task.startAmpm;
+                    document.getElementById('endHour').value = task.endHour;
+                    document.getElementById('endMin').value = task.endMin;
+                    document.getElementById('endAmpm').value = task.endAmpm;
+                    document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
+                    document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
+                    document.getElementById('taskFrequency').value = task.frequency || 'everyday';
+                    document.getElementById('taskPriority').value = task.priority || 'medium';
+                    document.getElementById('taskModalTitle').innerText = "Edit Task";
                     document.getElementById('taskModal').style.display = 'flex';
                 });
 
-                listEl.appendChild(card);
+                card.querySelector('.action-btn.delete').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "tasks", task.id));
+                    showNotification("Deleted", "Task removed", "danger", "#ef4444");
+                });
+
+                list.appendChild(card);
             });
         }
 
-        document.getElementById('searchInput').addEventListener('input', renderTasks);
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -2153,216 +2158,232 @@
             });
         });
 
+        document.getElementById('searchInput').addEventListener('input', renderTasks);
+
+        function updateProgress() {
+            if (userTasks.length === 0) {
+                document.getElementById('progressPercent').innerText = '0%';
+                document.getElementById('progressBar').style.width = '0%';
+                return;
+            }
+            const comp = userTasks.filter(t => t.completed).length;
+            const pct = Math.round((comp / userTasks.length) * 100);
+            document.getElementById('progressPercent').innerText = `${pct}%`;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+        }
+
+        // Syllabus Modal & Logic
         document.getElementById('openSyllabusModalBtn').addEventListener('click', () => {
             document.getElementById('editSyllabusId').value = '';
-            document.getElementById('syllabusModalTitle').innerText = "Add Subject & Multiple Chapters";
             document.getElementById('saveSyllabusForm').reset();
             document.getElementById('modalChapterListContainer').innerHTML = '';
             addChapterInputRow();
             document.getElementById('syllabusModal').style.display = 'flex';
         });
+
         document.getElementById('closeSyllabusModalBtn').addEventListener('click', () => {
             document.getElementById('syllabusModal').style.display = 'none';
         });
 
-        function addChapterInputRow(chapterName = '', subchapters = '') {
+        document.getElementById('addMoreChapterBtn').addEventListener('click', () => addChapterInputRow());
+
+        function addChapterInputRow(val = '') {
             const container = document.getElementById('modalChapterListContainer');
             const row = document.createElement('div');
             row.className = 'chapter-input-row';
             row.innerHTML = `
-                <input type="text" placeholder="Chapter Name (e.g. Vector)" class="modal-chap-name" value="${chapterName}" style="flex:1; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:10px;" required>
-                <input type="text" placeholder="Subchapters (comma separated)" class="modal-subchap-list" value="${subchapters}" style="flex:1; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:10px;">
-                <button type="button" class="remove-chap-row" style="background:rgba(239,68,68,0.2); border:none; color:#fca5a5; width:36px; height:36px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+                <input type="text" class="chap-input" placeholder="Chapter Name" value="${val}" style="flex:1; padding:10px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:10px;" required>
+                <button type="button" class="remove-chap-btn" style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; width:36px; height:36px; border-radius:10px; cursor:pointer;"><i class="fa-solid fa-minus"></i></button>
             `;
-            row.querySelector('.remove-chap-row').addEventListener('click', () => row.remove());
+            row.querySelector('.remove-chap-btn').addEventListener('click', () => row.remove());
             container.appendChild(row);
         }
 
-        document.getElementById('addMoreChapterBtn').addEventListener('click', () => addChapterInputRow());
-
         document.getElementById('saveSyllabusForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const subjectId = document.getElementById('editSyllabusId').value;
-            const subjectName = document.getElementById('sylSubject').value;
-            
-            const chapterRows = document.querySelectorAll('.chapter-input-row');
+            const subject = document.getElementById('sylSubject').value;
+            const chapInputs = document.querySelectorAll('.chap-input');
             const chapters = [];
-            chapterRows.forEach(row => {
-                const cName = row.querySelector('.modal-chap-name').value;
-                const subs = row.querySelector('.modal-subchap-list').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
-                if(cName) {
-                    chapters.push({ name: cName, subchapters: subs, completed: false });
+            chapInputs.forEach((inp, idx) => {
+                if (inp.value.trim()) {
+                    chapters.push({ id: `chap_${Date.now()}_${idx}`, name: inp.value.trim(), completed: false });
                 }
             });
 
-            const sylData = { subject: subjectName, chapters: chapters };
-            const sylRef = collection(db, "users", currentUser.uid, "syllabus");
+            const sylData = { subject, chapters, createdAt: new Date().toISOString() };
+            await addDoc(collection(db, "users", currentUser.uid, "syllabus"), sylData);
 
-            if (subjectId) {
-                await updateDoc(doc(db, "users", currentUser.uid, "syllabus", subjectId), sylData);
-                showNotification("Updated", "Syllabus updated successfully", "success", "#10b981");
-            } else {
-                await addDoc(sylRef, sylData);
-                showNotification("Added", "New subject & chapters saved", "success", "#10b981");
-            }
-
-            const addExamEvent = document.getElementById('sylAddExamEvent').value;
-            const examDate = document.getElementById('sylExamDate').value;
-            if (addExamEvent === 'yes' && examDate) {
-                await addDoc(collection(db, "users", currentUser.uid, "events"), {
-                    title: `${subjectName} Exam`,
-                    date: examDate,
-                    notes: `Exam synced from syllabus tracker`
-                });
+            if (document.getElementById('sylAddExamEvent').value === 'yes') {
+                const examDate = document.getElementById('sylExamDate').value;
+                if (examDate) {
+                    await addDoc(collection(db, "users", currentUser.uid, "events"), {
+                        title: `${subject} Exam`,
+                        date: examDate,
+                        notes: `Syllabus exam for ${subject}`,
+                        createdAt: new Date().toISOString()
+                    });
+                }
             }
 
             document.getElementById('syllabusModal').style.display = 'none';
+            showNotification("Syllabus Saved", "Subject added to tracker!", "success", "#10b981");
         });
 
-        async function toggleChapterComplete(subject, chapterIndex) {
-            const chap = subject.chapters[chapterIndex];
-            const willComplete = !chap.completed;
-            chap.completed = willComplete;
-
-            let currentXp = userProfileData.xp || 0;
-            let xpChange = willComplete ? 5 : -5;
-            let newXp = Math.max(0, currentXp + xpChange);
-
-            if (willComplete) {
-                checkLevelUp(currentXp, newXp);
-                showNotification("Chapter Completed! 🎯", "+5 XP earned for completing chapter!", "success", "#10b981");
-            } else {
-                showNotification("Chapter Unchecked ⚠️", "-5 XP deducted for unchecking chapter.", "danger", "#ef4444");
-            }
-
-            await updateDoc(doc(db, "users", currentUser.uid, "syllabus", subject.id), { chapters: subject.chapters });
-            await updateProfileFirestore({ xp: newXp });
-        }
-
         function renderSyllabus() {
-            const listEl = document.getElementById('syllabusList');
-            listEl.innerHTML = '';
+            const list = document.getElementById('syllabusList');
+            list.innerHTML = '';
 
-            let totalChapters = 0;
-            let completedChapters = 0;
+            let totalChap = 0;
+            let doneChap = 0;
 
-            if (userSyllabus.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No subjects added yet. Click 'Add Subject & Chapters'.</div>`;
-                document.getElementById('syllabusStatsText').innerText = `0 Chapters Completed`;
-                document.getElementById('syllabusPercentText').innerText = `0%`;
-                return;
-            }
-
-            userSyllabus.forEach(subj => {
+            userSyllabus.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'syllabus-subject-card';
-                
-                let chaptersHtml = '';
-                subj.chapters.forEach((chap, idx) => {
-                    totalChapters++;
-                    if (chap.completed) completedChapters++;
 
-                    let subsHtml = '';
-                    if (chap.subchapters && chap.subchapters.length > 0) {
-                        subsHtml = `<div class="subchapter-list-wrap">` + chap.subchapters.map(sub => `<span class="subchapter-tag"><i class="fa-solid fa-circle-dot" style="font-size:0.5rem;"></i> ${sub}</span>`).join('') + `</div>`;
-                    }
-
-                    chaptersHtml += `
-                        <div class="syllabus-chapter-item" style="border-left: 4px solid ${chap.completed ? 'var(--success)' : 'var(--accent-purple)'};">
+                let chaptersHTML = '';
+                item.chapters.forEach(ch => {
+                    totalChap++;
+                    if (ch.completed) doneChap++;
+                    chaptersHTML += `
+                        <div class="syllabus-chapter-item">
                             <div class="chapter-title-bar">
                                 <label class="chapter-checkbox-title">
-                                    <input type="checkbox" ${chap.completed ? 'checked' : ''} data-subid="${subj.id}" data-chapidx="${idx}" style="accent-color: var(--success); width:18px; height:18px; cursor:pointer;">
-                                    <span style="${chap.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${chap.name}</span>
+                                    <input type="checkbox" ${ch.completed ? 'checked' : ''} data-sylid="${item.id}" data-chapid="${ch.id}">
+                                    <span style="${ch.completed ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${ch.name}</span>
                                 </label>
                             </div>
-                            ${subsHtml}
                         </div>
                     `;
                 });
 
                 card.innerHTML = `
                     <div class="syllabus-header-row">
-                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-pink);"><i class="fa-solid fa-book-bookmark"></i> ${subj.subject}</div>
-                        <div style="display:flex; gap:8px;">
-                            <button class="action-btn edit edit-syl-btn" data-id="${subj.id}"><i class="fa-solid fa-pen"></i></button>
-                            <button class="action-btn delete del-syl-btn" data-id="${subj.id}"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                        <div style="font-size: 1rem; font-weight: 700; color: var(--accent-pink);">${item.subject}</div>
+                        <button class="action-btn delete-syl" data-id="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
-                    <div>${chaptersHtml}</div>
+                    <div>${chaptersHTML}</div>
                 `;
 
                 card.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-                    chk.addEventListener('change', () => {
-                        const sId = chk.getAttribute('data-subid');
-                        const cIdx = parseInt(chk.getAttribute('data-chapidx'));
-                        const subjectObj = userSyllabus.find(s => s.id === sId);
-                        toggleChapterComplete(subjectObj, cIdx);
+                    chk.addEventListener('change', async (e) => {
+                        const isChecked = e.target.checked;
+                        const sylId = e.target.getAttribute('data-sylid');
+                        const chapId = e.target.getAttribute('data-chapid');
+
+                        const targetSyl = userSyllabus.find(s => s.id === sylId);
+                        if (!targetSyl) return;
+
+                        const updatedChapters = targetSyl.chapters.map(c => {
+                            if (c.id === chapId) return { ...c, completed: isChecked };
+                            return c;
+                        });
+
+                        await updateDoc(doc(db, "users", currentUser.uid, "syllabus", sylId), { chapters: updatedChapters });
+
+                        const oldXp = userProfileData.xp || 0;
+                        const newXp = isChecked ? oldXp + 15 : Math.max(0, oldXp - 15);
+                        await updateProfileFirestore({ xp: newXp });
+                        if (isChecked) checkLevelUp(oldXp, newXp);
                     });
                 });
 
-                card.querySelector('.del-syl-btn').addEventListener('click', async () => {
-                    await deleteDoc(doc(db, "users", currentUser.uid, "syllabus", subj.id));
-                    showNotification("Deleted", "Subject removed", "danger", "#ef4444");
+                card.querySelector('.delete-syl').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "syllabus", item.id));
+                    showNotification("Deleted", "Syllabus entry removed", "danger", "#ef4444");
                 });
 
-                card.querySelector('.edit-syl-btn').addEventListener('click', () => {
-                    document.getElementById('editSyllabusId').value = subj.id;
-                    document.getElementById('syllabusModalTitle').innerText = "Edit Syllabus";
-                    document.getElementById('sylSubject').value = subj.subject;
-                    const container = document.getElementById('modalChapterListContainer');
-                    container.innerHTML = '';
-                    subj.chapters.forEach(c => addChapterInputRow(c.name, c.subchapters.join(', ')));
-                    document.getElementById('syllabusModal').style.display = 'flex';
-                });
-
-                listEl.appendChild(card);
+                list.appendChild(card);
             });
 
-            const percent = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
-            document.getElementById('syllabusStatsText').innerText = `${completedChapters} of ${totalChapters} Chapters Completed`;
-            document.getElementById('syllabusPercentText').innerText = `${percent}%`;
+            const pct = totalChap > 0 ? Math.round((doneChap / totalChap) * 100) : 0;
+            document.getElementById('syllabusStatsText').innerText = `${doneChap} / ${totalChap} Chapters Completed`;
+            document.getElementById('syllabusPercentText').innerText = `${pct}%`;
         }
 
+        // Pomodoro logic
+        document.getElementById('pomoStartBtn').addEventListener('click', () => {
+            if (isPomoRunning) {
+                clearInterval(pomoInterval);
+                isPomoRunning = false;
+                document.getElementById('pomoStartBtn').innerText = "Start";
+            } else {
+                isPomoRunning = true;
+                document.getElementById('pomoStartBtn').innerText = "Pause";
+                pomoInterval = setInterval(() => {
+                    if (pomoSecondsLeft <= 0) {
+                        clearInterval(pomoInterval);
+                        isPomoRunning = false;
+                        showNotification("Pomodoro Complete!", "Time for a 5 min break!", "alarm", "#10b981");
+                        pomoSecondsLeft = 25 * 60;
+                        document.getElementById('pomoStartBtn').innerText = "Start";
+                    } else {
+                        pomoSecondsLeft--;
+                    }
+                    updatePomoDisplay();
+                }, 1000);
+            }
+        });
+
+        document.getElementById('pomoResetBtn').addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            pomoSecondsLeft = 25 * 60;
+            document.getElementById('pomoStartBtn').innerText = "Start";
+            updatePomoDisplay();
+        });
+
+        function updatePomoDisplay() {
+            const m = Math.floor(pomoSecondsLeft / 60);
+            const s = pomoSecondsLeft % 60;
+            document.getElementById('pomoTimerDisplay').innerText = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+        }
+
+        // Timer Challenge logic
         document.getElementById('startChallengeBtn').addEventListener('click', () => {
-            const hours = parseInt(document.getElementById('challengeHours').value) || 0;
+            const hrs = parseInt(document.getElementById('challengeHours').value) || 0;
             const mins = parseInt(document.getElementById('challengeMins').value) || 0;
-            challengeTotalSeconds = (hours * 3600) + (mins * 60);
+            challengeTotalSeconds = (hrs * 3600) + (mins * 60);
 
             if (challengeTotalSeconds <= 0) {
-                showNotification("Error", "Please set valid challenge hours or minutes.", "danger", "#ef4444");
+                showNotification("Invalid Time", "Please set valid hours or minutes", "info", "#f59e0b");
                 return;
             }
 
-            if (challengeInterval) clearInterval(challengeInterval);
-            challengeInterval = setInterval(async () => {
-                if (challengeTotalSeconds > 0) {
-                    challengeTotalSeconds--;
-                    const h = Math.floor(challengeTotalSeconds / 3600);
-                    const m = Math.floor((challengeTotalSeconds % 3600) / 60);
-                    const s = challengeTotalSeconds % 60;
-                    document.getElementById('challengeDisplay').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-                } else {
+            clearInterval(challengeInterval);
+            challengeInterval = setInterval(() => {
+                if (challengeTotalSeconds <= 0) {
                     clearInterval(challengeInterval);
-                    showNotification("Challenge Completed! 🏆", "+10 XP earned for finishing focus challenge!", "success", "#ffd700");
-                    let currentXp = userProfileData.xp || 0;
-                    let newXp = currentXp + 10;
-                    checkLevelUp(currentXp, newXp);
-                    await updateProfileFirestore({ xp: newXp });
+                    showNotification("Challenge Finished!", "You earned +10 XP!", "success", "#10b981");
+                    const oldXp = userProfileData.xp || 0;
+                    const newXp = oldXp + 10;
+                    updateProfileFirestore({ xp: newXp });
+                    checkLevelUp(oldXp, newXp);
+                } else {
+                    challengeTotalSeconds--;
                 }
+                updateChallengeDisplay();
             }, 1000);
-            showNotification("Challenge Started", "Focus countdown has begun!", "success", "#3b82f6");
         });
 
         document.getElementById('stopChallengeBtn').addEventListener('click', () => {
-            if (challengeInterval) clearInterval(challengeInterval);
-            document.getElementById('challengeDisplay').innerText = "00:00:00";
-            showNotification("Challenge Stopped", "Timer reset.", "info", "#94a3b8");
+            clearInterval(challengeInterval);
+            challengeTotalSeconds = 0;
+            updateChallengeDisplay();
         });
 
+        function updateChallengeDisplay() {
+            const h = Math.floor(challengeTotalSeconds / 3600);
+            const m = Math.floor((challengeTotalSeconds % 3600) / 60);
+            const s = challengeTotalSeconds % 60;
+            document.getElementById('challengeDisplay').innerText = `${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
+        }
+
+        // Event Modal & Logic
         document.getElementById('openEventModalBtn').addEventListener('click', () => {
             document.getElementById('saveEventForm').reset();
             document.getElementById('eventModal').style.display = 'flex';
         });
+
         document.getElementById('closeEventModalBtn').addEventListener('click', () => {
             document.getElementById('eventModal').style.display = 'none';
         });
@@ -2372,26 +2393,29 @@
             const eventData = {
                 title: document.getElementById('eventName').value,
                 date: document.getElementById('eventDate').value,
-                notes: document.getElementById('eventNotes').value
+                notes: document.getElementById('eventNotes').value,
+                createdAt: new Date().toISOString()
             };
             await addDoc(collection(db, "users", currentUser.uid, "events"), eventData);
             document.getElementById('eventModal').style.display = 'none';
-            showNotification("Scheduled", "Exam or event added successfully", "success", "#10b981");
+            showNotification("Event Saved", "Scheduled event successfully!", "success", "#10b981");
         });
 
         function renderEvents() {
-            const listEl = document.getElementById('eventsList');
-            listEl.innerHTML = '';
+            const list = document.getElementById('eventsList');
+            list.innerHTML = '';
             if (userEvents.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No exams or events scheduled.</div>`;
+                list.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px;">No upcoming exams or events.</div>`;
                 return;
             }
+
             userEvents.forEach(ev => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
+                card.style.setProperty('--card-color', '#3b82f6');
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="color:var(--accent-amber);"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div class="task-icon-box"><i class="fa-solid fa-calendar-day"></i></div>
                         <div class="task-details">
                             <div class="task-title">${ev.title}</div>
                             <div class="task-meta-info">
@@ -2401,21 +2425,23 @@
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn delete del-ev"><i class="fa-solid fa-trash"></i></button>
+                        <button class="action-btn delete-event" data-id="${ev.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-                card.querySelector('.del-ev').addEventListener('click', async () => {
+                card.querySelector('.delete-event').addEventListener('click', async () => {
                     await deleteDoc(doc(db, "users", currentUser.uid, "events", ev.id));
                     showNotification("Deleted", "Event removed", "danger", "#ef4444");
                 });
-                listEl.appendChild(card);
+                list.appendChild(card);
             });
         }
 
+        // Study Vault Modal & Logic
         document.getElementById('openStudyModalBtn').addEventListener('click', () => {
             document.getElementById('saveStudyForm').reset();
             document.getElementById('studyModal').style.display = 'flex';
         });
+
         document.getElementById('closeStudyModalBtn').addEventListener('click', () => {
             document.getElementById('studyModal').style.display = 'none';
         });
@@ -2427,26 +2453,29 @@
                 chapterName: document.getElementById('studyChapterName').value,
                 targetUrl: document.getElementById('studyTargetUrl').value,
                 youtubeUrl: document.getElementById('studyYoutubeUrl').value,
-                notes: document.getElementById('studyNotes').value
+                notes: document.getElementById('studyNotes').value,
+                createdAt: new Date().toISOString()
             };
             await addDoc(collection(db, "users", currentUser.uid, "studyVault"), studyData);
             document.getElementById('studyModal').style.display = 'none';
-            showNotification("Saved", "Study material added to vault", "success", "#10b981");
+            showNotification("Saved", "Material added to Study Vault", "success", "#10b981");
         });
 
         function renderStudyVault() {
-            const listEl = document.getElementById('studyList');
-            listEl.innerHTML = '';
+            const list = document.getElementById('studyList');
+            list.innerHTML = '';
             if (userStudyItems.length === 0) {
-                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No books or study materials added.</div>`;
+                list.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px;">Study Vault is empty.</div>`;
                 return;
             }
+
             userStudyItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
+                card.style.setProperty('--card-color', '#ec4899');
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="color:var(--success);"><i class="fa-solid fa-book"></i></div>
+                        <div class="task-icon-box"><i class="fa-solid fa-book-bookmark"></i></div>
                         <div class="task-details">
                             <div class="task-title">${item.bookName} - ${item.chapterName}</div>
                             <div class="task-meta-info">
@@ -2455,58 +2484,53 @@
                         </div>
                     </div>
                     <div class="task-actions">
-                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn" title="Open Link" style="color:var(--accent-blue);"><i class="fa-solid fa-link"></i></a>` : ''}
-                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn" title="YouTube" style="color:#ef4444;"><i class="fa-brands fa-youtube"></i></a>` : ''}
-                        <button class="action-btn delete del-stu"><i class="fa-solid fa-trash"></i></button>
+                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn" style="text-decoration:none;"><i class="fa-solid fa-link"></i></a>` : ''}
+                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn" style="text-decoration:none; color:#ef4444;"><i class="fa-brands fa-youtube"></i></a>` : ''}
+                        <button class="action-btn delete-study" data-id="${item.id}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-                card.querySelector('.del-stu').addEventListener('click', async () => {
+                card.querySelector('.delete-study').addEventListener('click', async () => {
                     await deleteDoc(doc(db, "users", currentUser.uid, "studyVault", item.id));
-                    showNotification("Deleted", "Material removed", "danger", "#ef4444");
+                    showNotification("Deleted", "Item removed", "danger", "#ef4444");
                 });
-                listEl.appendChild(card);
+                list.appendChild(card);
             });
         }
 
+        // Live Clock & Mini Calendar
         setInterval(() => {
             const now = new Date();
             document.getElementById('liveClock').innerText = now.toLocaleTimeString();
             document.getElementById('liveDate').innerText = now.toDateString();
         }, 1000);
 
-        function updateProgress() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressPercent').innerText = '0%';
-                document.getElementById('progressBar').style.width = '0%';
-                return;
-            }
-            const completed = userTasks.filter(t => t.completed).length;
-            const pct = Math.round((completed / userTasks.length) * 100);
-            document.getElementById('progressPercent').innerText = `${pct}%`;
-            document.getElementById('progressBar').style.width = `${pct}%`;
-        }
-
         function renderCalendar() {
             const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-            ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
-                grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
-            });
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
-            const currentDay = now.getDate();
 
             document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
-            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
-            for(let d=1; d<=totalDays; d++) {
-                grid.innerHTML += `<div class="calendar-day ${d === currentDay ? 'active' : ''}">${d}</div>`;
+            grid.innerHTML = '';
+            ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
+                grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
+            });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const isToday = day === now.getDate();
+                grid.innerHTML += `<div class="calendar-day ${isToday ? 'active' : ''}">${day}</div>`;
             }
         }
         renderCalendar();
+        setLanguage(currentLang);
     </script>
 </body>
 </html>
