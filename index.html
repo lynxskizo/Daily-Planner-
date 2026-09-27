@@ -36,7 +36,6 @@
             --font-en: 'Poppins', sans-serif;
             --font-bn: 'Hind Siliguri', sans-serif;
             
-            /* Avatar Level Color Variables */
             --level-bronze: #cd7f32;
             --level-silver: #c0c0c0;
             --level-gold: #ffd700;
@@ -50,6 +49,7 @@
             box-sizing: border-box;
             font-family: var(--font-en);
             color: var(--text-main);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.lang-bn, body.lang-bn *:not(i):not(.fa):not(.fas):not(.far):not(.fal):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands) {
@@ -106,18 +106,16 @@
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             box-shadow: var(--glass-shadow);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             z-index: 1;
         }
 
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
+        .animate-fade { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(16px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* NOTIFICATION TOAST CONTAINER */
         #notificationContainer {
             position: fixed;
             top: 20px;
@@ -125,24 +123,25 @@
             z-index: 9999;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-width: 360px;
+            gap: 12px;
+            max-width: 380px;
             width: 100%;
             pointer-events: none;
         }
 
         .custom-toast {
             pointer-events: auto;
-            background: rgba(15, 23, 42, 0.95);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            backdrop-filter: blur(16px);
-            border-radius: 16px;
-            padding: 14px 16px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 18px;
+            padding: 16px 18px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            animation: slideInRight 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            gap: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.55);
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
             overflow: hidden;
             position: relative;
         }
@@ -151,25 +150,24 @@
             content: '';
             position: absolute;
             left: 0; top: 0; bottom: 0;
-            width: 4px;
+            width: 5px;
             background: var(--toast-accent, var(--accent-purple));
         }
 
         .toast-icon {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--toast-accent, var(--accent-purple));
         }
 
         .toast-content { flex: 1; }
-        .toast-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 2px; }
-        .toast-msg { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
+        .toast-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 3px; color: #fff; }
+        .toast-msg { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
 
         @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from { transform: translateX(110%); opacity: 0; scale: 0.9; }
+            to { transform: translateX(0); opacity: 1; scale: 1; }
         }
 
-        /* TOP NAVBAR */
         .top-navbar {
             position: fixed;
             top: 15px;
@@ -177,16 +175,16 @@
             z-index: 90;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .lang-toggle-btn {
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             border: 1px solid var(--glass-border);
             background: rgba(255, 255, 255, 0.08);
             color: white;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
             backdrop-filter: blur(10px);
@@ -194,36 +192,35 @@
             align-items: center;
             gap: 6px;
         }
-        .lang-toggle-btn:hover { background: var(--accent-purple); }
+        .lang-toggle-btn:hover { background: var(--accent-purple); transform: translateY(-2px); }
 
-        /* AUTH SCREEN */
         .auth-container {
             width: 100%;
-            max-width: 420px;
-            padding: 40px 25px;
+            max-width: 440px;
+            padding: 45px 30px;
             text-align: center;
             margin-top: 50px;
         }
 
         .auth-container h2 {
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
             background: linear-gradient(to right, #a78bfa, #f472b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .auth-container p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 25px; }
+        .auth-container p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
 
         .input-group {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             position: relative;
             width: 100%;
         }
 
         .input-group i.input-icon {
             position: absolute;
-            left: 15px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
@@ -231,12 +228,12 @@
 
         .input-group input, .input-group select, .input-group textarea {
             width: 100%;
-            padding: 12px 15px 12px 45px;
+            padding: 13px 16px 13px 46px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: 14px;
             outline: none;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             text-overflow: ellipsis;
         }
 
@@ -247,30 +244,39 @@
 
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
             border-color: var(--accent-purple);
-            box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.35);
+            background: rgba(255, 255, 255, 0.07);
         }
 
         .btn {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             color: white;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             cursor: pointer;
-            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.45);
         }
+
+        .btn-google {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border);
+            margin-top: 12px;
+            color: #fff;
+        }
+        .btn-google:hover { background: rgba(255, 255, 255, 0.15); }
 
         .btn-install {
             background: linear-gradient(135deg, #10b981, #059669);
@@ -279,21 +285,20 @@
         }
 
         .auth-switch {
-            margin-top: 15px;
-            font-size: 0.85rem;
+            margin-top: 18px;
+            font-size: 0.88rem;
             color: var(--text-muted);
         }
         .auth-switch span { color: var(--accent-pink); cursor: pointer; font-weight: 600; }
 
-        /* DASHBOARD LAYOUT */
         .dashboard {
             display: none;
             width: 100%;
-            max-width: 1250px;
+            max-width: 1280px;
             grid-template-columns: 320px 1fr;
             gap: 25px;
             margin-top: 40px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .sidebar {
@@ -301,30 +306,30 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 15px;
+            gap: 18px;
+            height: fit-content;
         }
 
-        /* PROFESSIONAL APP STYLE DECORATION (PROFILE TOP LEFT, WORK & TIME/CALENDAR SECTIONS) */
         .sidebar-top-section {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .user-profile-duo {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 18px;
+            padding: 20px;
             text-align: center;
             position: relative;
         }
 
         .avatar-container {
             position: relative;
-            width: 82px;
-            height: 82px;
-            margin: 0 auto 12px;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -332,14 +337,14 @@
         }
 
         .avatar {
-            width: 68px;
-            height: 68px;
+            width: 74px;
+            height: 74px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: bold;
             overflow: hidden;
             z-index: 2;
@@ -350,27 +355,28 @@
 
         .avatar-ring {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
-            transition: all 0.4s ease;
         }
 
         .ring-bronze {
             border: 4px dashed var(--level-bronze);
-            box-shadow: 0 0 10px rgba(205, 127, 50, 0.4);
+            box-shadow: 0 0 12px rgba(205, 127, 50, 0.5);
+            animation: rotateRing 15s linear infinite;
         }
 
         .ring-silver {
             border: 4px solid var(--level-silver);
-            box-shadow: 0 0 12px rgba(192, 192, 192, 0.6);
+            box-shadow: 0 0 15px rgba(192, 192, 192, 0.7);
+            animation: rotateRing 12s linear infinite;
         }
 
         .ring-gold {
             border: 4px double var(--level-gold);
-            box-shadow: 0 0 18px rgba(255, 215, 0, 0.8);
-            animation: rotateRing 10s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.9), inset 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: rotateRing 8s linear infinite;
         }
 
         .ring-diamond {
@@ -378,8 +384,8 @@
             border-top: 4px solid var(--level-diamond);
             border-right: 4px solid var(--accent-purple);
             border-bottom: 4px solid var(--level-diamond);
-            box-shadow: 0 0 20px var(--level-diamond);
-            filter: drop-shadow(0 0 8px #00ffff);
+            border-left: 4px solid var(--accent-pink);
+            box-shadow: 0 0 25px var(--level-diamond), inset 0 0 12px #00ffff;
             animation: rotateRing 4s linear infinite;
         }
 
@@ -387,8 +393,9 @@
             border: 4px solid transparent;
             border-top: 4px solid #ff007f;
             border-right: 4px solid #ff9900;
-            border-bottom: 4px solid #f59e0b;
-            box-shadow: 0 0 25px #ff007f, inset 0 0 10px #ff9900;
+            border-bottom: 4px solid #00ffff;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 0 30px #ff007f, 0 0 15px #00ffff, inset 0 0 12px #ff9900;
             animation: rotateRing 2.5s linear infinite;
         }
 
@@ -400,13 +407,13 @@
         .avatar-upload-overlay {
             position: absolute;
             bottom: 0; right: 0;
-            width: 26px; height: 26px;
+            width: 28px; height: 28px;
             background: var(--accent-purple);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             z-index: 3;
             border: 2px solid #111827;
         }
@@ -415,28 +422,28 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-top: 12px;
-            background: rgba(0, 0, 0, 0.25);
+            margin-top: 14px;
+            background: rgba(0, 0, 0, 0.3);
             padding: 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .badge-item {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            font-size: 0.75rem;
+            gap: 5px;
+            font-size: 0.78rem;
             font-weight: 700;
         }
 
         .level-badge-container {
             grid-column: span 2;
-            padding: 6px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            font-size: 0.75rem;
+            padding: 7px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            font-size: 0.78rem;
             font-weight: 700;
             color: var(--accent-pink);
             display: flex;
@@ -445,19 +452,18 @@
             gap: 6px;
         }
 
-        /* WORK SECTION PANEL */
         .work-section-panel {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 16px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .section-header-title {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -467,27 +473,26 @@
             gap: 8px;
         }
 
-        /* TIME & CALENDAR CONTAINER */
         .time-calendar-panel {
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 16px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .clock-box {
             text-align: center;
-            padding: 12px;
+            padding: 14px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .clock-box h3 { font-size: 1.35rem; letter-spacing: 1px; font-weight: 600; }
-        .clock-box p { font-size: 0.78rem; color: var(--text-muted); }
+        .clock-box h3 { font-size: 1.4rem; letter-spacing: 1px; font-weight: 600; }
+        .clock-box p { font-size: 0.8rem; color: var(--text-muted); }
 
         .notice-card {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
@@ -498,19 +503,18 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            transition: transform 0.2s;
         }
-        .notice-card:hover { transform: translateY(-2px); }
+        .notice-card:hover { transform: translateY(-2px); border-color: var(--accent-blue); }
 
         .pomodoro-box {
-            background: rgba(0,0,0,0.25);
+            background: rgba(0,0,0,0.3);
             border-radius: 16px;
-            padding: 15px;
+            padding: 16px;
             text-align: center;
             border: 1px solid var(--glass-border);
         }
         .pomodoro-display {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 700;
             color: var(--accent-pink);
             letter-spacing: 2px;
@@ -522,18 +526,19 @@
             justify-content: center;
         }
         .pomo-btn {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.78rem;
+            border-radius: 9px;
             border: none;
             cursor: pointer;
             background: var(--accent-purple);
             color: white;
             font-weight: 600;
         }
+        .pomo-btn:hover { background: var(--accent-pink); }
 
         .progress-box {
-            padding: 12px;
+            padding: 14px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 14px;
             border: 1px solid var(--glass-border);
@@ -542,13 +547,13 @@
         .progress-info {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             margin-bottom: 8px;
         }
 
         .progress-bar-bg {
             width: 100%;
-            height: 8px;
+            height: 9px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
@@ -559,7 +564,6 @@
             width: 0%;
             background: linear-gradient(to right, var(--accent-purple), var(--success));
             border-radius: 10px;
-            transition: width 0.4s ease;
         }
 
         .calendar-header {
@@ -567,7 +571,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 600;
         }
 
@@ -576,7 +580,7 @@
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
         }
 
         .calendar-day-head { color: var(--text-muted); font-weight: 600; padding-bottom: 4px; }
@@ -592,10 +596,10 @@
         .btn-logout:hover { background: rgba(239, 68, 68, 0.35); }
 
         .main-content {
-            padding: 25px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
             min-width: 0;
         }
 
@@ -603,7 +607,7 @@
             display: flex;
             gap: 10px;
             border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 12px;
+            padding-bottom: 14px;
             overflow-x: auto;
             white-space: nowrap;
         }
@@ -613,23 +617,22 @@
         .tab-btn {
             background: none;
             border: none;
-            padding: 8px 16px;
-            font-size: 0.85rem;
+            padding: 10px 18px;
+            font-size: 0.88rem;
             font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.2s;
-            flex-shrink: 0;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
 
         .tab-btn.active {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             color: var(--accent-pink);
             border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);
         }
 
         .header-actions {
@@ -637,7 +640,7 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 15px;
         }
 
         .controls-bar {
@@ -649,7 +652,7 @@
 
         .search-box {
             flex: 1;
-            min-width: 180px;
+            min-width: 200px;
             position: relative;
         }
         .search-box i {
@@ -658,69 +661,65 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: 0.88rem;
         }
         .search-box input {
             width: 100%;
-            padding: 9px 12px 9px 38px;
+            padding: 10px 14px 10px 40px;
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             outline: none;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
         }
 
         .filter-btn-group {
             display: flex;
-            background: rgba(0,0,0,0.2);
-            padding: 3px;
+            background: rgba(0,0,0,0.25);
+            padding: 4px;
             border-radius: 12px;
             border: 1px solid var(--glass-border);
         }
         .filter-btn {
-            padding: 6px 12px;
+            padding: 6px 14px;
             border: none;
             background: none;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             cursor: pointer;
             border-radius: 9px;
             color: var(--text-muted);
-            transition: all 0.2s;
         }
         .filter-btn.active {
             background: var(--accent-purple);
             color: white;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .tasks-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 540px;
+            gap: 14px;
+            max-height: 580px;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 6px;
         }
 
         .tasks-container::-webkit-scrollbar { width: 6px; }
         .tasks-container::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 10px; }
 
-        /* FLEXIBLE COMPACT CARDS FOR TASK, EVENT, SYLLABUS, STUDY */
         .task-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border: 1px solid var(--glass-border);
             border-radius: 16px;
             position: relative;
             overflow: hidden;
             background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
             backdrop-filter: blur(10px);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            gap: 12px;
-            min-height: 68px;
-            height: auto;
+            gap: 14px;
+            min-height: 72px;
         }
 
         .task-card::before {
@@ -733,7 +732,7 @@
 
         .task-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
             border-color: rgba(255, 255, 255, 0.25);
         }
 
@@ -743,21 +742,21 @@
         .task-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             min-width: 0;
             flex: 1;
         }
 
         .task-icon-box {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--card-color, var(--accent-purple));
             flex-shrink: 0;
         }
@@ -771,17 +770,17 @@
         }
 
         .task-details .task-title {
-            font-size: 0.88rem;
+            font-size: 0.92rem;
             font-weight: 600;
             word-break: break-word;
-            line-height: 1.35;
+            line-height: 1.4;
         }
 
         .task-meta-info {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.73rem;
+            gap: 10px;
+            font-size: 0.76rem;
             color: var(--text-muted);
             margin-top: 4px;
             flex-wrap: wrap;
@@ -790,20 +789,19 @@
         .task-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex-shrink: 0;
         }
 
         .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             border: 1px solid var(--glass-border);
             background: rgba(255,255,255,0.04);
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -813,22 +811,20 @@
         .action-btn.edit:hover { background: rgba(59, 130, 246, 0.25); color: var(--accent-blue); border-color: var(--accent-blue); }
         .action-btn.delete:hover { background: rgba(239, 68, 68, 0.25); color: var(--danger); border-color: var(--danger); }
 
-        /* MULTIPLE CHAPTERS SYLLABUS STYLING */
         .syllabus-subject-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 18px;
-            padding: 16px;
+            padding: 18px;
             margin-bottom: 14px;
-            height: auto;
         }
 
         .syllabus-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
@@ -836,18 +832,18 @@
             background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            padding: 10px 14px;
-            margin-top: 8px;
+            padding: 12px 14px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .chapter-title-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 10px;
         }
 
         .chapter-checkbox-title {
@@ -856,6 +852,8 @@
             gap: 10px;
             cursor: pointer;
             flex: 1;
+            font-size: 0.88rem;
+            font-weight: 500;
         }
 
         .subchapter-list-wrap {
@@ -872,38 +870,36 @@
             gap: 6px;
             background: rgba(139, 92, 246, 0.15);
             border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.72rem;
             color: #d8b4fe;
         }
 
-        /* CHALLENGE TIMER BOX */
         .challenge-box {
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
             border: 1px solid rgba(236, 72, 153, 0.3);
             border-radius: 20px;
-            padding: 20px;
+            padding: 24px;
             text-align: center;
             margin-bottom: 20px;
         }
 
         .challenge-timer-display {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 800;
             color: #f472b6;
             letter-spacing: 2px;
-            margin: 12px 0;
-            text-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+            margin: 15px 0;
+            text-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
         }
 
-        /* MODALS */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             justify-content: center;
             align-items: center;
             z-index: 100;
@@ -912,8 +908,8 @@
 
         .modal-content {
             width: 100%;
-            max-width: 520px;
-            padding: 24px;
+            max-width: 540px;
+            padding: 28px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -922,25 +918,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
-        .form-row { display: flex; gap: 10px; }
+        .form-row { display: flex; gap: 12px; }
 
-        .color-picker-grid { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+        .color-picker-grid { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
         .color-dot {
-            width: 22px;
-            height: 22px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid transparent;
-            transition: transform 0.2s;
         }
-        .color-dot.selected { border-color: white; transform: scale(1.15); }
+        .color-dot.selected { border-color: white; transform: scale(1.2); }
 
         .icon-selector-trigger {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
@@ -948,7 +943,7 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .icon-grid {
@@ -957,22 +952,22 @@
             gap: 8px;
             max-height: 220px;
             overflow-y: auto;
-            padding: 8px;
-            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            background: rgba(0,0,0,0.35);
             border-radius: 12px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .icon-option {
-            height: 36px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
             cursor: pointer;
             background: rgba(255,255,255,0.03);
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-muted);
         }
         .icon-option.selected { background: var(--accent-purple); color: white; }
@@ -993,19 +988,16 @@
         .chapter-input-row {
             display: flex;
             gap: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             align-items: center;
         }
 
         @media (max-width: 850px) {
             body { padding: 10px; }
-            .dashboard { grid-template-columns: 1fr; gap: 15px; margin-top: 50px; }
-            .main-content { padding: 16px; }
-            .sidebar { padding: 18px; }
+            .dashboard { grid-template-columns: 1fr; gap: 15px; margin-top: 55px; }
+            .main-content { padding: 18px; }
+            .sidebar { padding: 20px; }
             .form-row { flex-direction: column; gap: 0; }
-            .task-card { padding: 10px 12px; }
-            .header-actions { align-items: flex-start; }
-            .header-actions .btn { width: 100%; }
         }
     </style>
 </head>
@@ -1043,6 +1035,10 @@
             <button type="submit" class="btn" id="authBtn" data-en="Login" data-bn="লগইন করুন">Login</button>
         </form>
 
+        <button type="button" id="googleLoginBtn" class="btn btn-google">
+            <i class="fa-brands fa-google" style="color: #ea4335;"></i> <span data-en="Sign in with Google" data-bn="গুগল দিয়ে সাইন ইন করুন">Sign in with Google</span>
+        </button>
+
         <div class="auth-switch">
             <span id="switchText" data-en="Don't have an account?" data-bn="একাউন্ট নেই?">Don't have an account?</span>
             <span id="switchBtn" data-en="Register" data-bn="রেজিস্ট্রেশন করুন">Register</span>
@@ -1054,7 +1050,6 @@
         
         <aside class="glass sidebar animate-fade">
             <div class="sidebar-top-section">
-                <!-- TOP LEFT PROFILE SECTION -->
                 <div class="user-profile-duo">
                     <div class="avatar-container" id="avatarClickContainer" title="Click to Upload Profile Photo">
                         <div class="avatar-ring ring-bronze" id="avatarLevelRing"></div>
@@ -1063,13 +1058,13 @@
                     </div>
                     <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
 
-                    <h3 id="userNameDisplay" style="font-size: 0.95rem; font-weight: 700;">User</h3>
+                    <h3 id="userNameDisplay" style="font-size: 1rem; font-weight: 700;">User</h3>
                     
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;" id="userClassInstDisplay">
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 3px;" id="userClassInstDisplay">
                         <span id="userClassText">Class 12</span> • <span id="userInstText">College</span>
                     </div>
                     
-                    <div style="font-size: 0.72rem; color: var(--accent-pink); margin-top: 2px; font-weight: 600;" id="userDreamDisplay"></div>
+                    <div style="font-size: 0.75rem; color: var(--accent-pink); margin-top: 3px; font-weight: 600;" id="userDreamDisplay"></div>
 
                     <div class="profile-badges">
                         <div class="badge-item" style="color: #f59e0b;">
@@ -1083,12 +1078,11 @@
                         </div>
                     </div>
 
-                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.75rem; margin-top:12px; cursor:pointer; font-weight:600;">
+                    <button id="editProfileBtn" style="background:none; border:none; color:var(--accent-purple); font-size:0.78rem; margin-top:14px; cursor:pointer; font-weight:600;">
                         <i class="fa-solid fa-user-pen"></i> <span data-en="Edit Profile" data-bn="প্রোফাইল পরিবর্তন">Edit Profile</span>
                     </button>
                 </div>
 
-                <!-- WORK SECTION SIDE -->
                 <div class="work-section-panel">
                     <div class="section-header-title">
                         <i class="fa-solid fa-briefcase"></i> <span data-en="Work & Productivity" data-bn="ওয়ার্ক ও প্রোডাক্টিভিটি">Work & Productivity</span>
@@ -1098,15 +1092,15 @@
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <i class="fa-brands fa-facebook" style="font-size: 1.4rem; color: #3b82f6;"></i>
                             <div>
-                                <div style="font-size: 0.8rem; font-weight: 700;" data-en="Notice Center" data-bn="নোটিশ সেন্টার">Notice Center</div>
-                                <div style="font-size: 0.7rem; color: var(--text-muted);" data-en="Campus Facebook Updates" data-bn="প্রতিষ্ঠানের ফেসবুক নোটিশ">Campus Facebook Updates</div>
+                                <div style="font-size: 0.82rem; font-weight: 700;" data-en="Notice Center" data-bn="নোটিশ সেন্টার">Notice Center</div>
+                                <div style="font-size: 0.72rem; color: var(--text-muted);" data-en="Campus Facebook Updates" data-bn="প্রতিষ্ঠানের ফেসবুক নোটিশ">Campus Facebook Updates</div>
                             </div>
                         </div>
                         <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.8rem; color: var(--text-muted);"></i>
                     </div>
 
                     <div class="pomodoro-box">
-                        <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">
+                        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">
                             <i class="fa-solid fa-stopwatch"></i> <span data-en="Focus Pomodoro" data-bn="ফোকাস পোমোডোরো">Focus Pomodoro</span>
                         </div>
                         <div class="pomodoro-display" id="pomoTimerDisplay">25:00</div>
@@ -1127,7 +1121,6 @@
                     </div>
                 </div>
 
-                <!-- TIME & CALENDAR SECTION INTERFACE -->
                 <div class="time-calendar-panel">
                     <div class="section-header-title">
                         <i class="fa-solid fa-clock"></i> <span data-en="Time & Calendar" data-bn="সময় ও ক্যালেন্ডার">Time & Calendar</span>
@@ -1164,17 +1157,17 @@
 
             <!-- ROUTINE TASKS VIEW -->
             <div id="tasksTabView">
-                <div class="header-actions" style="margin-bottom: 15px;">
+                <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Daily Routine & Planner" data-bn="দৈনিক রুটিন ও প্ল্যানার">Daily Routine & Planner</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Complete tasks to earn +5 XP every 10 completions" data-bn="প্রতি ১০টি টাস্ক সম্পন্ন করলে পাবেন +৫ XP">Complete tasks to earn +5 XP every 10 completions</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Complete tasks to earn XP (Different 10 tasks refresh daily)" data-bn="টাস্ক সম্পন্ন করে XP অর্জন করুন (ভিন্ন ভিন্ন ১০টি টাস্ক প্রতিদিন রিফ্রেশ হয়)">Complete tasks to earn XP</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openTaskModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openTaskModalBtn">
                         <i class="fa-solid fa-plus"></i> <span data-en="New Task" data-bn="নতুন কাজ">New Task</span>
                     </button>
                 </div>
 
-                <div class="controls-bar" style="margin-bottom: 15px;">
+                <div class="controls-bar" style="margin-bottom: 18px;">
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="searchInput" placeholder="Search tasks...">
@@ -1191,22 +1184,22 @@
 
             <!-- SYLLABUS TRACKER VIEW -->
             <div id="syllabusTabView" style="display: none;">
-                <div class="header-actions" style="margin-bottom: 15px;">
+                <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Academic Syllabus Tracker" data-bn="একাডেমিক সিলেবাস ট্র্যাকার">Academic Syllabus Tracker</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track subject completion & multiple chapters (+5 XP per chapter completed)" data-bn="বিষয় ও একাধিক অধ্যায় ট্র্যাকিং (অধ্যায় সম্পন্নে +৫ XP)">Track subject completion & multiple chapters (+5 XP per chapter completed)</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Check chapter tick to get XP, uncheck to deduct XP safely" data-bn="অধ্যায়ে টিক দিলে XP যোগ হবে, টিক সরালে XP কেটে নেওয়া হবে">Check chapter tick to get XP, uncheck to deduct XP</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openSyllabusModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openSyllabusModalBtn">
                         <i class="fa-solid fa-plus"></i> <span data-en="Add Subject & Chapters" data-bn="বিষয় ও অধ্যায় যোগ করুন">Add Subject & Chapters</span>
                     </button>
                 </div>
 
-                <div id="syllabusProgressOverview" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 16px; border-radius: 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+                <div id="syllabusProgressOverview" style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 18px; border-radius: 18px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between;">
                     <div>
-                        <div style="font-size: 0.85rem; font-weight: 700;" data-en="Academic Coverage" data-bn="একাডেমিক সিলেবাস কাভারেজ">Academic Coverage</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);" id="syllabusStatsText">0 Chapters Completed</div>
+                        <div style="font-size: 0.88rem; font-weight: 700;" data-en="Academic Coverage" data-bn="একাডেমিক সিলেবাস কাভারেজ">Academic Coverage</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);" id="syllabusStatsText">0 Chapters Completed</div>
                     </div>
-                    <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-pink);" id="syllabusPercentText">0%</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-pink);" id="syllabusPercentText">0%</div>
                 </div>
 
                 <div class="tasks-container" id="syllabusList"></div>
@@ -1214,28 +1207,28 @@
 
             <!-- CHALLENGE TIMER VIEW -->
             <div id="challengeTabView" style="display: none;">
-                <div class="header-actions" style="margin-bottom: 15px;">
+                <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Focus Challenge & Countdown" data-bn="ফোকাস চ্যালেঞ্জ ও কাউন্টডাউন">Focus Challenge & Countdown</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Set custom timer challenges (+5 XP reward upon completion)" data-bn="পড়াশোনার সময় চ্যালেঞ্জ সেটিং (সম্পন্নে +৫ XP)">Set custom timer challenges (+5 XP reward upon completion)</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Set custom timer challenges (+10 XP reward upon completion)" data-bn="পড়াশোনার সময় চ্যালেঞ্জ সেটিং (সম্পন্নে +১০ XP)">Set custom timer challenges (+10 XP reward upon completion)</p>
                     </div>
                 </div>
 
                 <div class="challenge-box">
-                    <i class="fa-solid fa-trophy" style="font-size: 2.5rem; color: var(--accent-amber);"></i>
-                    <h3 style="margin-top: 8px; font-size: 1.3rem;" data-en="Study Challenge Mode" data-bn="স্টাডি চ্যালেঞ্জ মোড">Study Challenge Mode</h3>
+                    <i class="fa-solid fa-trophy" style="font-size: 2.8rem; color: var(--accent-amber);"></i>
+                    <h3 style="margin-top: 10px; font-size: 1.4rem;" data-en="Study Challenge Mode" data-bn="স্টাডি চ্যালেঞ্জ মোড">Study Challenge Mode</h3>
                     <div class="challenge-timer-display" id="challengeDisplay">00:00:00</div>
                     
-                    <div class="form-row" style="max-width: 360px; margin: 0 auto 15px auto;">
-                        <input type="number" id="challengeHours" min="0" max="24" placeholder="Hours" style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; text-align: center;">
-                        <input type="number" id="challengeMins" min="0" max="59" placeholder="Mins" style="padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; text-align: center;">
+                    <div class="form-row" style="max-width: 380px; margin: 0 auto 18px auto;">
+                        <input type="number" id="challengeHours" min="0" max="24" placeholder="Hours" style="padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; text-align: center;">
+                        <input type="number" id="challengeMins" min="0" max="59" placeholder="Mins" style="padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; text-align: center;">
                     </div>
 
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button class="btn" id="startChallengeBtn" style="width: 140px;">
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button class="btn" id="startChallengeBtn" style="width: 150px;">
                             <i class="fa-solid fa-play"></i> <span data-en="Start Challenge" data-bn="চ্যালেঞ্জ শুরু">Start Challenge</span>
                         </button>
-                        <button class="btn" id="stopChallengeBtn" style="width: 120px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4);">
+                        <button class="btn" id="stopChallengeBtn" style="width: 130px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4);">
                             <i class="fa-solid fa-square"></i> <span data-en="Stop" data-bn="বন্ধ করুন">Stop</span>
                         </button>
                     </div>
@@ -1244,12 +1237,12 @@
 
             <!-- EXAMS & EVENTS VIEW -->
             <div id="eventsTabView" style="display: none;">
-                <div class="header-actions" style="margin-bottom: 15px;">
+                <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Exam & Event Schedule" data-bn="পরীক্ষা ও ইভেন্ট সময়সূচী">Exam & Event Schedule</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Track exam dates & deadlines (Auto-synced from Syllabus)" data-bn="পরীক্ষার তারিখ ও ডেডলাইন ট্র্যাকিং">Track exam dates & deadlines (Auto-synced from Syllabus)</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Track exam dates & deadlines" data-bn="পরীক্ষার তারিখ ও ডেডলাইন ট্র্যাকিং">Track exam dates & deadlines</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openEventModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openEventModalBtn">
                         <i class="fa-solid fa-calendar-plus"></i> <span data-en="New Event" data-bn="নতুন ইভেন্ট">New Event</span>
                     </button>
                 </div>
@@ -1259,12 +1252,12 @@
 
             <!-- STUDY VAULT VIEW -->
             <div id="studyTabView" style="display: none;">
-                <div class="header-actions" style="margin-bottom: 15px;">
+                <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Study Vault & Resources" data-bn="স্টাডি মেমোরিয়াল ও ভল্ট">Study Vault & Resources</h2>
-                        <p style="color: var(--text-muted); font-size: 0.8rem;" data-en="Subject Books, PDFs & Auto-Redirect Resources" data-bn="বই, নোটস এবং লিংকে অটো-রিডাইরেক্ট">Subject Books, PDFs & Auto-Redirect Resources</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Subject Books, PDFs & Auto-Redirect Resources" data-bn="বই, নোটস এবং লিংকে অটো-রিডাইরেক্ট">Subject Books, PDFs & Auto-Redirect Resources</p>
                     </div>
-                    <button class="btn" style="width: auto; padding: 10px 16px;" id="openStudyModalBtn">
+                    <button class="btn" style="width: auto; padding: 10px 18px;" id="openStudyModalBtn">
                         <i class="fa-solid fa-book-open"></i> <span data-en="Add Material" data-bn="মেটেরিয়াল যুক্ত করুন">Add Material</span>
                     </button>
                 </div>
@@ -1354,7 +1347,7 @@
                     <input type="text" id="taskName" placeholder="Task Name (e.g. Physics Revision)" required>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Theme Color" data-bn="থিম কালার">Theme Color</label>
+                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Theme Color" data-bn="থিম কালার">Theme Color</label>
                 <div class="color-picker-grid" id="colorPickerGrid">
                     <div class="color-dot selected" data-color="#8b5cf6" style="background:#8b5cf6;"></div>
                     <div class="color-dot" data-color="#ec4899" style="background:#ec4899;"></div>
@@ -1364,16 +1357,16 @@
                     <div class="color-dot" data-color="#ef4444" style="background:#ef4444;"></div>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Activity Icon" data-bn="আইকন নির্বাচন">Activity Icon</label>
+                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;" data-en="Activity Icon" data-bn="আইকন নির্বাচন">Activity Icon</label>
                 <div class="icon-selector-trigger" id="iconSelectorTrigger">
-                    <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.82rem;">fa-book</span></span>
-                    <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-muted);"></i>
+                    <span><i id="selectedIconPreview" class="fa-solid fa-book"></i> <span id="selectedIconName" style="margin-left: 8px; font-size: 0.85rem;">fa-book</span></span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 0.78rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="icon-grid" id="iconGrid" style="display: none;"></div>
 
                 <div class="form-row" style="margin-bottom: 14px;">
                     <div style="flex:1;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="Start Time (12hr)" data-bn="শুরুর সময় (১২ ঘণ্টা)">Start Time (12hr)</label>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="Start Time (12hr)" data-bn="শুরুর সময় (১২ ঘণ্টা)">Start Time (12hr)</label>
                         <div class="time-picker-12">
                             <select id="startHour"></select>
                             <select id="startMin"></select>
@@ -1383,7 +1376,7 @@
                         </div>
                     </div>
                     <div style="flex:1;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="End Time (12hr)" data-bn="শেষের সময় (১২ ঘণ্টা)">End Time (12hr)</label>
+                        <label style="font-size: 0.78rem; color: var(--text-muted); display:block; margin-bottom:4px;" data-en="End Time (12hr)" data-bn="শেষের সময় (১২ ঘণ্টা)">End Time (12hr)</label>
                         <div class="time-picker-12">
                             <select id="endHour"></select>
                             <select id="endMin"></select>
@@ -1394,7 +1387,7 @@
                     </div>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Alarm Settings" data-bn="অ্যালার্ম সেটিংস">Alarm Settings</label>
+                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Alarm Settings" data-bn="অ্যালার্ম সেটিংস">Alarm Settings</label>
                 <div class="form-row">
                     <div class="input-group" style="flex: 1;">
                         <i class="fa-solid fa-bell input-icon"></i>
@@ -1436,7 +1429,7 @@
         </div>
     </div>
 
-    <!-- MULTIPLE CHAPTER SYLLABUS MODAL WITH EDIT OPTION -->
+    <!-- SYLLABUS MODAL -->
     <div id="syllabusModal" class="modal">
         <div class="glass modal-content animate-fade">
             <div class="modal-header">
@@ -1451,17 +1444,17 @@
                     <input type="text" id="sylSubject" placeholder="Subject Name (e.g. Higher Math)" required>
                 </div>
 
-                <div style="margin-bottom: 12px;">
+                <div style="margin-bottom: 14px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <label style="font-size: 0.8rem; font-weight: 600;" data-en="Chapter Names & Subchapters" data-bn="অধ্যায় এবং সাব-অধ্যায়সমূহ">Chapter Names & Subchapters</label>
-                        <button type="button" id="addMoreChapterBtn" style="background: rgba(139, 92, 246, 0.2); border: 1px solid var(--accent-purple); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; cursor: pointer;">
+                        <label style="font-size: 0.82rem; font-weight: 600;" data-en="Chapter Names & Subchapters" data-bn="অধ্যায় এবং সাব-অধ্যায়সমূহ">Chapter Names & Subchapters</label>
+                        <button type="button" id="addMoreChapterBtn" style="background: rgba(139, 92, 246, 0.2); border: 1px solid var(--accent-purple); color: white; padding: 5px 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer;">
                             <i class="fa-solid fa-plus"></i> <span data-en="Add Chapter" data-bn="অধ্যায় যোগ করুন">Add Chapter</span>
                         </button>
                     </div>
                     <div id="modalChapterListContainer"></div>
                 </div>
 
-                <label style="font-size: 0.78rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Sync Exam Reminder to Events?" data-bn="পরীক্ষার ইভেন্ট তৈরি করবেন?">Sync Exam Reminder to Events?</label>
+                <label style="font-size: 0.8rem; color: var(--accent-pink); display: block; margin-bottom: 6px; font-weight: 600;" data-en="Sync Exam Reminder to Events?" data-bn="পরীক্ষার ইভেন্ট তৈরি করবেন?">Sync Exam Reminder to Events?</label>
                 <div class="form-row">
                     <div class="input-group" style="flex:1;">
                         <i class="fa-solid fa-bell input-icon"></i>
@@ -1553,6 +1546,8 @@
             getAuth, 
             createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
+            signInWithPopup,
+            GoogleAuthProvider,
             signOut, 
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
@@ -1566,8 +1561,6 @@
             setDoc,
             getDoc,
             onSnapshot, 
-            query, 
-            where,
             enableIndexedDbPersistence
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
@@ -1582,6 +1575,7 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
         const db = getFirestore(app);
 
         enableIndexedDbPersistence(db).catch((err) => {
@@ -1601,23 +1595,8 @@
         let selectedColor = "#8b5cf6";
         let activeFilter = "all";
 
-        let unsubscribeTasks = null;
-        let unsubscribeSyllabus = null;
-        let unsubscribeEvents = null;
-        let unsubscribeStudy = null;
-
         let challengeInterval = null;
         let challengeTotalSeconds = 0;
-
-        let pomoInterval = null;
-        let pomoTimeLeft = 25 * 60;
-        let pomoRunning = false;
-
-        const TONE_PRESETS = {
-            synth: "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3",
-            bell: "https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3",
-            digital: "https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3"
-        };
 
         const ICON_LIST = [
             "fa-book", "fa-graduation-cap", "fa-brain", "fa-pencil", "fa-calculator", "fa-microscope", "fa-flask", "fa-globe", "fa-laptop-code", "fa-school",
@@ -1626,38 +1605,52 @@
             "fa-desktop", "fa-mobile-screen", "fa-terminal", "fa-code", "fa-database", "fa-microchip", "fa-network-wired", "fa-wifi", "fa-robot", "fa-gears"
         ];
 
+        // Top 3 Colleges of Dhaka (Fixed requirements)
+        const TOP_DHAKA_COLLEGES = [
+            "Notre Dame College", 
+            "Viqarunnisa Noon College", 
+            "Holy Cross College"
+        ];
+
+        // 7 more colleges per board for Class 9-10 choice
         const BOARD_COLLEGES = {
-            Dhaka: ["Dhaka College", "Notre Dame College", "Viqarunnisa Nisa Noon College", "Holy Cross College", "Residential Model College", "Rajuk Uttara Model College", "Adamjee Cantonment College", "Government Science College", "City College Dhaka", "Birshreshtha Noor Mohammad Public College"],
-            Chittagong: ["Chittagong College", "Government Hazi Mohammad Mohsin College", "Chittagong Govt. City College", "Cantonment English School & College", "Chittagong Public School & College", "Fouzderhat Collegiate School", "Govt. Commerce College", "Ispahani Public School & College", "Navy Anchor College", "Bakalia Govt. College"],
-            Rajshahi: ["Rajshahi College", "Government Secondary College Rajshahi", "New Govt. Degree College", "Rajshahi Cantonment Board School & College", "Varendra College", "Shah Makhdum College", "Rajshahi Court College", "Govt. Women's College Rajshahi", "Paba College", "Birshreshtha College"],
-            Khulna: ["B L College Khulna", "Government M. M. College Jessore", "Khulna Public College", "Govt. Pioneer Women's College", "Cantonment College Jessore", "Khulna Govt. Girls College", "Kushtia Govt. College", "City College Khulna", "Satkhira Govt. College", "Majid Memorial City College"],
-            Barisal: ["Brojomohun (BM) College", "Barisal Govt. Women's College", "Amrit Lal Dey College", "Barisal Cadet College", "Government Syed Hatem Ali College", "Patuakhali Govt. College", "Bhola Govt. College", "Pirojpur Govt. College", "Barisal Model School and College", "Gournadi Govt. College"],
-            Sylhet: ["Murari Chand (MC) College", "Sylhet Govt. College", "Sylhet Govt. Women's College", "Madan Mohan College", "Sylhet Cadet College", "Scholarshome", " Jalalabad Cantonment Public School & College", "Habiganj Govt. College", "Sunamganj Govt. College", "Moulvibazar Govt. College"],
-            Comilla: ["Comilla Victoria Government College", "Comilla Government College", "Comilla Cadet College", "Comilla Shiksha Board Model College", "Ispahani Public School & College Comilla", "Feni Govt. College", "Nawab Faizunnesa Govt. College", "Narsingdi Govt. College", "Brahmanbaria Govt. College", "Chandpur Govt. College"],
-            Mymensingh: ["Ananda Mohan College", "Mymensingh Girls' Cadet College", "Mymensingh Govt. College", "Agricultural University College", "Shahid Syed Nazrul Islam College", "Cantonment Public School & College Momenshahi", "Netrokona Govt. College", "Jamalpur Govt. Ashek Mahmud College", "Sherpur Govt. College", "Gaffargaon Govt. College"],
-            Dinajpur: ["Dinajpur Govt. College", "Carmichael College Rangpur", "Rangpur Cadet College", "Rangpur Govt. College", "Cantonment Public School & College Rangpur", "Dinajpur Govt. City College", "Thakurgaon Govt. College", "Panchagarh Govt. College", "Gaibandha Govt. College", "Kurigram Govt. College"],
-            Madrasah: ["Tamirul Millat Kamil Madrasah", "Jhalakathi N S Kamil Madrasah", "Dhaka Alia Madrasah", "Sarsina Darussunat Kamil Madrasah", "Patuakhali Aliah Madrasah"],
-            Technical: ["Dhaka Polytechnic Institute", "Chittagong Polytechnic Institute", "Rajshahi Polytechnic Institute", "Sylhet Polytechnic Institute", "Khulna Polytechnic Institute"]
+            Dhaka: ["Dhaka College", "Residential Model College", "Rajuk Uttara Model College", "Adamjee Cantonment College", "Government Science College", "City College Dhaka", "Birshreshtha Noor Mohammad Public College"],
+            Chittagong: ["Chittagong College", "Government Hazi Mohammad Mohsin College", "Chittagong Govt. City College", "Cantonment English School & College", "Chittagong Public School & College", "Fouzderhat Collegiate School", "Govt. Commerce College"],
+            Rajshahi: ["Rajshahi College", "Government Secondary College Rajshahi", "New Govt. Degree College", "Rajshahi Cantonment Board School & College", "Varendra College", "Shah Makhdum College", "Rajshahi Court College"],
+            Khulna: ["B L College Khulna", "Government M. M. College Jessore", "Khulna Public College", "Govt. Pioneer Women's College", "Cantonment College Jessore", "Khulna Govt. Girls College", "Kushtia Govt. College"],
+            Barisal: ["Brojomohun (BM) College", "Barisal Govt. Women's College", "Amrit Lal Dey College", "Barisal Cadet College", "Government Syed Hatem Ali College", "Patuakhali Govt. College", "Bhola Govt. College"],
+            Sylhet: ["Murari Chand (MC) College", "Sylhet Govt. College", "Sylhet Govt. Women's College", "Madan Mohan College", "Sylhet Cadet College", "Scholarshome", "Jalalabad Cantonment Public School & College"],
+            Comilla: ["Comilla Victoria Government College", "Comilla Government College", "Comilla Cadet College", "Comilla Shiksha Board Model College", "Ispahani Public School & College Comilla", "Feni Govt. College", "Nawab Faizunnesa Govt. College"],
+            Mymensingh: ["Ananda Mohan College", "Mymensingh Girls' Cadet College", "Mymensingh Govt. College", "Agricultural University College", "Shahid Syed Nazrul Islam College", "Cantonment Public School & College Momenshahi", "Netrokona Govt. College"],
+            Dinajpur: ["Dinajpur Govt. College", "Carmichael College Rangpur", "Rangpur Cadet College", "Rangpur Govt. College", "Cantonment Public School & College Rangpur", "Dinajpur Govt. City College", "Thakurgaon Govt. College"],
+            Madrasah: ["Tamirul Millat Kamil Madrasah", "Jhalakathi N S Kamil Madrasah", "Dhaka Alia Madrasah", "Sarsina Darussunat Kamil Madrasah", "Patuakhali Aliah Madrasah", "Sylhet Alia Madrasah", "Chittagong Alia Madrasah"],
+            Technical: ["Dhaka Polytechnic Institute", "Chittagong Polytechnic Institute", "Rajshahi Polytechnic Institute", "Sylhet Polytechnic Institute", "Khulna Polytechnic Institute", "Barisal Polytechnic Institute", "Comilla Polytechnic Institute"]
         };
 
+        // Famous Universities across all districts for Inter 1st/2nd Year
         const UNIVERSITIES_BD = [
-            "BUET (Bangladesh University of Engineering and Technology)",
-            "DU (University of Dhaka)",
-            "CUET (Chittagong University of Engineering & Technology)",
-            "RUET (Rajshahi University of Engineering & Technology)",
-            "KUET (Khulna University of Engineering & Technology)",
-            "CU (University of Chittagong)",
-            "RU (University of Rajshahi)",
-            "SUST (Shahjalal University of Science and Technology)",
-            "JU (Jahangirnagar University)",
-            "GST Combined Public Universities",
-            "Medical Colleges Admission (DMC, SSMC, etc.)",
-            "MIST (Military Institute of Science and Technology)",
-            "IUT (Islamic University of Technology)"
+            "BUET (Bangladesh University of Engineering and Technology) - Dhaka",
+            "DU (University of Dhaka) - Dhaka",
+            "CUET (Chittagong University of Engineering & Technology) - Chittagong",
+            "RUET (Rajshahi University of Engineering & Technology) - Rajshahi",
+            "KUET (Khulna University of Engineering & Technology) - Khulna",
+            "CU (University of Chittagong) - Chittagong",
+            "RU (University of Rajshahi) - Rajshahi",
+            "SUST (Shahjalal University of Science and Technology) - Sylhet",
+            "JU (Jahangirnagar University) - Savar, Dhaka",
+            "BSMMU & Dhaka Medical College (Medical) - Dhaka",
+            "Chittagong Medical College - Chittagong",
+            "Rajshahi Medical College - Rajshahi",
+            "Sher-e-Bangla Medical College - Barisal",
+            "Sylhet MAG Osmani Medical College - Sylhet",
+            "MIST (Military Institute of Science and Technology) - Dhaka",
+            "IUT (Islamic University of Technology) - Gazipur",
+            "BAU (Bangladesh Agricultural University) - Mymensingh"
         ];
 
         function showNotification(title, message, type = 'info', accent = '#8b5cf6') {
             const container = document.getElementById('notificationContainer');
+            if(!container) return;
             const toast = document.createElement('div');
             toast.className = 'custom-toast';
             toast.style.setProperty('--toast-accent', accent);
@@ -1666,6 +1659,7 @@
             if (type === 'danger') iconClass = 'fa-trash-can';
             if (type === 'success') iconClass = 'fa-circle-check';
             if (type === 'alarm') iconClass = 'fa-bell';
+            if (type === 'levelup') iconClass = 'fa-ranking-star';
 
             toast.innerHTML = `
                 <i class="fa-solid ${iconClass} toast-icon"></i>
@@ -1677,22 +1671,23 @@
 
             container.appendChild(toast);
             setTimeout(() => {
-                toast.style.animation = 'slideInRight 0.35s ease reverse forwards';
-                setTimeout(() => toast.remove(), 350);
-            }, 3500);
+                toast.style.animation = 'slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25) reverse forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 3800);
         }
 
-        function sendSystemNotification(title, body) {
-            if ("Notification" in window) {
-                if (Notification.permission === "granted") {
-                    new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/3429/3429149.png' });
-                } else if (Notification.permission !== "denied") {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === "granted") {
-                            new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/3429/3429149.png' });
-                        }
-                    });
-                }
+        function checkLevelUp(oldXp, newXp) {
+            const getLevelInfo = (xp) => {
+                if (xp < 300) return { title: "Bronze", ring: "ring-bronze" };
+                if (xp < 700) return { title: "Silver", ring: "ring-silver" };
+                if (xp < 1500) return { title: "Gold", ring: "ring-gold" };
+                if (xp < 3000) return { title: "Diamond", ring: "ring-diamond" };
+                return { title: "Elite Master", ring: "ring-elite" };
+            };
+            const oldLvl = getLevelInfo(oldXp);
+            const newLvl = getLevelInfo(newXp);
+            if (oldLvl.title !== newLvl.title) {
+                showNotification("🎉 Level Up!", `Congratulations! You reached ${newLvl.title} rank!`, 'levelup', '#ffd700');
             }
         }
 
@@ -1721,379 +1716,162 @@
             setLanguage(currentLang === 'en' ? 'bn' : 'en');
         });
 
-        function saveLocalData(key, data) {
-            if (!currentUser) return;
-            localStorage.setItem(`studypulse_${currentUser.uid}_${key}`, JSON.stringify(data));
-        }
-
-        function loadLocalData(key) {
-            if (!currentUser) return null;
-            const saved = localStorage.getItem(`studypulse_${currentUser.uid}_${key}`);
-            return saved ? JSON.parse(saved) : null;
-        }
-
-        // NAVIGATION TABS
-        const tabTasksBtn = document.getElementById('tabTasksBtn');
-        const tabSyllabusBtn = document.getElementById('tabSyllabusBtn');
-        const tabChallengeBtn = document.getElementById('tabChallengeBtn');
-        const tabEventsBtn = document.getElementById('tabEventsBtn');
-        const tabStudyBtn = document.getElementById('tabStudyBtn');
-
-        const tasksTabView = document.getElementById('tasksTabView');
-        const syllabusTabView = document.getElementById('syllabusTabView');
-        const challengeTabView = document.getElementById('challengeTabView');
-        const eventsTabView = document.getElementById('eventsTabView');
-        const studyTabView = document.getElementById('studyTabView');
-
-        function switchTab(activeBtn, activeView) {
-            [tabTasksBtn, tabSyllabusBtn, tabChallengeBtn, tabEventsBtn, tabStudyBtn].forEach(b => b.classList.remove('active'));
-            [tasksTabView, syllabusTabView, challengeTabView, eventsTabView, studyTabView].forEach(v => v.style.display = 'none');
-
-            activeBtn.classList.add('active');
-            activeView.style.display = 'block';
-        }
-
-        tabTasksBtn.addEventListener('click', () => switchTab(tabTasksBtn, tasksTabView));
-        tabSyllabusBtn.addEventListener('click', () => switchTab(tabSyllabusBtn, syllabusTabView));
-        tabChallengeBtn.addEventListener('click', () => switchTab(tabChallengeBtn, challengeTabView));
-        tabEventsBtn.addEventListener('click', () => switchTab(tabEventsBtn, eventsTabView));
-        tabStudyBtn.addEventListener('click', () => switchTab(tabStudyBtn, studyTabView));
+        document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                currentUser = result.user;
+                showNotification("Success", "Logged in with Google successfully!", "success", "#10b981");
+            } catch (error) {
+                showNotification("Error", error.message, "danger", "#ef4444");
+            }
+        });
 
         onAuthStateChanged(auth, async (user) => {
-            setLanguage(currentLang);
             if (user) {
                 currentUser = user;
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('dashboardSection').style.display = 'grid';
-
-                userTasks = loadLocalData('tasks') || [];
-                userSyllabus = loadLocalData('syllabus') || [];
-                userEvents = loadLocalData('events') || [];
-                userStudyItems = loadLocalData('study') || [];
-                
-                populateTimeSelects();
-                checkTaskDailyRefresh();
-                renderTasks();
-                renderSyllabus();
-                renderEvents();
-                renderStudyHub();
-
-                buildIconGrid();
-                buildCalendar();
-                startLiveClock();
-                setupPomodoro();
-
-                listenToTasks(user.uid);
-                listenToSyllabus(user.uid);
-                listenToEvents(user.uid);
-                listenToStudyHub(user.uid);
-                loadUserProfile(user.uid);
+                await loadUserDataFromFirestore();
+                initRealtimeListeners();
             } else {
                 currentUser = null;
-                if (unsubscribeTasks) unsubscribeTasks();
-                if (unsubscribeSyllabus) unsubscribeSyllabus();
-                if (unsubscribeEvents) unsubscribeEvents();
-                if (unsubscribeStudy) unsubscribeStudy();
-                document.getElementById('dashboardSection').style.display = 'none';
                 document.getElementById('authSection').style.display = 'block';
+                document.getElementById('dashboardSection').style.display = 'none';
+            }
+        });
+
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+            try {
+                if (isLoginMode) {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    showNotification("Welcome Back", "Logged in successfully!", "success", "#10b981");
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                    showNotification("Account Created", "Registration successful!", "success", "#10b981");
+                }
+            } catch (err) {
+                showNotification("Authentication Error", err.message, "danger", "#ef4444");
             }
         });
 
         document.getElementById('switchBtn').addEventListener('click', () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('authSubtitle').innerText = isLoginMode ? 'Login to access your study tasks' : 'Create account to get started';
-            document.getElementById('authBtn').innerText = isLoginMode ? 'Login' : 'Register';
+            document.getElementById('authTitle').innerText = isLoginMode ? "StudyPulse Pro" : "Register Account";
+            document.getElementById('authBtn').innerText = isLoginMode ? "Login" : "Register";
+            document.getElementById('switchBtn').innerText = isLoginMode ? "Register" : "Login";
             document.getElementById('switchText').innerText = isLoginMode ? "Don't have an account?" : "Already have an account?";
-            document.getElementById('switchBtn').innerText = isLoginMode ? 'Register' : 'Login';
         });
 
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPassword').value;
-
-            try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, password);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    showNotification("Account Created", "Welcome to StudyPulse Pro!", "success");
-                }
-            } catch (error) { alert(error.message); }
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth);
         });
 
-        document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
-
-        function checkTaskDailyRefresh() {
-            const todayStr = new Date().toDateString();
-            const lastReset = localStorage.getItem('studypulse_last_reset');
-
-            if (lastReset !== todayStr) {
-                let updated = false;
-                let newTasks = [];
-
-                userTasks.forEach(task => {
-                    if (task.frequency === 'everyday') {
-                        if (task.completed) {
-                            task.completed = false;
-                            updated = true;
-                        }
-                        newTasks.push(task);
-                    } else if (task.frequency === 'oneday') {
-                        if (task.completed || (task.createdAt && new Date(task.createdAt).toDateString() !== todayStr)) {
-                            updated = true;
-                            if (currentUser) {
-                                deleteDoc(doc(db, "tasks", task.id)).catch(e => console.log(e));
-                            }
-                        } else {
-                            newTasks.push(task);
-                        }
-                    }
-                });
-
-                userTasks = newTasks;
-                localStorage.setItem('studypulse_last_reset', todayStr);
-                if (updated) {
-                    saveLocalData('tasks', userTasks);
-                    renderTasks();
-                    showNotification("Daily Reset", "Everyday tasks refreshed!", "info", "#3b82f6");
-                }
+        async function loadUserDataFromFirestore() {
+            if (!currentUser) return;
+            const docRef = doc(db, "users", currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                userProfileData = docSnap.data();
+            } else {
+                userProfileData = { 
+                    name: currentUser.displayName || currentUser.email.split('@')[0], 
+                    class: 'Class 12', 
+                    board: 'Dhaka', 
+                    inst: 'College', 
+                    dreamInst: '', 
+                    fbUrl: '', 
+                    streak: 1, 
+                    xp: 0, 
+                    completedTaskCount: 0, 
+                    avatarUrl: currentUser.photoURL || '',
+                    lastResetDate: new Date().toDateString()
+                };
+                await setDoc(docRef, userProfileData);
             }
+            updateProfileUI();
         }
 
-        // REALTIME FIREBASE LISTENERS
-        function listenToTasks(userId) {
-            try {
-                const q = query(collection(db, "tasks"), where("uid", "==", userId));
-                unsubscribeTasks = onSnapshot(q, (snapshot) => {
-                    const fetched = [];
-                    snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    userTasks = fetched;
-                    checkTaskDailyRefresh();
-                    userTasks.sort((a, b) => compare12HrTimes(a.startTime, b.startTime));
-                    saveLocalData('tasks', userTasks);
-                    renderTasks();
-                }, (err) => console.log("Firebase sync:", err));
-            } catch (e) { console.log(e); }
-        }
-
-        function listenToSyllabus(userId) {
-            try {
-                const q = query(collection(db, "syllabus"), where("uid", "==", userId));
-                unsubscribeSyllabus = onSnapshot(q, (snapshot) => {
-                    const fetched = [];
-                    snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    userSyllabus = fetched;
-                    saveLocalData('syllabus', userSyllabus);
-                    renderSyllabus();
-                }, (err) => console.log(err));
-            } catch (e) { console.log(e); }
-        }
-
-        function listenToEvents(userId) {
-            try {
-                const q = query(collection(db, "events"), where("uid", "==", userId));
-                unsubscribeEvents = onSnapshot(q, (snapshot) => {
-                    const fetched = [];
-                    snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    userEvents = fetched;
-                    saveLocalData('events', userEvents);
-                    renderEvents();
-                }, (err) => console.log(err));
-            } catch (e) { console.log(e); }
-        }
-
-        function listenToStudyHub(userId) {
-            try {
-                const q = query(collection(db, "studyHub"), where("uid", "==", userId));
-                unsubscribeStudy = onSnapshot(q, (snapshot) => {
-                    const fetched = [];
-                    snapshot.forEach((doc) => fetched.push({ id: doc.id, ...doc.data() }));
-                    userStudyItems = fetched;
-                    saveLocalData('study', userStudyItems);
-                    renderStudyHub();
-                }, (err) => console.log(err));
-            } catch (e) { console.log(e); }
-        }
-
-        // USER PROFILE & LEVEL SYSTEM
-        async function loadUserProfile(userId) {
-            try {
-                const docRef = doc(db, "users", userId);
-                const docSnap = await getDoc(docRef);
-                
-                const cachedProfile = loadLocalData('profile');
-                if (cachedProfile) userProfileData = cachedProfile;
-
-                if (docSnap.exists()) {
-                    userProfileData = { ...userProfileData, ...docSnap.data() };
-                }
-
-                const todayStr = new Date().toDateString();
-                if (userProfileData.lastLoginDate !== todayStr) {
-                    const yesterday = new Date();
-                    yesterday.setDate(yesterday.getDate() - 1);
-                    if (userProfileData.lastLoginDate === yesterday.toDateString()) {
-                        userProfileData.streak = (userProfileData.streak || 0) + 1;
-                    } else {
-                        userProfileData.streak = 1;
-                    }
-                    userProfileData.lastLoginDate = todayStr;
-                    await syncProfileData();
-                } else {
-                    updateProfileUI();
-                }
-            } catch(e) { 
-                updateProfileUI();
-            }
+        async function updateProfileFirestore(newData) {
+            if (!currentUser) return;
+            const docRef = doc(db, "users", currentUser.uid);
+            await updateDoc(docRef, newData);
+            userProfileData = { ...userProfileData, ...newData };
+            updateProfileUI();
         }
 
         function updateProfileUI() {
-            document.getElementById('userNameDisplay').innerText = userProfileData.name || currentUser.email.split('@')[0];
-            
-            const avatarElem = document.getElementById('userAvatar');
-            if (userProfileData.avatarUrl) {
-                avatarElem.style.backgroundImage = `url(${userProfileData.avatarUrl})`;
-                avatarElem.innerText = '';
-            } else {
-                avatarElem.style.backgroundImage = 'none';
-                avatarElem.innerText = (userProfileData.name || currentUser.email).charAt(0).toUpperCase();
-            }
-
-            document.getElementById('userClassText').innerText = userProfileData.class || 'Class 12';
-            document.getElementById('userInstText').innerText = userProfileData.inst || 'Institution';
-            
-            const dreamElem = document.getElementById('userDreamDisplay');
-            if (userProfileData.dreamInst) {
-                dreamElem.innerHTML = `<i class="fa-solid fa-star"></i> ${userProfileData.dreamInst}`;
-                dreamElem.style.display = 'block';
-            } else {
-                dreamElem.style.display = 'none';
-            }
-
+            document.getElementById('userNameDisplay').innerText = userProfileData.name || 'User';
+            document.getElementById('userClassText').innerText = userProfileData.class || '';
+            document.getElementById('userInstText').innerText = userProfileData.inst || '';
+            document.getElementById('userDreamDisplay').innerText = userProfileData.dreamInst ? `Dream: ${userProfileData.dreamInst}` : '';
             document.getElementById('userStreak').innerText = userProfileData.streak || 1;
-            const currentXP = userProfileData.xp || 0;
-            document.getElementById('userXP').innerText = currentXP;
+            document.getElementById('userXP').innerText = userProfileData.xp || 0;
+
+            const avatarEl = document.getElementById('userAvatar');
+            if (userProfileData.avatarUrl) {
+                avatarEl.style.backgroundImage = `url('${userProfileData.avatarUrl}')`;
+                avatarEl.innerText = '';
+            } else {
+                avatarEl.style.backgroundImage = 'none';
+                avatarEl.innerText = (userProfileData.name || 'U').charAt(0).toUpperCase();
+            }
+
+            const xp = userProfileData.xp || 0;
+            const ringEl = document.getElementById('avatarLevelRing');
+            const levelTitleEl = document.getElementById('userLevelTitle');
             
-            const ringElem = document.getElementById('avatarLevelRing');
-            const levelBadgeText = document.getElementById('userLevelTitle');
-            
-            ringElem.className = 'avatar-ring';
-
-            if (currentXP >= 10000) {
-                ringElem.classList.add('ring-elite');
-                levelBadgeText.innerText = 'Elite (10,000+ XP)';
-                levelBadgeText.style.color = '#ff007f';
-            } else if (currentXP >= 5000) {
-                ringElem.classList.add('ring-diamond');
-                levelBadgeText.innerText = 'Diamond (5,000 XP)';
-                levelBadgeText.style.color = '#00ffff';
-            } else if (currentXP >= 1500) {
-                ringElem.classList.add('ring-gold');
-                levelBadgeText.innerText = 'Gold (1,500 XP)';
-                levelBadgeText.style.color = '#ffd700';
-            } else if (currentXP >= 600) {
-                ringElem.classList.add('ring-silver');
-                levelBadgeText.innerText = 'Silver (600 XP)';
-                levelBadgeText.style.color = '#c0c0c0';
-            } else {
-                ringElem.classList.add('ring-bronze');
-                levelBadgeText.innerText = 'Bronze (100 XP)';
-                levelBadgeText.style.color = '#cd7f32';
-            }
+            ringEl.className = "avatar-ring";
+            if (xp < 300) { ringEl.classList.add('ring-bronze'); levelTitleEl.innerText = `Bronze (${300 - xp} XP to Silver)`; }
+            else if (xp < 700) { ringEl.classList.add('ring-silver'); levelTitleEl.innerText = `Silver (${700 - xp} XP to Gold)`; }
+            else if (xp < 1500) { ringEl.classList.add('ring-gold'); levelTitleEl.innerText = `Gold (${1500 - xp} XP to Diamond)`; }
+            else if (xp < 3000) { ringEl.classList.add('ring-diamond'); levelTitleEl.innerText = `Diamond (${3000 - xp} XP to Elite)`; }
+            else { ringEl.classList.add('ring-elite'); levelTitleEl.innerText = `Elite Master ⚡`; }
         }
 
-        async function syncProfileData() {
-            updateProfileUI();
-            saveLocalData('profile', userProfileData);
-            if (currentUser) {
-                try {
-                    await setDoc(doc(db, "users", currentUser.uid), userProfileData, { merge: true });
-                } catch(e) { console.log("Offline profile save"); }
-            }
+        function initRealtimeListeners() {
+            if (!currentUser) return;
+
+            const tasksRef = collection(db, "users", currentUser.uid, "tasks");
+            onSnapshot(tasksRef, (snapshot) => {
+                userTasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderTasks();
+                updateProgress();
+            });
+
+            const syllabusRef = collection(db, "users", currentUser.uid, "syllabus");
+            onSnapshot(syllabusRef, (snapshot) => {
+                userSyllabus = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderSyllabus();
+            });
+
+            const eventsRef = collection(db, "users", currentUser.uid, "events");
+            onSnapshot(eventsRef, (snapshot) => {
+                userEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderEvents();
+            });
+
+            const studyRef = collection(db, "users", currentUser.uid, "studyVault");
+            onSnapshot(studyRef, (snapshot) => {
+                userStudyItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderStudyVault();
+            });
         }
 
-        async function addXP(amount, reason) {
-            userProfileData.xp = (userProfileData.xp || 0) + amount;
-            showNotification("⚡ XP Earned!", `+${amount} XP for ${reason}`, "success", "#ec4899");
-            await syncProfileData();
-        }
-
-        async function incrementTaskReward() {
-            userProfileData.completedTaskCount = (userProfileData.completedTaskCount || 0) + 1;
-            if (userProfileData.completedTaskCount >= 10) {
-                userProfileData.completedTaskCount = 0;
-                await addXP(5, "completing 10 daily tasks");
-            } else {
-                await syncProfileData();
-            }
-        }
-
-        const avatarContainer = document.getElementById('avatarClickContainer');
-        const profileImageInput = document.getElementById('profileImageInput');
-
-        avatarContainer.addEventListener('click', () => {
-            const confirmed = confirm("StudyPulse Pro requests permission to access your Device Photo Gallery to set your Profile Picture. Allow access?");
-            if (confirmed) {
-                profileImageInput.click();
-            }
+        const tabs = ['tasks', 'syllabus', 'challenge', 'events', 'study'];
+        tabs.forEach(tab => {
+            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).addEventListener('click', () => {
+                tabs.forEach(t => {
+                    document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).classList.remove('active');
+                    document.getElementById(`${t}TabView`).style.display = 'none';
+                });
+                document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).classList.add('active');
+                document.getElementById(`${tab}TabView`).style.display = 'block';
+                document.getElementById(`${tab}TabView`).classList.add('animate-fade');
+            });
         });
-
-        profileImageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (file.size > 2 * 1024 * 1024) {
-                    showNotification("File Too Large", "Please choose an image under 2MB.", "warning", "#f59e0b");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = async function(evt) {
-                    userProfileData.avatarUrl = evt.target.result;
-                    await syncProfileData();
-                    showNotification("Profile Picture Updated", "Your gallery avatar has been applied!", "success");
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        const profClassSelect = document.getElementById('profClass');
-        const profBoardSelect = document.getElementById('profBoard');
-        const dreamContainer = document.getElementById('dreamInstContainer');
-        const dreamSelect = document.getElementById('profDreamInst');
-
-        function updateDreamOptions() {
-            const cls = profClassSelect.value;
-            const board = profBoardSelect.value;
-            dreamSelect.innerHTML = '<option value="">Select Dream Institution</option>';
-
-            if (cls === 'Class 9-10') {
-                dreamContainer.style.display = 'block';
-                const topDhaka = ["Notre Dame College (Dhaka)", "Viqarunnisa Nisa Noon College (Dhaka)", "Holy Cross College (Dhaka)"];
-                const boardColleges = BOARD_COLLEGES[board] || BOARD_COLLEGES.Dhaka;
-
-                const grp1 = document.createElement('optgroup');
-                grp1.label = "Top 3 Colleges of Dhaka";
-                topDhaka.forEach(c => grp1.appendChild(new Option(c, c)));
-                dreamSelect.appendChild(grp1);
-
-                const grp2 = document.createElement('optgroup');
-                grp2.label = `Top Govt Colleges (${board} Board)`;
-                boardColleges.forEach(c => grp2.appendChild(new Option(c, c)));
-                dreamSelect.appendChild(grp2);
-
-            } else if (cls.includes('Inter') || cls === 'Admission Candidate') {
-                dreamContainer.style.display = 'block';
-                const grp = document.createElement('optgroup');
-                grp.label = "Top Universities of Bangladesh";
-                UNIVERSITIES_BD.forEach(u => grp.appendChild(new Option(u, u)));
-                dreamSelect.appendChild(grp);
-            } else {
-                dreamContainer.style.display = 'none';
-            }
-        }
-
-        profClassSelect.addEventListener('change', updateDreamOptions);
-        profBoardSelect.addEventListener('change', updateDreamOptions);
 
         document.getElementById('editProfileBtn').addEventListener('click', () => {
             document.getElementById('profName').value = userProfileData.name || '';
@@ -2101,8 +1879,8 @@
             document.getElementById('profBoard').value = userProfileData.board || '';
             document.getElementById('profInst').value = userProfileData.inst || '';
             document.getElementById('profFbUrl').value = userProfileData.fbUrl || '';
-            updateDreamOptions();
-            if (userProfileData.dreamInst) document.getElementById('profDreamInst').value = userProfileData.dreamInst;
+            updateDreamInstitutions(userProfileData.board, userProfileData.class);
+            document.getElementById('profDreamInst').value = userProfileData.dreamInst || '';
             document.getElementById('profileModal').style.display = 'flex';
         });
 
@@ -2110,852 +1888,625 @@
             document.getElementById('profileModal').style.display = 'none';
         });
 
+        document.getElementById('profBoard').addEventListener('change', (e) => {
+            updateDreamInstitutions(e.target.value, document.getElementById('profClass').value);
+        });
+        document.getElementById('profClass').addEventListener('change', (e) => {
+            updateDreamInstitutions(document.getElementById('profBoard').value, e.target.value);
+        });
+
+        // FIXED FUNCTION FOR SELECTING CLASS 9-10 vs INTER 1st/2nd YEAR
+        function updateDreamInstitutions(board, className) {
+            const container = document.getElementById('dreamInstContainer');
+            const select = document.getElementById('profDreamInst');
+            select.innerHTML = '<option value="">Select Dream Institution</option>';
+
+            if (className === 'Class 9-10') {
+                container.style.display = 'block';
+                
+                // Add Top 3 Dhaka Colleges
+                let groupDhaka = document.createElement('optgroup');
+                groupDhaka.label = "Top 3 Colleges of Dhaka";
+                TOP_DHAKA_COLLEGES.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = c;
+                    groupDhaka.appendChild(opt);
+                });
+                select.appendChild(groupDhaka);
+
+                // Add 7 More Colleges from User's Board
+                if (board && BOARD_COLLEGES[board]) {
+                    let groupBoard = document.createElement('optgroup');
+                    groupBoard.label = `${board} Board Colleges`;
+                    BOARD_COLLEGES[board].forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c;
+                        opt.textContent = c;
+                        groupBoard.appendChild(opt);
+                    });
+                    select.appendChild(groupBoard);
+                }
+            } else if (className.includes('Inter')) {
+                container.style.display = 'block';
+                
+                // Show all famous universities & medicals from all districts
+                let groupUniv = document.createElement('optgroup');
+                groupUniv.label = "Famous Universities & Medicals (All Districts)";
+                UNIVERSITIES_BD.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u;
+                    opt.textContent = u;
+                    groupUniv.appendChild(opt);
+                });
+                select.appendChild(groupUniv);
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
         document.getElementById('saveProfileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            userProfileData.name = document.getElementById('profName').value;
-            userProfileData.class = document.getElementById('profClass').value;
-            userProfileData.board = document.getElementById('profBoard').value;
-            userProfileData.inst = document.getElementById('profInst').value;
-            userProfileData.dreamInst = document.getElementById('profDreamInst').value;
-            userProfileData.fbUrl = document.getElementById('profFbUrl').value;
-
+            const newData = {
+                name: document.getElementById('profName').value,
+                class: document.getElementById('profClass').value,
+                board: document.getElementById('profBoard').value,
+                inst: document.getElementById('profInst').value,
+                dreamInst: document.getElementById('profDreamInst').value,
+                fbUrl: document.getElementById('profFbUrl').value
+            };
+            await updateProfileFirestore(newData);
             document.getElementById('profileModal').style.display = 'none';
-            await syncProfileData();
-            showNotification("Profile Updated", "Your profile details have been saved!", "success");
+            showNotification("Profile Updated", "Your profile has been saved successfully!", "success", "#10b981");
+        });
+
+        document.getElementById('avatarClickContainer').addEventListener('click', () => {
+            document.getElementById('profileImageInput').click();
+        });
+        document.getElementById('profileImageInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const base64Img = event.target.result;
+                    await updateProfileFirestore({ avatarUrl: base64Img });
+                    showNotification("Avatar Updated", "Profile picture changed successfully!", "success", "#10b981");
+                };
+                reader.readAsDataURL(file);
+            }
         });
 
         document.getElementById('noticeCenterCard').addEventListener('click', () => {
             if (userProfileData.fbUrl) {
                 window.open(userProfileData.fbUrl, '_blank');
             } else {
-                showNotification("No Notice Link", "Please add your institution's Facebook page link in 'Edit Profile'.", "warning", "#f59e0b");
+                showNotification("Notice", "Please set your institution Facebook notice URL in Edit Profile.", "info", "#3b82f6");
             }
         });
 
-        function populateTimeSelects() {
-            ['start', 'end'].forEach(prefix => {
-                const hourSel = document.getElementById(`${prefix}Hour`);
-                const minSel = document.getElementById(`${prefix}Min`);
-                if (!hourSel || !minSel) return;
-                
-                hourSel.innerHTML = ''; minSel.innerHTML = '';
-                for (let i = 1; i <= 12; i++) {
-                    const val = i < 10 ? '0' + i : i.toString();
-                    hourSel.appendChild(new Option(val, val));
-                }
-                for (let i = 0; i < 60; i += 5) {
-                    const val = i < 10 ? '0' + i : i.toString();
-                    minSel.appendChild(new Option(val, val));
-                }
-            });
-        }
-
-        function compare12HrTimes(t1, t2) {
-            if (!t1 || !t2) return 0;
-            const parseMinutes = (str) => {
-                const parts = str.split(' ');
-                if (parts.length < 2) return 0;
-                const timeParts = parts[0].split(':');
-                let h = parseInt(timeParts[0]);
-                const m = parseInt(timeParts[1]);
-                const ampm = parts[1].toUpperCase();
-                if (ampm === 'PM' && h < 12) h += 12;
-                if (ampm === 'AM' && h === 12) h = 0;
-                return h * 60 + m;
-            };
-            return parseMinutes(t1) - parseMinutes(t2);
-        }
-
-        function startLiveClock() {
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('liveClock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                document.getElementById('liveDate').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-            }, 1000);
-        }
-
-        function setupPomodoro() {
-            const display = document.getElementById('pomoTimerDisplay');
-            const startBtn = document.getElementById('pomoStartBtn');
-            const resetBtn = document.getElementById('pomoResetBtn');
-
-            function updatePomoDisplay() {
-                const m = Math.floor(pomoTimeLeft / 60);
-                const s = pomoTimeLeft % 60;
-                display.innerText = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
-            }
-
-            startBtn.addEventListener('click', () => {
-                if (pomoRunning) {
-                    clearInterval(pomoInterval);
-                    pomoRunning = false;
-                    startBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-                } else {
-                    pomoRunning = true;
-                    startBtn.innerText = currentLang === 'en' ? 'Pause' : 'থামুন';
-                    pomoInterval = setInterval(() => {
-                        pomoTimeLeft--;
-                        updatePomoDisplay();
-                        if (pomoTimeLeft <= 0) {
-                            clearInterval(pomoInterval);
-                            pomoRunning = false;
-                            pomoTimeLeft = 25 * 60;
-                            updatePomoDisplay();
-                            startBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-                            addXP(5, "completing a Pomodoro session");
-                            showNotification("Pomodoro Complete!", "Great job! Take a 5-minute break.", "success");
-                        }
-                    }, 1000);
-                }
-            });
-
-            resetBtn.addEventListener('click', () => {
-                clearInterval(pomoInterval);
-                pomoRunning = false;
-                pomoTimeLeft = 25 * 60;
-                updatePomoDisplay();
-                startBtn.innerText = currentLang === 'en' ? 'Start' : 'শুরু করুন';
-            });
-        }
-
-        function buildCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            const monthHead = document.getElementById('calMonthYear');
-            if (!grid || !monthHead) return;
-
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth();
-
-            monthHead.innerText = now.toLocaleDateString([], { month: 'long', year: 'numeric' });
-            grid.innerHTML = '';
-
-            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-            dayNames.forEach(d => {
-                const h = document.createElement('div');
-                h.className = 'calendar-day-head';
-                h.innerText = d;
-                grid.appendChild(h);
-            });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            for (let i = 0; i < firstDay; i++) {
-                grid.appendChild(document.createElement('div'));
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const cell = document.createElement('div');
-                cell.className = 'calendar-day';
-                if (day === now.getDate()) cell.classList.add('active');
-                cell.innerText = day;
-                grid.appendChild(cell);
-            }
-        }
-
-        function buildIconGrid() {
-            const grid = document.getElementById('iconGrid');
-            const trigger = document.getElementById('iconSelectorTrigger');
-            grid.innerHTML = '';
-
-            ICON_LIST.forEach(iconClass => {
-                const opt = document.createElement('div');
-                opt.className = `icon-option ${iconClass === selectedIcon ? 'selected' : ''}`;
-                opt.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
-                opt.addEventListener('click', () => {
-                    selectedIcon = iconClass;
-                    document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-                    document.getElementById('selectedIconName').innerText = selectedIcon;
-                    grid.style.display = 'none';
-                    document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
-                    opt.classList.add('selected');
-                });
-                grid.appendChild(opt);
-            });
-
-            trigger.addEventListener('click', () => {
-                grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
-            });
-
-            document.querySelectorAll('.color-dot').forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
-                    e.target.classList.add('selected');
-                    selectedColor = e.target.getAttribute('data-color');
-                });
-            });
-        }
-
-        // ROUTINE TASKS LOGIC
-        const tasksList = document.getElementById('tasksList');
-        const openTaskModalBtn = document.getElementById('openTaskModalBtn');
-        const taskModal = document.getElementById('taskModal');
-        const closeTaskModalBtn = document.getElementById('closeTaskModalBtn');
-        const saveTaskForm = document.getElementById('saveTaskForm');
-
-        openTaskModalBtn.addEventListener('click', () => {
+        document.getElementById('openTaskModalBtn').addEventListener('click', () => {
             document.getElementById('editTaskId').value = '';
-            document.getElementById('taskModalTitle').innerText = 'Create New Activity';
-            saveTaskForm.reset();
-            taskModal.style.display = 'flex';
+            document.getElementById('taskModalTitle').innerText = "Create New Activity";
+            document.getElementById('saveTaskForm').reset();
+            document.getElementById('taskModal').style.display = 'flex';
+        });
+        document.getElementById('closeTaskModalBtn').addEventListener('click', () => {
+            document.getElementById('taskModal').style.display = 'none';
         });
 
-        closeTaskModalBtn.addEventListener('click', () => taskModal.style.display = 'none');
+        ['start', 'end'].forEach(prefix => {
+            const hSel = document.getElementById(`${prefix}Hour`);
+            const mSel = document.getElementById(`${prefix}Min`);
+            for(let i=1; i<=12; i++) hSel.innerHTML += `<option value="${i}">${i}</option>`;
+            for(let i=0; i<60; i+=5) mSel.innerHTML += `<option value="${i < 10 ? '0'+i : i}">${i < 10 ? '0'+i : i}</option>`;
+        });
 
-        saveTaskForm.addEventListener('submit', async (e) => {
+        document.querySelectorAll('.color-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+                dot.classList.add('selected');
+                selectedColor = dot.getAttribute('data-color');
+            });
+        });
+
+        const iconGridEl = document.getElementById('iconGrid');
+        ICON_LIST.forEach(icon => {
+            const div = document.createElement('div');
+            div.className = `icon-option ${icon === selectedIcon ? 'selected' : ''}`;
+            div.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+            div.addEventListener('click', () => {
+                document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedIcon = icon;
+                document.getElementById('selectedIconPreview').className = `fa-solid ${icon}`;
+                document.getElementById('selectedIconName').innerText = icon;
+                iconGridEl.style.display = 'none';
+            });
+            iconGridEl.appendChild(div);
+        });
+
+        document.getElementById('iconSelectorTrigger').addEventListener('click', () => {
+            iconGridEl.style.display = iconGridEl.style.display === 'grid' ? 'none' : 'grid';
+        });
+
+        document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const editId = document.getElementById('editTaskId').value;
-            const name = document.getElementById('taskName').value.trim();
-            const startH = document.getElementById('startHour').value;
-            const startM = document.getElementById('startMin').value;
-            const startA = document.getElementById('startAmpm').value;
-            const endH = document.getElementById('endHour').value;
-            const endM = document.getElementById('endMin').value;
-            const endA = document.getElementById('endAmpm').value;
-
-            const startTime = `${startH}:${startM} ${startA}`;
-            const endTime = `${endH}:${endM} ${endA}`;
-
+            const taskId = document.getElementById('editTaskId').value;
             const taskData = {
-                uid: currentUser.uid,
-                name: name,
+                title: document.getElementById('taskName').value,
                 color: selectedColor,
                 icon: selectedIcon,
-                startTime: startTime,
-                endTime: endTime,
+                time: `${document.getElementById('startHour').value}:${document.getElementById('startMin').value} ${document.getElementById('startAmpm').value} - ${document.getElementById('endHour').value}:${document.getElementById('endMin').value} ${document.getElementById('endAmpm').value}`,
                 alarmEnable: document.getElementById('taskAlarmEnable').value,
                 alarmTone: document.getElementById('taskAlarmTone').value,
                 frequency: document.getElementById('taskFrequency').value,
                 priority: document.getElementById('taskPriority').value,
                 completed: false,
-                createdAt: new Date().toISOString()
+                updatedAt: new Date().toISOString()
             };
 
-            if (editId) {
-                if (currentUser) await updateDoc(doc(db, "tasks", editId), taskData);
-                const idx = userTasks.findIndex(t => t.id === editId);
-                if (idx !== -1) userTasks[idx] = { ...userTasks[idx], ...taskData };
+            const tasksRef = collection(db, "users", currentUser.uid, "tasks");
+            if (taskId) {
+                await updateDoc(doc(db, "users", currentUser.uid, "tasks", taskId), taskData);
+                showNotification("Updated", "Task updated successfully", "success", "#10b981");
             } else {
-                if (currentUser) {
-                    const docRef = await addDoc(collection(db, "tasks"), taskData);
-                    taskData.id = docRef.id;
-                } else {
-                    taskData.id = 'local_' + Date.now();
-                }
-                userTasks.push(taskData);
+                taskData.createdAt = new Date().toISOString();
+                await addDoc(tasksRef, taskData);
+                showNotification("Created", "New task added successfully", "success", "#10b981");
             }
-
-            taskModal.style.display = 'none';
-            saveLocalData('tasks', userTasks);
-            renderTasks();
-            showNotification("Task Saved", "Your routine activity was saved successfully!", "success");
+            document.getElementById('taskModal').style.display = 'none';
         });
 
+        async function toggleTaskComplete(task) {
+            const newCompleted = !task.completed;
+            const todayStr = new Date().toDateString();
+            let currentXp = userProfileData.xp || 0;
+            let currentCount = userProfileData.completedTaskCount || 0;
+            let lastReset = userProfileData.lastResetDate || '';
+
+            if (lastReset !== todayStr) {
+                currentCount = 0;
+                lastReset = todayStr;
+            }
+
+            let xpChange = 0;
+            if (newCompleted) {
+                currentCount++;
+                if (currentCount % 10 === 0) {
+                    xpChange = 5;
+                    showNotification("XP Bonus! ⚡", "+5 XP earned for completing 10 tasks!", "success", "#ec4899");
+                }
+            } else {
+                if (currentCount > 0) currentCount--;
+            }
+
+            const newXp = Math.max(0, currentXp + xpChange);
+            checkLevelUp(currentXp, newXp);
+
+            await updateDoc(doc(db, "users", currentUser.uid, "tasks", task.id), { completed: newCompleted });
+            await updateProfileFirestore({ xp: newXp, completedTaskCount: currentCount, lastResetDate: lastReset });
+        }
+
         function renderTasks() {
-            tasksList.innerHTML = '';
+            const listEl = document.getElementById('tasksList');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
-            
-            let filtered = userTasks.filter(t => {
-                const matchesSearch = t.name.toLowerCase().includes(searchVal);
-                if (activeFilter === 'active') return matchesSearch && !t.completed;
-                if (activeFilter === 'completed') return matchesSearch && t.completed;
-                return matchesSearch;
+            listEl.innerHTML = '';
+
+            const filtered = userTasks.filter(t => {
+                const matchSearch = t.title.toLowerCase().includes(searchVal);
+                if (activeFilter === 'active') return matchSearch && !t.completed;
+                if (activeFilter === 'completed') return matchSearch && t.completed;
+                return matchSearch;
             });
 
             if (filtered.length === 0) {
-                tasksList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No routine tasks found.</div>`;
-                updateGoalProgress();
+                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No tasks found.</div>`;
                 return;
             }
 
-            filtered.forEach((task) => {
+            filtered.forEach(task => {
                 const card = document.createElement('div');
                 card.className = `task-card ${task.completed ? 'completed' : ''}`;
                 card.style.setProperty('--card-color', task.color || '#8b5cf6');
-
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="--card-color: ${task.color};">
-                            <i class="fa-solid ${task.icon || 'fa-book'}"></i>
-                        </div>
+                        <div class="task-icon-box"><i class="fa-solid ${task.icon || 'fa-book'}"></i></div>
                         <div class="task-details">
-                            <div class="task-title">${task.name}</div>
+                            <div class="task-title">${task.title}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-regular fa-clock"></i> ${task.startTime} - ${task.endTime}</span>
-                                <span class="priority-badge priority-${task.priority}">${task.priority}</span>
-                                ${task.alarmEnable === 'yes' ? '<i class="fa-solid fa-bell alarm-indicator" title="Alarm Active"></i>' : ''}
+                                <span><i class="fa-solid fa-clock"></i> ${task.time}</span>
+                                <span>•</span>
+                                <span style="text-transform: capitalize;">${task.priority} Priority</span>
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn check ${task.completed ? 'active-complete' : ''}" data-id="${task.id}" title="Mark Done">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-                        <button class="action-btn edit" data-id="${task.id}" title="Edit">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button class="action-btn delete" data-id="${task.id}" title="Delete">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <button class="action-btn check ${task.completed ? 'active-complete' : ''}" title="Complete Task"><i class="fa-solid fa-check"></i></button>
+                        <button class="action-btn edit" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                        <button class="action-btn delete" title="Delete"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
 
-                card.querySelector('.action-btn.check').addEventListener('click', () => toggleTaskComplete(task.id));
-                card.querySelector('.action-btn.edit').addEventListener('click', () => editTask(task.id));
-                card.querySelector('.action-btn.delete').addEventListener('click', () => deleteTask(task.id));
+                card.querySelector('.check').addEventListener('click', () => toggleTaskComplete(task));
+                card.querySelector('.delete').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "tasks", task.id));
+                    showNotification("Deleted", "Task removed", "danger", "#ef4444");
+                });
+                card.querySelector('.edit').addEventListener('click', () => {
+                    document.getElementById('editTaskId').value = task.id;
+                    document.getElementById('taskModalTitle').innerText = "Edit Activity";
+                    document.getElementById('taskName').value = task.title;
+                    document.getElementById('taskModal').style.display = 'flex';
+                });
 
-                tasksList.appendChild(card);
+                listEl.appendChild(card);
             });
-
-            updateGoalProgress();
-        }
-
-        async function toggleTaskComplete(id) {
-            const task = userTasks.find(t => t.id === id);
-            if (task) {
-                task.completed = !task.completed;
-                if (task.completed) {
-                    await incrementTaskReward();
-                }
-                saveLocalData('tasks', userTasks);
-                if (currentUser && !id.startsWith('local_')) {
-                    await updateDoc(doc(db, "tasks", id), { completed: task.completed });
-                }
-                renderTasks();
-            }
-        }
-
-        function editTask(id) {
-            const task = userTasks.find(t => t.id === id);
-            if (!task) return;
-            document.getElementById('editTaskId').value = task.id;
-            document.getElementById('taskModalTitle').innerText = 'Edit Routine Activity';
-            document.getElementById('taskName').value = task.name;
-            
-            if (task.startTime) {
-                const parts = task.startTime.split(' ');
-                const times = parts[0].split(':');
-                document.getElementById('startHour').value = times[0];
-                document.getElementById('startMin').value = times[1];
-                document.getElementById('startAmpm').value = parts[1];
-            }
-            if (task.endTime) {
-                const parts = task.endTime.split(' ');
-                const times = parts[0].split(':');
-                document.getElementById('endHour').value = times[0];
-                document.getElementById('endMin').value = times[1];
-                document.getElementById('endAmpm').value = parts[1];
-            }
-
-            document.getElementById('taskAlarmEnable').value = task.alarmEnable || 'yes';
-            document.getElementById('taskAlarmTone').value = task.alarmTone || 'synth';
-            document.getElementById('taskFrequency').value = task.frequency || 'everyday';
-            document.getElementById('taskPriority').value = task.priority || 'medium';
-
-            selectedColor = task.color || '#8b5cf6';
-            selectedIcon = task.icon || 'fa-book';
-            
-            document.getElementById('selectedIconPreview').className = `fa-solid ${selectedIcon}`;
-            document.getElementById('selectedIconName').innerText = selectedIcon;
-
-            taskModal.style.display = 'flex';
-        }
-
-        async function deleteTask(id) {
-            if (confirm("Delete this routine task?")) {
-                userTasks = userTasks.filter(t => t.id !== id);
-                saveLocalData('tasks', userTasks);
-                if (currentUser && !id.startsWith('local_')) {
-                    await deleteDoc(doc(db, "tasks", id));
-                }
-                renderTasks();
-                showNotification("Task Deleted", "Task removed from your schedule.", "danger");
-            }
         }
 
         document.getElementById('searchInput').addEventListener('input', renderTasks);
         document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                activeFilter = e.target.getAttribute('data-filter');
+                btn.classList.add('active');
+                activeFilter = btn.getAttribute('data-filter');
                 renderTasks();
             });
         });
 
-        function updateGoalProgress() {
-            if (userTasks.length === 0) {
-                document.getElementById('progressPercent').innerText = '0%';
-                document.getElementById('progressBar').style.width = '0%';
-                return;
-            }
-            const completedCount = userTasks.filter(t => t.completed).length;
-            const percent = Math.round((completedCount / userTasks.length) * 100);
-            document.getElementById('progressPercent').innerText = `${percent}%`;
-            document.getElementById('progressBar').style.width = `${percent}%`;
-        }
+        document.getElementById('openSyllabusModalBtn').addEventListener('click', () => {
+            document.getElementById('editSyllabusId').value = '';
+            document.getElementById('syllabusModalTitle').innerText = "Add Subject & Multiple Chapters";
+            document.getElementById('saveSyllabusForm').reset();
+            document.getElementById('modalChapterListContainer').innerHTML = '';
+            addChapterInputRow();
+            document.getElementById('syllabusModal').style.display = 'flex';
+        });
+        document.getElementById('closeSyllabusModalBtn').addEventListener('click', () => {
+            document.getElementById('syllabusModal').style.display = 'none';
+        });
 
-        // MULTIPLE CHAPTERS SYLLABUS SYSTEM
-        const syllabusList = document.getElementById('syllabusList');
-        const openSyllabusModalBtn = document.getElementById('openSyllabusModalBtn');
-        const syllabusModal = document.getElementById('syllabusModal');
-        const closeSyllabusModalBtn = document.getElementById('closeSyllabusModalBtn');
-        const saveSyllabusForm = document.getElementById('saveSyllabusForm');
-        const modalChapterListContainer = document.getElementById('modalChapterListContainer');
-        const addMoreChapterBtn = document.getElementById('addMoreChapterBtn');
-
-        function createChapterInputRow(chapterName = '', subchapters = '') {
+        function addChapterInputRow(chapterName = '', subchapters = '') {
+            const container = document.getElementById('modalChapterListContainer');
             const row = document.createElement('div');
             row.className = 'chapter-input-row';
             row.innerHTML = `
-                <input type="text" class="chap-name-input" placeholder="Chapter Name" value="${chapterName}" required style="flex:1; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.8rem;">
-                <input type="text" class="chap-sub-input" placeholder="Subchapters (comma separated)" value="${subchapters}" style="flex:1; padding: 8px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 0.8rem;">
-                <button type="button" class="remove-chap-btn" style="background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); color: #fca5a5; padding: 6px 10px; border-radius: 8px; cursor: pointer;">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <input type="text" placeholder="Chapter Name (e.g. Vector)" class="modal-chap-name" value="${chapterName}" style="flex:1; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:10px;" required>
+                <input type="text" placeholder="Subchapters (comma separated)" class="modal-subchap-list" value="${subchapters}" style="flex:1; padding:10px; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:10px;">
+                <button type="button" class="remove-chap-row" style="background:rgba(239,68,68,0.2); border:none; color:#fca5a5; width:36px; height:36px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             `;
-            row.querySelector('.remove-chap-btn').addEventListener('click', () => {
-                if (modalChapterListContainer.children.length > 1) {
-                    row.remove();
-                } else {
-                    showNotification("Requirement", "At least one chapter is required.", "warning");
-                }
-            });
-            modalChapterListContainer.appendChild(row);
+            row.querySelector('.remove-chap-row').addEventListener('click', () => row.remove());
+            container.appendChild(row);
         }
 
-        addMoreChapterBtn.addEventListener('click', () => createChapterInputRow());
+        document.getElementById('addMoreChapterBtn').addEventListener('click', () => addChapterInputRow());
 
-        openSyllabusModalBtn.addEventListener('click', () => {
-            document.getElementById('editSyllabusId').value = '';
-            document.getElementById('syllabusModalTitle').innerText = 'Add Subject & Multiple Chapters';
-            saveSyllabusForm.reset();
-            modalChapterListContainer.innerHTML = '';
-            createChapterInputRow();
-            syllabusModal.style.display = 'flex';
-        });
-
-        closeSyllabusModalBtn.addEventListener('click', () => syllabusModal.style.display = 'none');
-
-        saveSyllabusForm.addEventListener('submit', async (e) => {
+        document.getElementById('saveSyllabusForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const editId = document.getElementById('editSyllabusId').value;
-            const subject = document.getElementById('sylSubject').value.trim();
-            const addExam = document.getElementById('sylAddExamEvent').value;
-            const examDate = document.getElementById('sylExamDate').value;
-
-            const chapterRows = modalChapterListContainer.querySelectorAll('.chapter-input-row');
-            let chapters = [];
-
-            chapterRows.forEach((row, idx) => {
-                const name = row.querySelector('.chap-name-input').value.trim();
-                const subStr = row.querySelector('.chap-sub-input').value.trim();
-                const subs = subStr ? subStr.split(',').map(s => s.trim()).filter(s => s.length > 0) : [];
-                
-                let isCompleted = false;
-                if (editId) {
-                    const existingSubj = userSyllabus.find(s => s.id === editId);
-                    if (existingSubj && existingSubj.chapters && existingSubj.chapters[idx]) {
-                        isCompleted = existingSubj.chapters[idx].completed || false;
-                    }
-                }
-
-                if (name) {
-                    chapters.push({ id: 'chap_' + Date.now() + '_' + idx, name, subchapters: subs, completed: isCompleted });
+            const subjectId = document.getElementById('editSyllabusId').value;
+            const subjectName = document.getElementById('sylSubject').value;
+            
+            const chapterRows = document.querySelectorAll('.chapter-input-row');
+            const chapters = [];
+            chapterRows.forEach(row => {
+                const cName = row.querySelector('.modal-chap-name').value;
+                const subs = row.querySelector('.modal-subchap-list').value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                if(cName) {
+                    chapters.push({ name: cName, subchapters: subs, completed: false });
                 }
             });
 
-            const syllabusData = {
-                uid: currentUser.uid,
-                subject: subject,
-                chapters: chapters,
-                createdAt: new Date().toISOString()
-            };
+            const sylData = { subject: subjectName, chapters: chapters };
+            const sylRef = collection(db, "users", currentUser.uid, "syllabus");
 
-            if (editId) {
-                if (currentUser) await updateDoc(doc(db, "syllabus", editId), syllabusData);
-                const idx = userSyllabus.findIndex(s => s.id === editId);
-                if (idx !== -1) userSyllabus[idx] = { ...userSyllabus[idx], ...syllabusData };
+            if (subjectId) {
+                await updateDoc(doc(db, "users", currentUser.uid, "syllabus", subjectId), sylData);
+                showNotification("Updated", "Syllabus updated successfully", "success", "#10b981");
             } else {
-                if (currentUser) {
-                    const docRef = await addDoc(collection(db, "syllabus"), syllabusData);
-                    syllabusData.id = docRef.id;
-                } else {
-                    syllabusData.id = 'local_syl_' + Date.now();
-                }
-                userSyllabus.push(syllabusData);
+                await addDoc(sylRef, sylData);
+                showNotification("Added", "New subject & chapters saved", "success", "#10b981");
             }
 
-            if (addExam === 'yes' && examDate) {
-                const eventData = {
-                    uid: currentUser.uid,
-                    title: `${subject} Exam`,
+            const addExamEvent = document.getElementById('sylAddExamEvent').value;
+            const examDate = document.getElementById('sylExamDate').value;
+            if (addExamEvent === 'yes' && examDate) {
+                await addDoc(collection(db, "users", currentUser.uid, "events"), {
+                    title: `${subjectName} Exam`,
                     date: examDate,
-                    notes: `Exam synced from Syllabus Tracker. Covers ${chapters.length} chapters.`,
-                    createdAt: new Date().toISOString()
-                };
-                if (currentUser) {
-                    await addDoc(collection(db, "events"), eventData);
-                } else {
-                    eventData.id = 'local_evt_' + Date.now();
-                    userEvents.push(eventData);
-                }
+                    notes: `Exam synced from syllabus tracker`
+                });
             }
 
-            syllabusModal.style.display = 'none';
-            saveLocalData('syllabus', userSyllabus);
-            renderSyllabus();
-            showNotification("Syllabus Saved", "Subject and multiple chapters updated!", "success");
+            document.getElementById('syllabusModal').style.display = 'none';
         });
 
+        async function toggleChapterComplete(subject, chapterIndex) {
+            const chap = subject.chapters[chapterIndex];
+            const willComplete = !chap.completed;
+            chap.completed = willComplete;
+
+            let currentXp = userProfileData.xp || 0;
+            let xpChange = willComplete ? 5 : -5;
+            let newXp = Math.max(0, currentXp + xpChange);
+
+            if (willComplete) {
+                checkLevelUp(currentXp, newXp);
+                showNotification("Chapter Completed! 🎯", "+5 XP earned for completing chapter!", "success", "#10b981");
+            } else {
+                showNotification("Chapter Unchecked ⚠️", "-5 XP deducted for unchecking chapter.", "danger", "#ef4444");
+            }
+
+            await updateDoc(doc(db, "users", currentUser.uid, "syllabus", subject.id), { chapters: subject.chapters });
+            await updateProfileFirestore({ xp: newXp });
+        }
+
         function renderSyllabus() {
-            syllabusList.innerHTML = '';
+            const listEl = document.getElementById('syllabusList');
+            listEl.innerHTML = '';
+
             let totalChapters = 0;
             let completedChapters = 0;
 
             if (userSyllabus.length === 0) {
-                syllabusList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No subjects added to syllabus yet.</div>`;
-                document.getElementById('syllabusStatsText').innerText = '0 Chapters Completed';
-                document.getElementById('syllabusPercentText').innerText = '0%';
+                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No subjects added yet. Click 'Add Subject & Chapters'.</div>`;
+                document.getElementById('syllabusStatsText').innerText = `0 Chapters Completed`;
+                document.getElementById('syllabusPercentText').innerText = `0%`;
                 return;
             }
 
-            userSyllabus.forEach(sub => {
+            userSyllabus.forEach(subj => {
                 const card = document.createElement('div');
                 card.className = 'syllabus-subject-card';
-
+                
                 let chaptersHtml = '';
-                if (sub.chapters && sub.chapters.length > 0) {
-                    sub.chapters.forEach((chap, cIdx) => {
-                        totalChapters++;
-                        if (chap.completed) completedChapters++;
+                subj.chapters.forEach((chap, idx) => {
+                    totalChapters++;
+                    if (chap.completed) completedChapters++;
 
-                        let subsHtml = '';
-                        if (chap.subchapters && chap.subchapters.length > 0) {
-                            chap.subchapters.forEach(subTitle => {
-                                subsHtml += `<span class="subchapter-tag"><i class="fa-solid fa-angle-right"></i> ${subTitle}</span>`;
-                            });
-                        }
+                    let subsHtml = '';
+                    if (chap.subchapters && chap.subchapters.length > 0) {
+                        subsHtml = `<div class="subchapter-list-wrap">` + chap.subchapters.map(sub => `<span class="subchapter-tag"><i class="fa-solid fa-circle-dot" style="font-size:0.5rem;"></i> ${sub}</span>`).join('') + `</div>`;
+                    }
 
-                        chaptersHtml += `
-                            <div class="syllabus-chapter-item">
-                                <div class="chapter-title-bar">
-                                    <div class="chapter-checkbox-title" data-sub-id="${sub.id}" data-chap-idx="${cIdx}">
-                                        <i class="${chap.completed ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" style="font-size: 1.1rem; color: ${chap.completed ? 'var(--success)' : 'var(--text-muted)'};"></i>
-                                        <span style="font-size: 0.85rem; font-weight: 600; ${chap.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${chap.name}</span>
-                                    </div>
-                                    <span style="font-size: 0.7rem; color: var(--text-muted);">${chap.completed ? 'Completed (+5 XP)' : 'Pending'}</span>
-                                </div>
-                                ${subsHtml ? `<div class="subchapter-list-wrap">${subsHtml}</div>` : ''}
+                    chaptersHtml += `
+                        <div class="syllabus-chapter-item" style="border-left: 4px solid ${chap.completed ? 'var(--success)' : 'var(--accent-purple)'};">
+                            <div class="chapter-title-bar">
+                                <label class="chapter-checkbox-title">
+                                    <input type="checkbox" ${chap.completed ? 'checked' : ''} data-subid="${subj.id}" data-chapidx="${idx}" style="accent-color: var(--success); width:18px; height:18px; cursor:pointer;">
+                                    <span style="${chap.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${chap.name}</span>
+                                </label>
                             </div>
-                        `;
-                    });
-                }
+                            ${subsHtml}
+                        </div>
+                    `;
+                });
 
                 card.innerHTML = `
                     <div class="syllabus-header-row">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fa-solid fa-book-bookmark" style="color: var(--accent-pink); font-size: 1.2rem;"></i>
-                            <h3 style="font-size: 1rem; font-weight: 700;">${sub.subject}</h3>
-                        </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="action-btn edit" data-id="${sub.id}" title="Edit Subject/Chapters"><i class="fa-solid fa-pen"></i></button>
-                            <button class="action-btn delete" data-id="${sub.id}" title="Delete Subject"><i class="fa-solid fa-trash"></i></button>
+                        <div style="font-size: 1.05rem; font-weight: 700; color: var(--accent-pink);"><i class="fa-solid fa-book-bookmark"></i> ${subj.subject}</div>
+                        <div style="display:flex; gap:8px;">
+                            <button class="action-btn edit edit-syl-btn" data-id="${subj.id}"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn delete del-syl-btn" data-id="${subj.id}"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                     <div>${chaptersHtml}</div>
                 `;
 
-                card.querySelectorAll('.chapter-checkbox-title').forEach(item => {
-                    item.addEventListener('click', () => {
-                        const subId = item.getAttribute('data-sub-id');
-                        const cIdx = parseInt(item.getAttribute('data-chap-idx'));
-                        toggleChapterDone(subId, cIdx);
+                card.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                    chk.addEventListener('change', () => {
+                        const sId = chk.getAttribute('data-subid');
+                        const cIdx = parseInt(chk.getAttribute('data-chapidx'));
+                        const subjectObj = userSyllabus.find(s => s.id === sId);
+                        toggleChapterComplete(subjectObj, cIdx);
                     });
                 });
 
-                card.querySelector('.action-btn.edit').addEventListener('click', () => editSyllabus(sub.id));
-                card.querySelector('.action-btn.delete').addEventListener('click', () => deleteSyllabus(sub.id));
+                card.querySelector('.del-syl-btn').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "syllabus", subj.id));
+                    showNotification("Deleted", "Subject removed", "danger", "#ef4444");
+                });
 
-                syllabusList.appendChild(card);
+                card.querySelector('.edit-syl-btn').addEventListener('click', () => {
+                    document.getElementById('editSyllabusId').value = subj.id;
+                    document.getElementById('syllabusModalTitle').innerText = "Edit Syllabus";
+                    document.getElementById('sylSubject').value = subj.subject;
+                    const container = document.getElementById('modalChapterListContainer');
+                    container.innerHTML = '';
+                    subj.chapters.forEach(c => addChapterInputRow(c.name, c.subchapters.join(', ')));
+                    document.getElementById('syllabusModal').style.display = 'flex';
+                });
+
+                listEl.appendChild(card);
             });
 
-            const overallPercent = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
+            const percent = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
             document.getElementById('syllabusStatsText').innerText = `${completedChapters} of ${totalChapters} Chapters Completed`;
-            document.getElementById('syllabusPercentText').innerText = `${overallPercent}%`;
+            document.getElementById('syllabusPercentText').innerText = `${percent}%`;
         }
 
-        async function toggleChapterDone(subId, chapIndex) {
-            const sub = userSyllabus.find(s => s.id === subId);
-            if (sub && sub.chapters && sub.chapters[chapIndex]) {
-                const targetChap = sub.chapters[chapIndex];
-                targetChap.completed = !targetChap.completed;
-                
-                if (targetChap.completed) {
-                    await addXP(5, "completing a syllabus chapter");
-                }
+        document.getElementById('startChallengeBtn').addEventListener('click', () => {
+            const hours = parseInt(document.getElementById('challengeHours').value) || 0;
+            const mins = parseInt(document.getElementById('challengeMins').value) || 0;
+            challengeTotalSeconds = (hours * 3600) + (mins * 60);
 
-                saveLocalData('syllabus', userSyllabus);
-                if (currentUser && !subId.startsWith('local_')) {
-                    await updateDoc(doc(db, "syllabus", subId), { chapters: sub.chapters });
-                }
-                renderSyllabus();
-            }
-        }
-
-        function editSyllabus(id) {
-            const sub = userSyllabus.find(s => s.id === id);
-            if (!sub) return;
-
-            document.getElementById('editSyllabusId').value = sub.id;
-            document.getElementById('syllabusModalTitle').innerText = 'Edit Subject & Chapters';
-            document.getElementById('sylSubject').value = sub.subject;
-
-            modalChapterListContainer.innerHTML = '';
-            if (sub.chapters && sub.chapters.length > 0) {
-                sub.chapters.forEach(chap => {
-                    createChapterInputRow(chap.name, (chap.subchapters || []).join(', '));
-                });
-            } else {
-                createChapterInputRow();
-            }
-
-            syllabusModal.style.display = 'flex';
-        }
-
-        async function deleteSyllabus(id) {
-            if (confirm("Delete this subject and all its chapters?")) {
-                userSyllabus = userSyllabus.filter(s => s.id !== id);
-                saveLocalData('syllabus', userSyllabus);
-                if (currentUser && !id.startsWith('local_')) {
-                    await deleteDoc(doc(db, "syllabus", id));
-                }
-                renderSyllabus();
-                showNotification("Syllabus Removed", "Subject deleted from tracker.", "danger");
-            }
-        }
-
-        // CHALLENGE TIMER WITH XP REWARDS
-        const startChallengeBtn = document.getElementById('startChallengeBtn');
-        const stopChallengeBtn = document.getElementById('stopChallengeBtn');
-        const challengeDisplay = document.getElementById('challengeDisplay');
-
-        startChallengeBtn.addEventListener('click', () => {
-            const h = parseInt(document.getElementById('challengeHours').value) || 0;
-            const m = parseInt(document.getElementById('challengeMins').value) || 0;
-            
-            if (h === 0 && m === 0) {
-                showNotification("Invalid Duration", "Please set hours or minutes for the challenge.", "warning");
+            if (challengeTotalSeconds <= 0) {
+                showNotification("Error", "Please set valid challenge hours or minutes.", "danger", "#ef4444");
                 return;
             }
 
-            clearInterval(challengeInterval);
-            challengeTotalSeconds = (h * 3600) + (m * 60);
-
-            showNotification("Challenge Started", "Stay focused until time is up!", "info", "#f472b6");
-
-            challengeInterval = setInterval(() => {
-                challengeTotalSeconds--;
-                if (challengeTotalSeconds <= 0) {
+            if (challengeInterval) clearInterval(challengeInterval);
+            challengeInterval = setInterval(async () => {
+                if (challengeTotalSeconds > 0) {
+                    challengeTotalSeconds--;
+                    const h = Math.floor(challengeTotalSeconds / 3600);
+                    const m = Math.floor((challengeTotalSeconds % 3600) / 60);
+                    const s = challengeTotalSeconds % 60;
+                    document.getElementById('challengeDisplay').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                } else {
                     clearInterval(challengeInterval);
-                    challengeDisplay.innerText = "00:00:00";
-                    sendSystemNotification("Timer Challenge Complete!", "Awesome job staying focused!");
-                    addXP(5, "completing a study timer challenge");
-                    showNotification("🏆 Challenge Complete!", "You earned +5 XP for completing your timer challenge!", "success", "#f59e0b");
-                    return;
+                    showNotification("Challenge Completed! 🏆", "+10 XP earned for finishing focus challenge!", "success", "#ffd700");
+                    let currentXp = userProfileData.xp || 0;
+                    let newXp = currentXp + 10;
+                    checkLevelUp(currentXp, newXp);
+                    await updateProfileFirestore({ xp: newXp });
                 }
-
-                const hrs = Math.floor(challengeTotalSeconds / 3600);
-                const mins = Math.floor((challengeTotalSeconds % 3600) / 60);
-                const secs = challengeTotalSeconds % 60;
-
-                challengeDisplay.innerText = 
-                    `${hrs < 10 ? '0' + hrs : hrs}:${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
             }, 1000);
+            showNotification("Challenge Started", "Focus countdown has begun!", "success", "#3b82f6");
         });
 
-        stopChallengeBtn.addEventListener('click', () => {
-            clearInterval(challengeInterval);
-            challengeDisplay.innerText = "00:00:00";
-            showNotification("Challenge Cancelled", "Timer stopped.", "warning");
+        document.getElementById('stopChallengeBtn').addEventListener('click', () => {
+            if (challengeInterval) clearInterval(challengeInterval);
+            document.getElementById('challengeDisplay').innerText = "00:00:00";
+            showNotification("Challenge Stopped", "Timer reset.", "info", "#94a3b8");
         });
 
-        // EVENTS SECTION
-        const eventsList = document.getElementById('eventsList');
-        const openEventModalBtn = document.getElementById('openEventModalBtn');
-        const eventModal = document.getElementById('eventModal');
-        const closeEventModalBtn = document.getElementById('closeEventModalBtn');
-        const saveEventForm = document.getElementById('saveEventForm');
-
-        openEventModalBtn.addEventListener('click', () => {
-            saveEventForm.reset();
-            eventModal.style.display = 'flex';
+        document.getElementById('openEventModalBtn').addEventListener('click', () => {
+            document.getElementById('saveEventForm').reset();
+            document.getElementById('eventModal').style.display = 'flex';
+        });
+        document.getElementById('closeEventModalBtn').addEventListener('click', () => {
+            document.getElementById('eventModal').style.display = 'none';
         });
 
-        closeEventModalBtn.addEventListener('click', () => eventModal.style.display = 'none');
-
-        saveEventForm.addEventListener('submit', async (e) => {
+        document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const eventData = {
-                uid: currentUser.uid,
-                title: document.getElementById('eventName').value.trim(),
+                title: document.getElementById('eventName').value,
                 date: document.getElementById('eventDate').value,
-                notes: document.getElementById('eventNotes').value.trim(),
-                createdAt: new Date().toISOString()
+                notes: document.getElementById('eventNotes').value
             };
-
-            if (currentUser) {
-                const docRef = await addDoc(collection(db, "events"), eventData);
-                eventData.id = docRef.id;
-            } else {
-                eventData.id = 'local_evt_' + Date.now();
-            }
-
-            userEvents.push(eventData);
-            eventModal.style.display = 'none';
-            saveLocalData('events', userEvents);
-            renderEvents();
-            showNotification("Event Scheduled", "Your academic event has been recorded!", "success");
+            await addDoc(collection(db, "users", currentUser.uid, "events"), eventData);
+            document.getElementById('eventModal').style.display = 'none';
+            showNotification("Scheduled", "Exam or event added successfully", "success", "#10b981");
         });
 
         function renderEvents() {
-            eventsList.innerHTML = '';
+            const listEl = document.getElementById('eventsList');
+            listEl.innerHTML = '';
             if (userEvents.length === 0) {
-                eventsList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No upcoming exams or events scheduled.</div>`;
+                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No exams or events scheduled.</div>`;
                 return;
             }
-
-            userEvents.forEach(evt => {
+            userEvents.forEach(ev => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
-                card.style.setProperty('--card-color', '#3b82f6');
-
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="--card-color: #3b82f6;">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
+                        <div class="task-icon-box" style="color:var(--accent-amber);"><i class="fa-solid fa-calendar-day"></i></div>
                         <div class="task-details">
-                            <div class="task-title">${evt.title}</div>
+                            <div class="task-title">${ev.title}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-regular fa-calendar"></i> ${evt.date}</span>
-                                ${evt.notes ? `<span>• ${evt.notes}</span>` : ''}
+                                <span><i class="fa-regular fa-calendar"></i> ${ev.date}</span>
+                                ${ev.notes ? `<span>• ${ev.notes}</span>` : ''}
                             </div>
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn delete" data-id="${evt.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        <button class="action-btn delete del-ev"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-
-                card.querySelector('.action-btn.delete').addEventListener('click', () => deleteEvent(evt.id));
-
-                eventsList.appendChild(card);
+                card.querySelector('.del-ev').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "events", ev.id));
+                    showNotification("Deleted", "Event removed", "danger", "#ef4444");
+                });
+                listEl.appendChild(card);
             });
         }
 
-        async function deleteEvent(id) {
-            if (confirm("Delete this event?")) {
-                userEvents = userEvents.filter(e => e.id !== id);
-                saveLocalData('events', userEvents);
-                if (currentUser && !id.startsWith('local_')) {
-                    await deleteDoc(doc(db, "events", id));
-                }
-                renderEvents();
-                showNotification("Event Removed", "Event deleted.", "danger");
-            }
-        }
-
-        // STUDY VAULT / MEMORIALS
-        const studyList = document.getElementById('studyList');
-        const openStudyModalBtn = document.getElementById('openStudyModalBtn');
-        const studyModal = document.getElementById('studyModal');
-        const closeStudyModalBtn = document.getElementById('closeStudyModalBtn');
-        const saveStudyForm = document.getElementById('saveStudyForm');
-
-        openStudyModalBtn.addEventListener('click', () => {
-            saveStudyForm.reset();
-            studyModal.style.display = 'flex';
+        document.getElementById('openStudyModalBtn').addEventListener('click', () => {
+            document.getElementById('saveStudyForm').reset();
+            document.getElementById('studyModal').style.display = 'flex';
+        });
+        document.getElementById('closeStudyModalBtn').addEventListener('click', () => {
+            document.getElementById('studyModal').style.display = 'none';
         });
 
-        closeStudyModalBtn.addEventListener('click', () => studyModal.style.display = 'none');
-
-        saveStudyForm.addEventListener('submit', async (e) => {
+        document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const studyData = {
-                uid: currentUser.uid,
-                bookName: document.getElementById('studyBookName').value.trim(),
-                chapterName: document.getElementById('studyChapterName').value.trim(),
-                targetUrl: document.getElementById('studyTargetUrl').value.trim(),
-                youtubeUrl: document.getElementById('studyYoutubeUrl').value.trim(),
-                notes: document.getElementById('studyNotes').value.trim(),
-                createdAt: new Date().toISOString()
+                bookName: document.getElementById('studyBookName').value,
+                chapterName: document.getElementById('studyChapterName').value,
+                targetUrl: document.getElementById('studyTargetUrl').value,
+                youtubeUrl: document.getElementById('studyYoutubeUrl').value,
+                notes: document.getElementById('studyNotes').value
             };
-
-            if (currentUser) {
-                const docRef = await addDoc(collection(db, "studyHub"), studyData);
-                studyData.id = docRef.id;
-            } else {
-                studyData.id = 'local_std_' + Date.now();
-            }
-
-            userStudyItems.push(studyData);
-            studyModal.style.display = 'none';
-            saveLocalData('study', userStudyItems);
-            renderStudyHub();
-            showNotification("Resource Added", "Study material saved in Vault!", "success");
+            await addDoc(collection(db, "users", currentUser.uid, "studyVault"), studyData);
+            document.getElementById('studyModal').style.display = 'none';
+            showNotification("Saved", "Study material added to vault", "success", "#10b981");
         });
 
-        function renderStudyHub() {
-            studyList.innerHTML = '';
+        function renderStudyVault() {
+            const listEl = document.getElementById('studyList');
+            listEl.innerHTML = '';
             if (userStudyItems.length === 0) {
-                studyList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 0.85rem;">No study materials added yet.</div>`;
+                listEl.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding:30px;">No books or study materials added.</div>`;
                 return;
             }
-
             userStudyItems.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'task-card';
-                card.style.setProperty('--card-color', '#10b981');
-
                 card.innerHTML = `
                     <div class="task-left">
-                        <div class="task-icon-box" style="--card-color: #10b981;">
-                            <i class="fa-solid fa-book-bookmark"></i>
-                        </div>
+                        <div class="task-icon-box" style="color:var(--success);"><i class="fa-solid fa-book"></i></div>
                         <div class="task-details">
-                            <div class="task-title">${item.bookName}</div>
+                            <div class="task-title">${item.bookName} - ${item.chapterName}</div>
                             <div class="task-meta-info">
-                                <span><i class="fa-solid fa-bookmark"></i> ${item.chapterName}</span>
-                                ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" style="color:var(--accent-blue);"><i class="fa-solid fa-link"></i> Resource Link</a>` : ''}
-                                ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" style="color:#ef4444;"><i class="fa-brands fa-youtube"></i> Video</a>` : ''}
+                                ${item.notes ? `<span>${item.notes}</span>` : ''}
                             </div>
-                            ${item.notes ? `<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">${item.notes}</div>` : ''}
                         </div>
                     </div>
                     <div class="task-actions">
-                        <button class="action-btn delete" data-id="${item.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                        ${item.targetUrl ? `<a href="${item.targetUrl}" target="_blank" class="action-btn" title="Open Link" style="color:var(--accent-blue);"><i class="fa-solid fa-link"></i></a>` : ''}
+                        ${item.youtubeUrl ? `<a href="${item.youtubeUrl}" target="_blank" class="action-btn" title="YouTube" style="color:#ef4444;"><i class="fa-brands fa-youtube"></i></a>` : ''}
+                        <button class="action-btn delete del-stu"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
-
-                card.querySelector('.action-btn.delete').addEventListener('click', () => deleteStudyItem(item.id));
-
-                studyList.appendChild(card);
+                card.querySelector('.del-stu').addEventListener('click', async () => {
+                    await deleteDoc(doc(db, "users", currentUser.uid, "studyVault", item.id));
+                    showNotification("Deleted", "Material removed", "danger", "#ef4444");
+                });
+                listEl.appendChild(card);
             });
         }
 
-        async function deleteStudyItem(id) {
-            if (confirm("Delete this study item?")) {
-                userStudyItems = userStudyItems.filter(i => i.id !== id);
-                saveLocalData('study', userStudyItems);
-                if (currentUser && !id.startsWith('local_')) {
-                    await deleteDoc(doc(db, "studyHub", id));
-                }
-                renderStudyHub();
-                showNotification("Material Removed", "Item deleted from Vault.", "danger");
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString();
+            document.getElementById('liveDate').innerText = now.toDateString();
+        }, 1000);
+
+        function updateProgress() {
+            if (userTasks.length === 0) {
+                document.getElementById('progressPercent').innerText = '0%';
+                document.getElementById('progressBar').style.width = '0%';
+                return;
+            }
+            const completed = userTasks.filter(t => t.completed).length;
+            const pct = Math.round((completed / userTasks.length) * 100);
+            document.getElementById('progressPercent').innerText = `${pct}%`;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+                grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
+            });
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+            const currentDay = now.getDate();
+
+            document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
+            for(let d=1; d<=totalDays; d++) {
+                grid.innerHTML += `<div class="calendar-day ${d === currentDay ? 'active' : ''}">${d}</div>`;
             }
         }
+        renderCalendar();
     </script>
 </body>
 </html>
