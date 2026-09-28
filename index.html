@@ -1780,16 +1780,33 @@
         }
 
         async function updateProfileFirestore(newData) {
-            if (!currentUser) return;
-            try {
-                const docRef = doc(db, "users", currentUser.uid);
-                await setDoc(docRef, newData, { merge: true });
-                userProfileData = { ...userProfileData, ...newData };
-                updateProfileUI();
-            } catch (err) {
-                showNotification("Error", err.message, "danger", "#ef4444");
-            }
-        }
+    if (!currentUser) return;
+    const docRef = doc(db, "users", currentUser.uid);
+    // setDoc দিয়ে পারমিশন বা নতুন ইউজারের ক্ষেত্রে সেফলি ডাটা মার্জ করা হচ্ছে
+    await setDoc(docRef, newData, { merge: true });
+    userProfileData = { ...userProfileData, ...newData };
+    updateProfileUI();
+}
+
+document.getElementById('saveProfileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newData = {
+        name: document.getElementById('profName').value,
+        class: document.getElementById('profClass').value,
+        board: document.getElementById('profBoard').value,
+        inst: document.getElementById('profInst').value,
+        dreamInst: document.getElementById('profDreamInst').value,
+        fbUrl: document.getElementById('profFbUrl').value
+    };
+    
+    try {
+        await updateProfileFirestore(newData);
+        document.getElementById('profileModal').style.display = 'none';
+        showNotification("Profile Updated", "Your profile has been saved successfully!", "success", "#10b981");
+    } catch (err) {
+        showNotification("Error", err.message, "danger", "#ef4444");
+    }
+});
 
         function updateProfileUI() {
             document.getElementById('userNameDisplay').innerText = userProfileData.name || 'User';
