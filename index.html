@@ -2510,25 +2510,33 @@
             const year = now.getFullYear();
             const month = now.getMonth();
 
-            document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+                        document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
 
             grid.innerHTML = '';
-            ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
+            
+            // Render day headers
+            const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+            days.forEach(d => {
                 grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
             });
 
+            // Calculate days for calendar grid
             const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+            // Add blank padding slots
             for (let i = 0; i < firstDay; i++) {
                 grid.innerHTML += `<div></div>`;
             }
 
-            for (let day = 1; day <= totalDays; day++) {
-                const isToday = day === now.getDate();
-                grid.innerHTML += `<div class="calendar-day ${isToday ? 'active' : ''}">${day}</div>`;
+            // Add days of the month
+            for (let d = 1; d <= daysInMonth; d++) {
+                const isActive = d === now.getDate() ? 'active' : '';
+                grid.innerHTML += `<div class="calendar-day ${isActive}">${d}</div>`;
             }
         }
+
+        // Initial setup calls
         renderCalendar();
         setLanguage(currentLang);
     </script>
