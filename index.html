@@ -856,6 +856,26 @@
             font-weight: 500;
         }
 
+        .subchapter-list-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+            padding-left: 26px;
+        }
+
+        .subchapter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            color: #d8b4fe;
+        }
+
         .challenge-box {
             background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(139, 92, 246, 0.15));
             border: 1px solid rgba(236, 72, 153, 0.3);
@@ -1140,7 +1160,7 @@
                 <div class="header-actions" style="margin-bottom: 18px;">
                     <div>
                         <h2 data-en="Daily Routine & Planner" data-bn="দৈনিক রুটিন ও প্ল্যানার">Daily Routine & Planner</h2>
-                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Complete tasks to earn XP" data-bn="টাস্ক সম্পন্ন করে XP অর্জন করুন">Complete tasks to earn XP</p>
+                        <p style="color: var(--text-muted); font-size: 0.82rem;" data-en="Complete tasks to earn XP (Different 10 tasks refresh daily)" data-bn="টাস্ক সম্পন্ন করে XP অর্জন করুন (ভিন্ন ভিন্ন ১০টি টাস্ক প্রতিদিন রিফ্রেশ হয়)">Complete tasks to earn XP</p>
                     </div>
                     <button class="btn" style="width: auto; padding: 10px 18px;" id="openTaskModalBtn">
                         <i class="fa-solid fa-plus"></i> <span data-en="New Task" data-bn="নতুন কাজ">New Task</span>
@@ -1522,6 +1542,7 @@
     <!-- FIREBASE & MAIN ENGINE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
         import { 
             getAuth, 
             createUserWithEmailAndPassword, 
@@ -1545,19 +1566,24 @@
             onSnapshot
         } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBjWYDAdRZT7dCPhK1XD07XlWc2oaWA9EY",
-            authDomain: "daily-planner-8d245.firebaseapp.com",
-            projectId: "daily-planner-8d245",
-            storageBucket: "daily-planner-8d245.firebasestorage.app",
-            messagingSenderId: "170453207728",
-            appId: "1:170453207728:web:387c77905505417f89c975"
+            apiKey: "AIzaSyDTlG2Umu3OqtZc0ZD_y3wLm_Z5xyu9L_A",
+            authDomain: "wellpapar-hd.firebaseapp.com",
+            projectId: "wellpapar-hd",
+            storageBucket: "wellpapar-hd.firebasestorage.app",
+            messagingSenderId: "753765688817",
+            appId: "1:753765688817:web:7c739220a590db88461050",
+            measurementId: "G-52L4ZGCXBR"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
         
+        // Firestore settings with local cache persistence
         const db = initializeFirestore(app, {
             localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
         });
@@ -1589,12 +1615,14 @@
             "fa-desktop", "fa-mobile-screen", "fa-terminal", "fa-code", "fa-database", "fa-microchip", "fa-network-wired", "fa-wifi", "fa-robot", "fa-gears"
         ];
 
+        // Top 3 Colleges of Dhaka
         const TOP_DHAKA_COLLEGES = [
             "Notre Dame College", 
             "Viqarunnisa Noon College", 
             "Holy Cross College"
         ];
 
+        // Colleges per board
         const BOARD_COLLEGES = {
             Dhaka: ["Dhaka College", "Residential Model College", "Rajuk Uttara Model College", "Adamjee Cantonment College", "Government Science College", "City College Dhaka", "Birshreshtha Noor Mohammad Public College"],
             Chittagong: ["Chittagong College", "Government Hazi Mohammad Mohsin College", "Chittagong Govt. City College", "Cantonment English School & College", "Chittagong Public School & College", "Fouzderhat Collegiate School", "Govt. Commerce College"],
@@ -1752,61 +1780,36 @@
 
         async function loadUserDataFromFirestore() {
             if (!currentUser) return;
-            try {
-                const docRef = doc(db, "users", currentUser.uid);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    userProfileData = docSnap.data();
-                } else {
-                    userProfileData = { 
-                        name: currentUser.displayName || currentUser.email.split('@')[0], 
-                        class: 'Class 12', 
-                        board: 'Dhaka', 
-                        inst: 'College', 
-                        dreamInst: '', 
-                        fbUrl: '', 
-                        streak: 1, 
-                        xp: 0, 
-                        completedTaskCount: 0, 
-                        avatarUrl: currentUser.photoURL || '',
-                        lastResetDate: new Date().toDateString()
-                    };
-                    await setDoc(docRef, userProfileData);
-                }
-                updateProfileUI();
-            } catch (err) {
-                showNotification("Error", err.message, "danger", "#ef4444");
+            const docRef = doc(db, "users", currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                userProfileData = docSnap.data();
+            } else {
+                userProfileData = { 
+                    name: currentUser.displayName || currentUser.email.split('@')[0], 
+                    class: 'Class 12', 
+                    board: 'Dhaka', 
+                    inst: 'College', 
+                    dreamInst: '', 
+                    fbUrl: '', 
+                    streak: 1, 
+                    xp: 0, 
+                    completedTaskCount: 0, 
+                    avatarUrl: currentUser.photoURL || '',
+                    lastResetDate: new Date().toDateString()
+                };
+                await setDoc(docRef, userProfileData);
             }
+            updateProfileUI();
         }
 
         async function updateProfileFirestore(newData) {
-    if (!currentUser) return;
-    const docRef = doc(db, "users", currentUser.uid);
-    // setDoc দিয়ে পারমিশন বা নতুন ইউজারের ক্ষেত্রে সেফলি ডাটা মার্জ করা হচ্ছে
-    await setDoc(docRef, newData, { merge: true });
-    userProfileData = { ...userProfileData, ...newData };
-    updateProfileUI();
-}
-
-document.getElementById('saveProfileForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const newData = {
-        name: document.getElementById('profName').value,
-        class: document.getElementById('profClass').value,
-        board: document.getElementById('profBoard').value,
-        inst: document.getElementById('profInst').value,
-        dreamInst: document.getElementById('profDreamInst').value,
-        fbUrl: document.getElementById('profFbUrl').value
-    };
-    
-    try {
-        await updateProfileFirestore(newData);
-        document.getElementById('profileModal').style.display = 'none';
-        showNotification("Profile Updated", "Your profile has been saved successfully!", "success", "#10b981");
-    } catch (err) {
-        showNotification("Error", err.message, "danger", "#ef4444");
-    }
-});
+            if (!currentUser) return;
+            const docRef = doc(db, "users", currentUser.uid);
+            await updateDoc(docRef, newData);
+            userProfileData = { ...userProfileData, ...newData };
+            updateProfileUI();
+        }
 
         function updateProfileUI() {
             document.getElementById('userNameDisplay').innerText = userProfileData.name || 'User';
@@ -2032,7 +2035,6 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
         // Task Form submit
         document.getElementById('saveTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
             const editId = document.getElementById('editTaskId').value;
             const taskData = {
                 name: document.getElementById('taskName').value,
@@ -2115,18 +2117,14 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
                 `;
 
                 card.querySelector('.action-btn.check').addEventListener('click', async () => {
-                    try {
-                        const isComp = !task.completed;
-                        await updateDoc(doc(db, "users", currentUser.uid, "tasks", task.id), { completed: isComp });
-                        if (isComp) {
-                            const oldXp = userProfileData.xp || 0;
-                            const newXp = oldXp + 10;
-                            await updateProfileFirestore({ xp: newXp, completedTaskCount: (userProfileData.completedTaskCount || 0) + 1 });
-                            checkLevelUp(oldXp, newXp);
-                            showNotification("Task Done!", "+10 XP Earned", "success", "#10b981");
-                        }
-                    } catch (err) {
-                        showNotification("Error", err.message, "danger", "#ef4444");
+                    const isComp = !task.completed;
+                    await updateDoc(doc(db, "users", currentUser.uid, "tasks", task.id), { completed: isComp });
+                    if (isComp) {
+                        const oldXp = userProfileData.xp || 0;
+                        const newXp = oldXp + 10;
+                        await updateProfileFirestore({ xp: newXp, completedTaskCount: (userProfileData.completedTaskCount || 0) + 1 });
+                        checkLevelUp(oldXp, newXp);
+                        showNotification("Task Done!", "+10 XP Earned", "success", "#10b981");
                     }
                 });
 
@@ -2148,12 +2146,8 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
                 });
 
                 card.querySelector('.action-btn.delete').addEventListener('click', async () => {
-                    try {
-                        await deleteDoc(doc(db, "users", currentUser.uid, "tasks", task.id));
-                        showNotification("Deleted", "Task removed", "danger", "#ef4444");
-                    } catch (err) {
-                        showNotification("Error", err.message, "danger", "#ef4444");
-                    }
+                    await deleteDoc(doc(db, "users", currentUser.uid, "tasks", task.id));
+                    showNotification("Deleted", "Task removed", "danger", "#ef4444");
                 });
 
                 list.appendChild(card);
@@ -2212,7 +2206,6 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
 
         document.getElementById('saveSyllabusForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
             const subject = document.getElementById('sylSubject').value;
             const chapInputs = document.querySelectorAll('.chap-input');
             const chapters = [];
@@ -2223,26 +2216,22 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
             });
 
             const sylData = { subject, chapters, createdAt: new Date().toISOString() };
-            try {
-                await addDoc(collection(db, "users", currentUser.uid, "syllabus"), sylData);
+            await addDoc(collection(db, "users", currentUser.uid, "syllabus"), sylData);
 
-                if (document.getElementById('sylAddExamEvent').value === 'yes') {
-                    const examDate = document.getElementById('sylExamDate').value;
-                    if (examDate) {
-                        await addDoc(collection(db, "users", currentUser.uid, "events"), {
-                            title: `${subject} Exam`,
-                            date: examDate,
-                            notes: `Syllabus exam for ${subject}`,
-                            createdAt: new Date().toISOString()
-                        });
-                    }
+            if (document.getElementById('sylAddExamEvent').value === 'yes') {
+                const examDate = document.getElementById('sylExamDate').value;
+                if (examDate) {
+                    await addDoc(collection(db, "users", currentUser.uid, "events"), {
+                        title: `${subject} Exam`,
+                        date: examDate,
+                        notes: `Syllabus exam for ${subject}`,
+                        createdAt: new Date().toISOString()
+                    });
                 }
-
-                document.getElementById('syllabusModal').style.display = 'none';
-                showNotification("Syllabus Saved", "Subject added to tracker!", "success", "#10b981");
-            } catch (err) {
-                showNotification("Error", err.message, "danger", "#ef4444");
             }
+
+            document.getElementById('syllabusModal').style.display = 'none';
+            showNotification("Syllabus Saved", "Subject added to tracker!", "success", "#10b981");
         });
 
         function renderSyllabus() {
@@ -2282,38 +2271,30 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
 
                 card.querySelectorAll('input[type="checkbox"]').forEach(chk => {
                     chk.addEventListener('change', async (e) => {
-                        try {
-                            const isChecked = e.target.checked;
-                            const sylId = e.target.getAttribute('data-sylid');
-                            const chapId = e.target.getAttribute('data-chapid');
+                        const isChecked = e.target.checked;
+                        const sylId = e.target.getAttribute('data-sylid');
+                        const chapId = e.target.getAttribute('data-chapid');
 
-                            const targetSyl = userSyllabus.find(s => s.id === sylId);
-                            if (!targetSyl) return;
+                        const targetSyl = userSyllabus.find(s => s.id === sylId);
+                        if (!targetSyl) return;
 
-                            const updatedChapters = targetSyl.chapters.map(c => {
-                                if (c.id === chapId) return { ...c, completed: isChecked };
-                                return c;
-                            });
+                        const updatedChapters = targetSyl.chapters.map(c => {
+                            if (c.id === chapId) return { ...c, completed: isChecked };
+                            return c;
+                        });
 
-                            await updateDoc(doc(db, "users", currentUser.uid, "syllabus", sylId), { chapters: updatedChapters });
+                        await updateDoc(doc(db, "users", currentUser.uid, "syllabus", sylId), { chapters: updatedChapters });
 
-                            const oldXp = userProfileData.xp || 0;
-                            const newXp = isChecked ? oldXp + 15 : Math.max(0, oldXp - 15);
-                            await updateProfileFirestore({ xp: newXp });
-                            if (isChecked) checkLevelUp(oldXp, newXp);
-                        } catch (err) {
-                            showNotification("Error", err.message, "danger", "#ef4444");
-                        }
+                        const oldXp = userProfileData.xp || 0;
+                        const newXp = isChecked ? oldXp + 15 : Math.max(0, oldXp - 15);
+                        await updateProfileFirestore({ xp: newXp });
+                        if (isChecked) checkLevelUp(oldXp, newXp);
                     });
                 });
 
                 card.querySelector('.delete-syl').addEventListener('click', async () => {
-                    try {
-                        await deleteDoc(doc(db, "users", currentUser.uid, "syllabus", item.id));
-                        showNotification("Deleted", "Syllabus entry removed", "danger", "#ef4444");
-                    } catch (err) {
-                        showNotification("Error", err.message, "danger", "#ef4444");
-                    }
+                    await deleteDoc(doc(db, "users", currentUser.uid, "syllabus", item.id));
+                    showNotification("Deleted", "Syllabus entry removed", "danger", "#ef4444");
                 });
 
                 list.appendChild(card);
@@ -2414,20 +2395,15 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
 
         document.getElementById('saveEventForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
             const eventData = {
                 title: document.getElementById('eventName').value,
                 date: document.getElementById('eventDate').value,
                 notes: document.getElementById('eventNotes').value,
                 createdAt: new Date().toISOString()
             };
-            try {
-                await addDoc(collection(db, "users", currentUser.uid, "events"), eventData);
-                document.getElementById('eventModal').style.display = 'none';
-                showNotification("Event Saved", "Scheduled event successfully!", "success", "#10b981");
-            } catch (err) {
-                showNotification("Error", err.message, "danger", "#ef4444");
-            }
+            await addDoc(collection(db, "users", currentUser.uid, "events"), eventData);
+            document.getElementById('eventModal').style.display = 'none';
+            showNotification("Event Saved", "Scheduled event successfully!", "success", "#10b981");
         });
 
         function renderEvents() {
@@ -2458,12 +2434,8 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
                     </div>
                 `;
                 card.querySelector('.delete-event').addEventListener('click', async () => {
-                    try {
-                        await deleteDoc(doc(db, "users", currentUser.uid, "events", ev.id));
-                        showNotification("Deleted", "Event removed", "danger", "#ef4444");
-                    } catch (err) {
-                        showNotification("Error", err.message, "danger", "#ef4444");
-                    }
+                    await deleteDoc(doc(db, "users", currentUser.uid, "events", ev.id));
+                    showNotification("Deleted", "Event removed", "danger", "#ef4444");
                 });
                 list.appendChild(card);
             });
@@ -2481,7 +2453,6 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
 
         document.getElementById('saveStudyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUser) return;
             const studyData = {
                 bookName: document.getElementById('studyBookName').value,
                 chapterName: document.getElementById('studyChapterName').value,
@@ -2490,13 +2461,9 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
                 notes: document.getElementById('studyNotes').value,
                 createdAt: new Date().toISOString()
             };
-            try {
-                await addDoc(collection(db, "users", currentUser.uid, "studyVault"), studyData);
-                document.getElementById('studyModal').style.display = 'none';
-                showNotification("Saved", "Material added to Study Vault", "success", "#10b981");
-            } catch (err) {
-                showNotification("Error", err.message, "danger", "#ef4444");
-            }
+            await addDoc(collection(db, "users", currentUser.uid, "studyVault"), studyData);
+            document.getElementById('studyModal').style.display = 'none';
+            showNotification("Saved", "Material added to Study Vault", "success", "#10b981");
         });
 
         function renderStudyVault() {
@@ -2528,52 +2495,59 @@ document.getElementById('saveProfileForm').addEventListener('submit', async (e) 
                     </div>
                 `;
                 card.querySelector('.delete-study').addEventListener('click', async () => {
-                    try {
-                        await deleteDoc(doc(db, "users", currentUser.uid, "studyVault", item.id));
-                        showNotification("Deleted", "Item removed", "danger", "#ef4444");
-                    } catch (err) {
-                        showNotification("Error", err.message, "danger", "#ef4444");
-                    }
+                    await deleteDoc(doc(db, "users", currentUser.uid, "studyVault", item.id));
+                    showNotification("Deleted", "Item removed from Study Vault", "danger", "#ef4444");
                 });
                 list.appendChild(card);
             });
         }
 
-        // Live Clock & Mini Calendar
-        setInterval(() => {
+        // Live Clock & Calendar initialization
+        function updateClock() {
             const now = new Date();
-            document.getElementById('liveClock').innerText = now.toLocaleTimeString();
-            document.getElementById('liveDate').innerText = now.toDateString();
-        }, 1000);
+            document.getElementById('liveClock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('liveDate').innerText = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
         function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
+            const calendarGrid = document.getElementById('calendarGrid');
+            const calMonthYear = document.getElementById('calMonthYear');
+            if (!calendarGrid || !calMonthYear) return;
+
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth();
 
-            document.getElementById('calMonthYear').innerText = now.toLocaleString('default', { month: 'long', year: 'numeric' });
-
-            grid.innerHTML = '';
-            ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(d => {
-                grid.innerHTML += `<div class="calendar-day-head">${d}</div>`;
-            });
+            calMonthYear.innerText = now.toLocaleDateString([], { month: 'long', year: 'numeric' });
 
             const firstDay = new Date(year, month, 1).getDay();
-            const totalDays = new Date(year, month + 1, 0).getDate();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            calendarGrid.innerHTML = '';
+
+            daysOfWeek.forEach(day => {
+                const dayHead = document.createElement('div');
+                dayHead.className = 'calendar-day-head';
+                dayHead.innerText = day;
+                calendarGrid.appendChild(dayHead);
+            });
 
             for (let i = 0; i < firstDay; i++) {
-                grid.innerHTML += `<div></div>`;
+                const emptyCell = document.createElement('div');
+                calendarGrid.appendChild(emptyCell);
             }
 
-            for (let day = 1; day <= totalDays; day++) {
-                const isToday = day === now.getDate();
-                grid.innerHTML += `<div class="calendar-day ${isToday ? 'active' : ''}">${day}</div>`;
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = `calendar-day ${day === now.getDate() ? 'active' : ''}`;
+                dayCell.innerText = day;
+                calendarGrid.appendChild(dayCell);
             }
         }
-
         renderCalendar();
-        setLanguage(currentLang);
     </script>
 </body>
 </html>
